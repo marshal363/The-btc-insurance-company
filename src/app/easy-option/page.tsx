@@ -1,3 +1,6 @@
-import EasyOption from './easy-option';
+import React from "react";
+import EasyOption from "./easy-option";
 
-export default EasyOption; 
+export default function EasyOptionPage() {
+  return <EasyOption />;
+} 
