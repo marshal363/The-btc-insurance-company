@@ -22,6 +22,11 @@ export default function Landing() {
       <FAQSection />
       <FinalCTA />
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="flex justify-center items-center py-6 mb-4">
+          <p className="text-center text-sm text-muted-foreground">
+            100% Non-custodial · Built on Stacks · Secured by Bitcoin
+          </p>
+        </div>
         <LandingFooter />
       </div>
     </div>

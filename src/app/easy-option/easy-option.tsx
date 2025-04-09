@@ -31,13 +31,31 @@ export default function EasyOption() {
   // Selected contract state
   const [selectedContract, setSelectedContract] = useState<OptionContract | null>(null);
   
+  // Step validation state
+  const [isTypeValid, setIsTypeValid] = useState(true); // Type is pre-selected so valid by default
+  const [isStrikeValid, setIsStrikeValid] = useState(true); // Strike is pre-set so valid by default
+  const [isExpiryValid, setIsExpiryValid] = useState(true); // Expiry is pre-set so valid by default
+  
   // Update strike price when BTC price changes (only on initial mount)
   useEffect(() => {
     setStrikePrice(btcPrice);
   }, []);
 
+  // Check validation for current step
+  const isCurrentStepValid = () => {
+    switch (currentStep) {
+      case "type": return isTypeValid;
+      case "strike": return isStrikeValid;
+      case "expiry": return isExpiryValid;
+      case "review": return true; // Review step just displays info, always valid
+      default: return false;
+    }
+  };
+
   // Step navigation functions
   const handleNext = () => {
+    if (!isCurrentStepValid()) return;
+    
     if (currentStep === "type") setCurrentStep("strike");
     else if (currentStep === "strike") setCurrentStep("expiry");
     else if (currentStep === "expiry") setCurrentStep("review");
@@ -101,14 +119,20 @@ export default function EasyOption() {
             {currentStep === "type" && (
               <OptionTypeSelector 
                 optionType={optionType} 
-                setOptionType={setOptionType} 
+                setOptionType={(type) => {
+                  setOptionType(type);
+                  setIsTypeValid(true);
+                }} 
               />
             )}
   
             {currentStep === "strike" && (
               <StrikePriceSelector 
                 strikePrice={strikePrice} 
-                setStrikePrice={setStrikePrice} 
+                setStrikePrice={(price) => {
+                  setStrikePrice(price);
+                  setIsStrikeValid(true);
+                }} 
                 currentBtcPrice={btcPrice}
                 optionType={optionType}
               />
@@ -117,7 +141,10 @@ export default function EasyOption() {
             {currentStep === "expiry" && (
               <ExpirySelector 
                 expiryDays={expiryDays} 
-                setExpiryDays={setExpiryDays} 
+                setExpiryDays={(days) => {
+                  setExpiryDays(days);
+                  setIsExpiryValid(true);
+                }} 
               />
             )}
   
@@ -153,6 +180,21 @@ export default function EasyOption() {
                 </button>
               </div>
             )}
+            
+            {/* Show PnL Toggle Button on desktop too */}
+            {canShowPnlSimulation && !isPnlPanelOpen && (
+              <div className="hidden md:block mt-4">
+                <button
+                  onClick={togglePnlPanel}
+                  className="ml-auto flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
+                  Show P&L Simulation
+                </button>
+              </div>
+            )}
           </div>
   
           {/* Navigation Buttons */}
@@ -161,6 +203,7 @@ export default function EasyOption() {
             handleBack={handleBack}
             handleNext={handleNext}
             handlePurchase={handlePurchaseOption}
+            isNextDisabled={!isCurrentStepValid()}
           />
         </div>
         
@@ -172,6 +215,7 @@ export default function EasyOption() {
             premium={selectedContract?.premium || 50}
             currentBtcPrice={btcPrice}
             isOpen={isPnlPanelOpen}
+            onToggle={togglePnlPanel}
           />
         </div>
       </div>
@@ -185,6 +229,7 @@ export default function EasyOption() {
             premium={selectedContract?.premium || 50}
             currentBtcPrice={btcPrice}
             isOpen={true}
+            onToggle={togglePnlPanel}
           />
         </div>
       </div>
