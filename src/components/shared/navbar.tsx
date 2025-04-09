@@ -35,14 +35,14 @@ export const Navbar = ({ className }: NavbarProps) => {
         className
       )}
     >
-      <div className="container flex h-16 items-center">
-        <div className="mr-4 flex">
+      <div className="container flex h-16 items-center px-4">
+        <div className="mr-6 flex">
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold">BitHedge</span>
           </Link>
         </div>
         
-        <nav className="flex items-center space-x-6 text-sm font-medium">
+        <nav className="flex items-center space-x-8 text-sm font-medium">
           {NavItems.map((item) => (
             <Link
               key={item.href}
@@ -59,10 +59,10 @@ export const Navbar = ({ className }: NavbarProps) => {
           ))}
         </nav>
         
-        <div className="ml-auto flex items-center space-x-4">
+        <div className="ml-auto flex items-center gap-3">
           {isConnected ? (
-            <div className="flex items-center space-x-2">
-              <div className="bg-muted px-3 py-1 rounded-full flex items-center space-x-2">
+            <div className="flex items-center gap-2">
+              <div className="bg-muted px-3 py-1.5 rounded-full flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">{formatAddress(address as WalletAddress)}</span>
                 <div className="h-2 w-2 rounded-full bg-green-500" />
               </div>
@@ -79,14 +79,14 @@ export const Navbar = ({ className }: NavbarProps) => {
               disabled={connecting}
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-                "bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2",
+                "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-5 py-2",
                 connecting && "opacity-70 cursor-not-allowed"
               )}
             >
               {connecting ? "Connecting..." : "Connect Wallet"}
             </button>
           )}
-          <div className="bg-destructive/20 text-destructive px-2 py-1 text-xs rounded-md">
+          <div className="bg-destructive/20 text-destructive px-3 py-1.5 text-xs font-medium rounded-md">
             Testnet
           </div>
         </div>
