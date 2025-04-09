@@ -31,7 +31,7 @@ function Arrow() {
 export function HowItWorks() {
   return (
     <section className="py-20 md:py-24 w-full" id="how-it-works">
-      <div className="container max-w-6xl mx-auto px-4">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">Hedging Made Simple</h2>
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-0">
           <Step 

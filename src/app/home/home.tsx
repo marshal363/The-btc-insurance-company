@@ -27,7 +27,7 @@ export default function Home() {
   }, [fetchMarketData, fetchAvailableOptions, fetchUserOptions, isConnected]);
 
   return (
-    <div className="container py-8">
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
       {!isConnected ? (
         <WelcomeSection onConnectWallet={connectWallet} />
       ) : null}

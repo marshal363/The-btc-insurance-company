@@ -24,7 +24,7 @@ export const LandingHeader = ({ className }: LandingHeaderProps) => {
         className
       )}
     >
-      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <span className="text-2xl font-bold">BitHedge</span>

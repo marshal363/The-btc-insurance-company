@@ -10,7 +10,7 @@ export function HeroSection() {
       <div className="absolute -top-1/4 right-0 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[100px]" />
       <div className="absolute -bottom-1/4 left-0 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[100px]" />
       
-      <div className="container relative mx-auto px-4 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="flex flex-col space-y-8">
             <div className="space-y-5">

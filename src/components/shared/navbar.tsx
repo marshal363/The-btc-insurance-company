@@ -36,7 +36,7 @@ export const Navbar = ({ className }: NavbarProps) => {
         className
       )}
     >
-      <div className="container flex h-16 items-center px-4">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex h-16 items-center">
         <div className="mr-6 flex">
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold">BitHedge</span>

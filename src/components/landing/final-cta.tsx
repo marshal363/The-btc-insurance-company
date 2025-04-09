@@ -6,7 +6,7 @@ import { Play } from "lucide-react";
 export function FinalCTA() {
   return (
     <section className="py-16 md:py-20 bg-background border-t">
-      <div className="container max-w-4xl mx-auto px-4 lg:px-8 text-center">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Start Hedging Your Bitcoin Today</h2>
         <p className="text-lg md:text-xl mb-8 md:mb-10 text-muted-foreground max-w-2xl mx-auto">
           Get protection against market volatility with just a few clicks
