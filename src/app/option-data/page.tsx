@@ -12,6 +12,56 @@ import { GroupedDistributionChart } from "@/components/option-data/grouped-distr
 import { TakerFlowChart } from "@/components/option-data/taker-flow-chart";
 import { OptionsChain } from "@/components/option-data/options-chain";
 import { EmptyState } from "@/components/option-data/empty-state";
+import { VolatilitySurface } from "@/components/option-data/volatility-surface";
+import { ImpliedVolatilitySmile } from "@/components/option-data/implied-volatility-smile";
+
+// Helper function to generate volatility surface mock data
+function generateVolatilitySurfaceData(
+  currentPrice: number,
+  expiryDates: Array<{ label: string, days: number }>,
+  strikePriceRange: [number, number],
+  strikePriceCount: number
+) {
+  const result = [];
+  const baseIV = 40; // Base implied volatility
+  
+  // Calculate strike price increments
+  const [minStrike, maxStrike] = strikePriceRange;
+  const strikeIncrement = (maxStrike - minStrike) / (strikePriceCount - 1);
+  
+  // Generate a grid of data points
+  for (let i = 0; i < strikePriceCount; i++) {
+    const strikePrice = minStrike + i * strikeIncrement;
+    
+    // Normalize the moneyness (how far from ATM the strike is)
+    const moneyness = strikePrice / currentPrice;
+    
+    for (const expiry of expiryDates) {
+      // Calculate IV with a smile pattern that's more pronounced for shorter expirations
+      const timeEffect = Math.sqrt(expiry.days / 365); // Time effect on volatility
+      const smileFactor = 1.2 * Math.pow(Math.abs(moneyness - 1), 1.8) / timeEffect;
+      const skewFactor = moneyness < 1 ? 0.05 : -0.02; // Skew (puts have higher IV than calls)
+      
+      // Combine factors for final IV
+      let iv = baseIV + baseIV * smileFactor + baseIV * skewFactor * (1 - moneyness);
+      
+      // Add some randomness
+      iv += (Math.random() * 4 - 2);
+      
+      // Ensure IV is realistic (not too low or high)
+      iv = Math.max(15, Math.min(80, iv));
+      
+      result.push({
+        strikePrice,
+        expiry: expiry.label,
+        expiryDays: expiry.days,
+        iv: parseFloat(iv.toFixed(1))
+      });
+    }
+  }
+  
+  return result;
+}
 
 export default function OptionDataPage() {
   const { 
@@ -111,6 +161,21 @@ export default function OptionDataPage() {
     { name: "Puts Bought", value: 31211, color: "#EF4444" },
     { name: "Puts Sold", value: 30287, color: "#F87171" },
   ];
+
+  // Generate mock data for implied volatility surface
+  const ivSurfaceData = generateVolatilitySurfaceData(
+    btcPrice,
+    [
+      { label: "Apr 15", days: 7 },
+      { label: "Apr 22", days: 14 },
+      { label: "Apr 29", days: 21 },
+      { label: "May 6", days: 30 },
+      { label: "May 20", days: 45 },
+      { label: "Jun 17", days: 75 }
+    ],
+    [btcPrice * 0.8, btcPrice * 1.2], // Strike range: ±20% of current price
+    9 // 9 different strike prices
+  );
 
   // Tab configuration
   const tabs = [
@@ -270,14 +335,39 @@ export default function OptionDataPage() {
 
       {activeTab === "impliedVolatility" && (
         <div className="grid grid-cols-1 gap-6">
-          {/* Placeholder for IV charts */}
-          <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Implied Volatility Smile</h2>
-            <EmptyState 
-              title="Coming Soon"
-              message="Implied volatility visualizations will be implemented in Phase 6.5."
-              icon="coming-soon"
-            />
+          {/* Volatility Surface */}
+          <VolatilitySurface 
+            data={ivSurfaceData} 
+            currentPrice={btcPrice}
+            title="Implied Volatility Surface"
+          />
+          
+          {/* IV Smile */}
+          <ImpliedVolatilitySmile 
+            data={ivSurfaceData} 
+            currentPrice={btcPrice}
+            title="Implied Volatility Smile"
+          />
+
+          {/* Future IV components */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm">
+              <h2 className="text-xl font-bold mb-4">IV Term Structure</h2>
+              <EmptyState 
+                title="Coming Soon"
+                message="IV term structure visualization will be implemented in Phase 6.5."
+                icon="coming-soon"
+              />
+            </div>
+            
+            <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm">
+              <h2 className="text-xl font-bold mb-4">Historical IV Comparison</h2>
+              <EmptyState 
+                title="Coming Soon"
+                message="Historical IV comparison will be implemented in Phase 6.5."
+                icon="coming-soon"
+              />
+            </div>
           </div>
         </div>
       )}
