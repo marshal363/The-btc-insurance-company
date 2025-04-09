@@ -16,7 +16,6 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -31,7 +30,7 @@ export default function RootLayout({
         <div className="relative flex min-h-screen flex-col">
           <HeaderSelector />
           <main className="flex-1 pb-20 md:pb-0">{children}</main>
-          <Footer className="hidden md:block" />
+          <Footer />
           <BottomNav />
         </div>
       </body>

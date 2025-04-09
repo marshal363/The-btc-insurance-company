@@ -8,6 +8,7 @@ import {
   FinalCTA,
   FAQSection
 } from "@/components/landing";
+import { LandingFooter } from "@/components/shared/landing-footer";
 
 export default function Landing() {
   return (
@@ -20,6 +21,9 @@ export default function Landing() {
       <SocialProof />
       <FAQSection />
       <FinalCTA />
+      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <LandingFooter />
+      </div>
     </div>
   );
 } 
