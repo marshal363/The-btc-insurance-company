@@ -1,14 +1,22 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { HeaderSelector } from "@/components/shared/header-selector";
 import { Footer } from "@/components/shared/footer";
+import { BottomNav } from "@/components/shared/navigation/bottom-nav";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "BitHedge - sBTC Options for Hedging Bitcoin Volatility",
   description: "Hedge Bitcoin volatility with sBTC options secured by Bitcoin's own security",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -22,8 +30,9 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans min-h-screen bg-background text-foreground antialiased`}>
         <div className="relative flex min-h-screen flex-col">
           <HeaderSelector />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <main className="flex-1 pb-20 md:pb-0">{children}</main>
+          <Footer className="hidden md:block" />
+          <BottomNav />
         </div>
       </body>
     </html>

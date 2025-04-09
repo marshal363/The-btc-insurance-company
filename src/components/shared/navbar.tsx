@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { WalletAddress, useWalletStore } from "@/store/wallet-store";
+import { WalletIcon } from "lucide-react";
 
 const NavItems = [
   {
@@ -42,7 +43,8 @@ export const Navbar = ({ className }: NavbarProps) => {
           </Link>
         </div>
         
-        <nav className="flex items-center space-x-8 text-sm font-medium">
+        {/* Navigation links - hidden on mobile */}
+        <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
           {NavItems.map((item) => (
             <Link
               key={item.href}
@@ -68,7 +70,7 @@ export const Navbar = ({ className }: NavbarProps) => {
               </div>
               <button 
                 onClick={() => disconnectWallet()}
-                className="text-xs text-muted-foreground hover:text-foreground"
+                className="hidden md:block text-xs text-muted-foreground hover:text-foreground"
               >
                 Disconnect
               </button>
@@ -79,14 +81,15 @@ export const Navbar = ({ className }: NavbarProps) => {
               disabled={connecting}
               className={cn(
                 "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-                "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-5 py-2",
+                "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-3 md:px-5 py-2",
                 connecting && "opacity-70 cursor-not-allowed"
               )}
             >
-              {connecting ? "Connecting..." : "Connect Wallet"}
+              <WalletIcon className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">{connecting ? "Connecting..." : "Connect Wallet"}</span>
             </button>
           )}
-          <div className="bg-destructive/20 text-destructive px-3 py-1.5 text-xs font-medium rounded-md">
+          <div className="bg-destructive/20 text-destructive px-2 md:px-3 py-1 md:py-1.5 text-xs font-medium rounded-md">
             Testnet
           </div>
         </div>
