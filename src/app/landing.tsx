@@ -5,7 +5,8 @@ import {
   EducationalSection,
   UserPaths,
   SocialProof,
-  FinalCTA
+  FinalCTA,
+  FAQSection
 } from "@/components/landing";
 
 export default function Landing() {
@@ -17,6 +18,7 @@ export default function Landing() {
       <EducationalSection />
       <UserPaths />
       <SocialProof />
+      <FAQSection />
       <FinalCTA />
     </div>
   );
