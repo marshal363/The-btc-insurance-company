@@ -1,10 +1,30 @@
 "use client";
 
 import { useMarketStore } from "@/store/market-store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Import our new components
+import { MarketOverviewCards } from "@/components/option-data/market-overview-cards";
+import { OptionsChain } from "@/components/option-data/options-chain";
+import { DistributionCharts } from "@/components/option-data/distribution-charts";
+import { InterestVolumeCharts } from "@/components/option-data/interest-volume-charts";
+import { TimeSeriesAnalysis } from "@/components/option-data/time-series-analysis";
+import { ImpliedVolatilityCharts } from "@/components/option-data/implied-volatility-charts";
+import { EducationalResources } from "@/components/option-data/educational-resources";
 
 export default function OptionData() {
-  const { btcPrice, btcPriceChange24h, btcVolatility, fetchMarketData, availableOptions, fetchAvailableOptions } = useMarketStore();
+  const { 
+    btcPrice, 
+    btcPriceChange24h, 
+    btcVolatility, 
+    putCallRatio,
+    availableOptions, 
+    fetchMarketData, 
+    fetchAvailableOptions 
+  } = useMarketStore();
+
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     // Fetch market data when component mounts
@@ -12,69 +32,95 @@ export default function OptionData() {
     fetchAvailableOptions();
   }, [fetchMarketData, fetchAvailableOptions]);
 
+  // Transform the availableOptions data for the visualizations
+  const openInterestData = [
+    { strike: 45000, calls: 150, puts: 300 },
+    { strike: 46000, calls: 220, puts: 280 },
+    { strike: 47000, calls: 280, puts: 200 },
+    { strike: 48000, calls: 250, puts: 180 },
+    { strike: 49000, calls: 200, puts: 160 },
+    { strike: 50000, calls: 350, puts: 140 },
+    { strike: 51000, calls: 300, puts: 120 },
+    { strike: 52000, calls: 250, puts: 100 },
+  ];
+
+  const volumeData = [
+    { strike: 45000, calls: 30, puts: 80 },
+    { strike: 46000, calls: 50, puts: 70 },
+    { strike: 47000, calls: 75, puts: 60 },
+    { strike: 48000, calls: 85, puts: 40 },
+    { strike: 49000, calls: 70, puts: 35 },
+    { strike: 50000, calls: 120, puts: 30 },
+    { strike: 51000, calls: 90, puts: 25 },
+    { strike: 52000, calls: 60, puts: 20 },
+  ];
+
+  const impliedVolatilityData = [
+    { strike: 45000, shortTerm: 52, midTerm: 48, longTerm: 45 },
+    { strike: 46000, shortTerm: 50, midTerm: 46, longTerm: 44 },
+    { strike: 47000, shortTerm: 48, midTerm: 45, longTerm: 42 },
+    { strike: 48000, shortTerm: 45, midTerm: 42, longTerm: 40 },
+    { strike: 49000, shortTerm: 44, midTerm: 41, longTerm: 39 },
+    { strike: 50000, shortTerm: 42, midTerm: 40, longTerm: 38 },
+    { strike: 51000, shortTerm: 44, midTerm: 41, longTerm: 39 },
+    { strike: 52000, shortTerm: 46, midTerm: 43, longTerm: 41 },
+  ];
+
   return (
-    <div className="container py-8">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
       <h1 className="text-3xl font-bold mb-6">Option Data</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-card rounded-lg p-4 text-card-foreground shadow-sm">
-          <div className="text-sm text-muted-foreground">BTC Price</div>
-          <div className="text-2xl font-semibold">${btcPrice.toLocaleString()}</div>
-          <div className={`text-sm ${btcPriceChange24h >= 0 ? "text-profit" : "text-loss"}`}>
-            {btcPriceChange24h > 0 ? "+" : ""}{btcPriceChange24h}%
-          </div>
-        </div>
-        
-        <div className="bg-card rounded-lg p-4 text-card-foreground shadow-sm">
-          <div className="text-sm text-muted-foreground">Historical Volatility</div>
-          <div className="text-2xl font-semibold">{btcVolatility}%</div>
-          <div className="text-sm text-muted-foreground">30-day</div>
-        </div>
-        
-        <div className="bg-card rounded-lg p-4 text-card-foreground shadow-sm">
-          <div className="text-sm text-muted-foreground">Available Options</div>
-          <div className="text-2xl font-semibold">{availableOptions.length}</div>
-          <div className="text-sm text-muted-foreground">
-            {availableOptions.filter(opt => opt.type === "call").length} calls / {availableOptions.filter(opt => opt.type === "put").length} puts
-          </div>
-        </div>
-        
-        <div className="bg-card rounded-lg p-4 text-card-foreground shadow-sm">
-          <div className="text-sm text-muted-foreground">Put/Call Ratio</div>
-          <div className="text-2xl font-semibold">0.8</div>
-          <div className="text-sm text-muted-foreground">Slight bullish bias</div>
-        </div>
-      </div>
+      {/* Market Overview Cards */}
+      <MarketOverviewCards 
+        btcPrice={btcPrice}
+        btcPriceChange24h={btcPriceChange24h}
+        btcVolatility={btcVolatility}
+        putCallRatio={putCallRatio}
+        availableOptions={availableOptions}
+      />
       
-      <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm mb-8">
-        <h2 className="text-xl font-bold mb-4">Options Chain</h2>
-        <div className="text-center py-8 text-muted-foreground">
-          Option chain visualization will be implemented in Phase 6.
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm">
-          <h2 className="text-xl font-bold mb-4">Open Interest</h2>
-          <div className="text-center py-8 text-muted-foreground">
-            Open interest chart will be implemented in Phase 6.4.
-          </div>
-        </div>
+      {/* Tabs Navigation */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+        <TabsList className="grid grid-cols-3 w-full max-w-md mb-6">
+          <TabsTrigger 
+            value="overview" 
+            className="rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm py-2"
+          >
+            Overview
+          </TabsTrigger>
+          <TabsTrigger 
+            value="openInterest" 
+            className="rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm py-2"
+          >
+            Open Interest & Volume
+          </TabsTrigger>
+          <TabsTrigger 
+            value="impliedVolatility" 
+            className="rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm py-2"
+          >
+            Implied Volatility
+          </TabsTrigger>
+        </TabsList>
         
-        <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm">
-          <h2 className="text-xl font-bold mb-4">Volume Distribution</h2>
-          <div className="text-center py-8 text-muted-foreground">
-            Volume distribution chart will be implemented in Phase 6.4.
-          </div>
-        </div>
-      </div>
+        {/* Overview Tab Content */}
+        <TabsContent value="overview">
+          <OptionsChain options={availableOptions} />
+          <DistributionCharts options={availableOptions} btcPrice={btcPrice} />
+        </TabsContent>
+        
+        {/* Open Interest & Volume Tab Content */}
+        <TabsContent value="openInterest">
+          <InterestVolumeCharts openInterestData={openInterestData} volumeData={volumeData} />
+          <TimeSeriesAnalysis />
+        </TabsContent>
+        
+        {/* Implied Volatility Tab Content */}
+        <TabsContent value="impliedVolatility">
+          <ImpliedVolatilityCharts impliedVolatilityData={impliedVolatilityData} />
+        </TabsContent>
+      </Tabs>
       
-      <div className="bg-card rounded-lg p-6 text-card-foreground shadow-sm">
-        <h2 className="text-xl font-bold mb-4">Implied Volatility</h2>
-        <div className="text-center py-8 text-muted-foreground">
-          Implied volatility visualization will be implemented in Phase 6.4.
-        </div>
-      </div>
+      <EducationalResources />
     </div>
   );
 } 
