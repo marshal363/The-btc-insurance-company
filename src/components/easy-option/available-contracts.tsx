@@ -13,11 +13,14 @@ export interface OptionContract {
   daysToExpiry: number;
   openInterest: number;
   volume: number;
+  durationLabel: string;
 }
 
 interface AvailableContractsProps {
   optionType: "call" | "put";
   strikePrice: string;
+  duration: "30" | "60" | "90" | "180" | "365" | "halving" | "custom";
+  customDays?: number;
   selectedContract: OptionContract | null;
   onSelectContract: (contract: OptionContract) => void;
   togglePnlPanel: () => void;
@@ -26,11 +29,27 @@ interface AvailableContractsProps {
 export function AvailableContracts({ 
   optionType, 
   strikePrice,
+  duration,
+  customDays = 120,
   selectedContract,
   onSelectContract,
   togglePnlPanel
 }: AvailableContractsProps) {
   const strikeNum = parseFloat(strikePrice);
+  
+  // Format duration for display
+  const formatDuration = (duration: string): { days: number, label: string } => {
+    if (duration === "30") return { days: 30, label: "30 days" };
+    if (duration === "60") return { days: 60, label: "60 days" };
+    if (duration === "90") return { days: 90, label: "90 days" };
+    if (duration === "180") return { days: 180, label: "6 months" };
+    if (duration === "365") return { days: 365, label: "1 year" };
+    if (duration === "halving") return { days: 200, label: "Until next halving" };
+    if (duration === "custom") return { days: customDays, label: `${customDays} days` };
+    return { days: 30, label: "30 days" }; // default
+  };
+  
+  const durationInfo = formatDuration(duration);
   
   // Generate mock contracts based on strike price and option type
   const generateContracts = (): OptionContract[] => {
@@ -54,24 +73,29 @@ export function AvailableContracts({
         moneyness = "OTM";
       }
       
-      // Calculate mock premium based on moneyness and option type
+      // Calculate mock premium based on moneyness, option type and duration
       const basePremium = 50;
-      let premium = basePremium;
+      
+      // Premium multiplier based on duration
+      const durationMultiplier = (durationInfo.days / 30) * (1 - (Math.log(durationInfo.days) / 100));
+      
+      let premium = basePremium * durationMultiplier;
       
       if (moneyness === "ITM") {
-        premium = basePremium * 1.5;
+        premium = premium * 1.5;
       } else if (moneyness === "OTM") {
-        premium = basePremium * 0.7;
+        premium = premium * 0.7;
       }
       
       return {
         id: `${index + 1}`,
         type: optionType,
         strike,
-        premium,
-        daysToExpiry: 30,
+        premium: Math.round(premium),
+        daysToExpiry: durationInfo.days,
         openInterest: 250 - (index * 50),
-        volume: 100 - (index * 25)
+        volume: 100 - (index * 25),
+        durationLabel: durationInfo.label
       };
     });
   };
@@ -245,16 +269,9 @@ export function AvailableContracts({
                     <span className="text-sm text-gray-500">{insuranceTerms.premium}</span>
                     <span className="text-lg font-semibold">${contract.premium}</span>
                   </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 text-sm mb-6">
-                  <div>
-                    <span className="block text-gray-500 mb-1">Policy Period</span>
-                    <span className="font-medium">{contract.daysToExpiry} days</span>
-                  </div>
-                  <div>
-                    <span className="block text-gray-500 mb-1">{insuranceTerms.strike}</span>
-                    <span className="font-medium">${contract.strike.toLocaleString()}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">Duration</span>
+                    <span className="text-sm font-medium">{contract.durationLabel}</span>
                   </div>
                 </div>
                 

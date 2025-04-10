@@ -8,7 +8,7 @@ interface ReviewAndActivateProps {
   protectionType: ProtectionType;
   strikePrice: string;
   amount: string;
-  duration: string;
+  duration: "30" | "60" | "90" | "180" | "365" | "halving" | "custom";
   policy: {
     premium: number;
     fees: number;
@@ -32,6 +32,21 @@ export function ReviewAndActivate({
   const btcPrice = 48500; // Hardcoded current price
   const usdValue = btcAmount * btcPrice;
   const strikePriceNumber = parseFloat(strikePrice);
+  
+  // Format duration display string
+  const formatDuration = (duration: string) => {
+    if (duration === "halving") {
+      return "Until next Bitcoin halving";
+    } else if (duration === "custom") {
+      return "Custom period"; // In a real app, would show actual days from state
+    } else if (duration === "180") {
+      return "6 months";
+    } else if (duration === "365") {
+      return "1 year";
+    } else {
+      return `${duration} days`;
+    }
+  };
   
   // Get protection direction text
   const protectionTypeText = 
@@ -90,7 +105,7 @@ export function ReviewAndActivate({
               </li>
               <li className="flex justify-between">
                 <span className="text-muted-foreground">Duration</span>
-                <span className="font-medium">{duration} days</span>
+                <span className="font-medium">{formatDuration(duration)}</span>
               </li>
               <li className="flex justify-between">
                 <span className="text-muted-foreground">Current Price</span>
@@ -137,7 +152,7 @@ export function ReviewAndActivate({
           <div className="flex items-start gap-2 text-sm text-muted-foreground">
             <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
             <p>
-              Your Bitcoin protection will be activated immediately upon payment. The protection will remain active for {duration} days.
+              Your Bitcoin protection will be activated immediately upon payment. The protection will remain active for {formatDuration(duration)}.
             </p>
           </div>
           <div className="flex items-start gap-2 text-sm text-muted-foreground">

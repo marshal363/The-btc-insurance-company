@@ -46,7 +46,7 @@ export default function EasyOption() {
   
   // Bitcoin amount and duration state 
   const [amount, setAmount] = useState<string>("0.25");
-  const [duration, setDuration] = useState<"30" | "60" | "90">("30");
+  const [duration, setDuration] = useState<"30" | "60" | "90" | "180" | "365" | "halving" | "custom">("30");
 
   // PnL simulation panel state
   const [isPnlPanelOpen, setIsPnlPanelOpen] = useState(false);
@@ -184,7 +184,21 @@ export default function EasyOption() {
   const calculatePayment = () => {
     // Simplified calculation for demo purposes
     // In a real app, we would call an API to get the exact premium
-    const premium = parseFloat(amount) * 0.05 * parseFloat(duration) / 30;
+    let durationValue = 30; 
+    
+    // Calculate effective days for premium calculation
+    if (duration === "30") durationValue = 30;
+    else if (duration === "60") durationValue = 60;
+    else if (duration === "90") durationValue = 90;
+    else if (duration === "180") durationValue = 180;
+    else if (duration === "365") durationValue = 365;
+    else if (duration === "halving") durationValue = 200; // Approximate days until next halving
+    else if (duration === "custom") durationValue = 120; // Default for custom
+
+    // Calculate premium with scaling factor for longer durations
+    const baseRate = 0.05; // 5%
+    const durationMultiplier = (durationValue / 30) * (1 - (Math.log(durationValue) / 100));
+    const premium = parseFloat(amount) * baseRate * durationMultiplier;
     const fees = premium * 0.02;
     const total = premium + fees;
     
@@ -239,7 +253,7 @@ export default function EasyOption() {
         {currentStep === STEPS.STRIKE_PRICE && (
           <StrikePrice 
             optionType={optionType}
-            strikePrice={strikePrice}
+                strikePrice={strikePrice} 
             setStrikePrice={setStrikePrice}
             protectionType={protectionType}
             amount={amount}
@@ -260,6 +274,8 @@ export default function EasyOption() {
           <AvailableContracts 
             optionType={optionType}
             strikePrice={strikePrice}
+            duration={duration}
+            customDays={duration === "custom" ? 120 : undefined}
             onSelectContract={handleSelectContract}
             selectedContract={selectedContract}
             togglePnlPanel={togglePnlPanel}
