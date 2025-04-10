@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Shield, TrendingUp, ArrowRight, ArrowDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Persona } from "./hero";
 
 interface StepProps {
   number: number;
@@ -57,7 +58,11 @@ function ConnectorLine({ direction = 'down', type = 'protection' }: { direction?
   );
 }
 
-export function HowItWorks() {
+interface HowItWorksProps {
+  activePersona: Persona;
+}
+
+export function HowItWorks({ activePersona }: HowItWorksProps) {
   return (
     <section className="py-16 md:py-24 w-full bg-gray-50/80 dark:bg-gray-900/20" id="how-it-works">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -112,8 +117,8 @@ export function HowItWorks() {
           </div>
           
           <div className="md:col-span-2">
-            <Step
-              number={1}
+          <Step 
+            number={1}
               title="Offer Protection Capacity"
               description="Decide how much protection you're willing to provide and at what rates."
               persona="income"
@@ -157,8 +162,8 @@ export function HowItWorks() {
           </div>
           
           <div className="md:col-span-2">
-            <Step
-              number={2}
+          <Step 
+            number={2}
               title="Set Your Terms"
               description="Specify your premium requirements and protection periods to match your strategy."
               persona="income"
@@ -202,8 +207,8 @@ export function HowItWorks() {
           </div>
           
           <div className="md:col-span-2">
-            <Step
-              number={3}
+          <Step 
+            number={3}
               title="Collect Premiums Instantly"
               description="Receive premium payments immediately when protection buyers select your offerings."
               persona="income"
@@ -291,7 +296,7 @@ export function HowItWorks() {
           >
             <Link href="/home">
               Experience The Platform
-            </Link>
+          </Link>
           </Button>
         </div>
       </div>

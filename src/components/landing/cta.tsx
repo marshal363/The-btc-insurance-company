@@ -4,8 +4,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Shield, TrendingUp, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Persona } from "./hero"; // Import Persona type
 
-export function CTA() {
+// Add Props interface
+interface CTAProps {
+  activePersona: Persona;
+}
+
+export function CTA({ activePersona }: CTAProps) { // Add activePersona prop
+  const isProtection = activePersona === "protection";
+
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Background Elements */}
@@ -27,66 +35,69 @@ export function CTA() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16">
-          {/* Protection CTA */}
-          <motion.div 
-            className="relative overflow-hidden rounded-2xl border border-blue-200 dark:border-blue-800/60 bg-blue-50/80 dark:bg-blue-950/20 p-8 shadow-sm hover:shadow-md transition-all duration-300"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            whileHover={{ y: -5 }}
-          >
-            <div className="absolute top-0 right-0 p-4">
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                <Shield className="h-7 w-7 text-primary" />
+        {/* Conditionally render based on activePersona */}
+        <div className="max-w-2xl mx-auto mb-16">
+          {isProtection ? (
+            <motion.div 
+              key="protection-cta"
+              className="relative overflow-hidden rounded-2xl border border-blue-200 dark:border-blue-800/60 bg-blue-50/80 dark:bg-blue-950/20 p-8 shadow-sm hover:shadow-md transition-all duration-300"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ y: -5 }}
+            >
+              <div className="absolute top-0 right-0 p-4">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                  <Shield className="h-7 w-7 text-primary" />
+                </div>
               </div>
-            </div>
-            
-            <h3 className="text-2xl font-bold mb-4 mt-10 md:mt-0">Secure Your Bitcoin Value Now</h3>
-            
-            <p className="text-muted-foreground mb-8 max-w-md">
-              Bitcoin&apos;s historical volatility means the next price movement could happen any day. 
-              Don&apos;t wait until prices start falling to seek protection.
-            </p>
-            
-            <Button asChild size="lg" className="w-full group">
-              <Link href="/home">
-                <span>Create Your Protection Policy</span>
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-          </motion.div>
-
-          {/* Income CTA */}
-          <motion.div 
-            className="relative overflow-hidden rounded-2xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/80 dark:bg-amber-950/20 p-8 shadow-sm hover:shadow-md transition-all duration-300"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            whileHover={{ y: -5 }}
-          >
-            <div className="absolute top-0 right-0 p-4">
-              <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
-                <TrendingUp className="h-7 w-7 text-amber-500" />
+              
+              <h3 className="text-2xl font-bold mb-4 mt-10 md:mt-0">Secure Your Bitcoin Value Now</h3>
+              
+              <p className="text-muted-foreground mb-8 max-w-md">
+                Bitcoin&apos;s historical volatility means the next price movement could happen any day. 
+                Don&apos;t wait until prices start falling to seek protection.
+              </p>
+              
+              <Button asChild size="lg" className="w-full group">
+                <Link href="/home">
+                  <span>Create Your Protection Policy</span>
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="income-cta"
+              className="relative overflow-hidden rounded-2xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/80 dark:bg-amber-950/20 p-8 shadow-sm hover:shadow-md transition-all duration-300"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ y: -5 }}
+            >
+              <div className="absolute top-0 right-0 p-4">
+                <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
+                  <TrendingUp className="h-7 w-7 text-amber-500" />
+                </div>
               </div>
-            </div>
-            
-            <h3 className="text-2xl font-bold mb-4 mt-10 md:mt-0">Begin Earning Premium Income Today</h3>
-            
-            <p className="text-muted-foreground mb-8 max-w-md">
-              Every day without your capital generating yield is a missed opportunity. 
-              Start collecting premiums within minutes.
-            </p>
-            
-            <Button asChild size="lg" variant="outline" className="w-full border-amber-200 dark:border-amber-800/60 hover:bg-amber-100/50 dark:hover:bg-amber-900/20 text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 group">
-              <Link href="/home">
-                <span>Start Providing Protection</span>
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-          </motion.div>
+              
+              <h3 className="text-2xl font-bold mb-4 mt-10 md:mt-0">Begin Earning Premium Income Today</h3>
+              
+              <p className="text-muted-foreground mb-8 max-w-md">
+                Every day without your capital generating yield is a missed opportunity. 
+                Start collecting premiums within minutes.
+              </p>
+              
+              <Button asChild size="lg" variant="outline" className="w-full border-amber-200 dark:border-amber-800/60 hover:bg-amber-100/50 dark:hover:bg-amber-900/20 text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 group">
+                <Link href="/home">
+                  <span>Start Providing Protection</span>
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </motion.div>
+          )}
         </div>
 
         <motion.div 

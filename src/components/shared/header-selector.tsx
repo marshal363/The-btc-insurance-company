@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { Navbar } from "./navbar";
-import { LandingHeader } from "./landing-header";
 import { useEffect } from "react";
 
 export function HeaderSelector() {
@@ -12,10 +11,9 @@ export function HeaderSelector() {
     console.log("HeaderSelector rendered with pathname:", pathname);
   }, [pathname]);
   
-  // Show landing header only on the root path
+  // Skip rendering on the root path as it's handled by page.tsx
   if (pathname === "/") {
-    console.log("Rendering LandingHeader for path:", pathname);
-    return <LandingHeader />;
+    return null;
   }
   
   // For all other routes, show the regular navbar

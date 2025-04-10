@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from "framer-motion";
 import { Shield, TrendingUp, ArrowRight, BookOpen, Lock, Settings } from "lucide-react";
+import { Persona } from './hero'; // Import Persona type
 
 interface PathCardProps {
   icon: React.ReactNode;
@@ -46,7 +47,12 @@ function PathCard({ icon, title, description, persona }: PathCardProps) {
   );
 }
 
-export function Paths() {
+// Add Props interface
+interface PathsProps {
+  activePersona: Persona;
+}
+
+export function Paths({ activePersona }: PathsProps) { // Add activePersona prop
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -91,116 +97,119 @@ export function Paths() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Protection Paths */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={containerVariants}
-          >
-            <motion.div variants={pathVariants} className="mb-8 flex items-center">
-              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mr-4">
-                <Shield className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold">For Bitcoin Holders</h3>
-            </motion.div>
-            
-            <motion.p 
-              variants={pathVariants}
-              className="text-muted-foreground mb-8"
-            >
-              Whether you&apos;re protecting your long-term holdings or managing short-term 
-              volatility, BitHedge adapts to your protection needs.
-            </motion.p>
-            
-            <motion.div 
-              className="space-y-4"
+        {/* Use activePersona for conditional rendering */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 max-w-2xl mx-auto gap-12 mb-16">
+          {activePersona === 'protection' && (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
               variants={containerVariants}
             >
-              <motion.div variants={itemVariants}>
-                <PathCard
-                  icon={<BookOpen className="h-5 w-5" />}
-                  title="Entry Protection"
-                  description="Perfect for new Bitcoin buyers wanting to limit initial downside"
-                  persona="protection"
-                />
+              <motion.div variants={pathVariants} className="mb-8 flex items-center">
+                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mr-4">
+                  <Shield className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold">For Bitcoin Holders</h3>
               </motion.div>
               
-              <motion.div variants={itemVariants}>
-                <PathCard
-                  icon={<Lock className="h-5 w-5" />}
-                  title="HODL Protection"
-                  description="Ideal for long-term holders seeking peace of mind during volatility"
-                  persona="protection"
-                />
-              </motion.div>
+              <motion.p 
+                variants={pathVariants}
+                className="text-muted-foreground mb-8"
+              >
+                Whether you&apos;re protecting your long-term holdings or managing short-term 
+                volatility, BitHedge adapts to your protection needs.
+              </motion.p>
               
-              <motion.div variants={itemVariants}>
-                <PathCard
-                  icon={<Settings className="h-5 w-5" />}
-                  title="Strategic Protection"
-                  description="For active traders managing position risk"
-                  persona="protection"
-                />
+              <motion.div 
+                className="space-y-4"
+                variants={containerVariants}
+              >
+                <motion.div variants={itemVariants}>
+                  <PathCard
+                    icon={<BookOpen className="h-5 w-5" />}
+                    title="Entry Protection"
+                    description="Perfect for new Bitcoin buyers wanting to limit initial downside"
+                    persona="protection"
+                  />
+                </motion.div>
+                
+                <motion.div variants={itemVariants}>
+                  <PathCard
+                    icon={<Lock className="h-5 w-5" />}
+                    title="HODL Protection"
+                    description="Ideal for long-term holders seeking peace of mind during volatility"
+                    persona="protection"
+                  />
+                </motion.div>
+                
+                <motion.div variants={itemVariants}>
+                  <PathCard
+                    icon={<Settings className="h-5 w-5" />}
+                    title="Strategic Protection"
+                    description="For active traders managing position risk"
+                    persona="protection"
+                  />
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
+          )}
           
-          {/* Income Paths */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={containerVariants}
-          >
-            <motion.div variants={pathVariants} className="mb-8 flex items-center">
-              <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mr-4">
-                <TrendingUp className="h-6 w-6 text-amber-500" />
-              </div>
-              <h3 className="text-2xl font-bold">For Yield Seekers</h3>
-            </motion.div>
-            
-            <motion.p 
-              variants={pathVariants}
-              className="text-muted-foreground mb-8"
-            >
-              BitHedge offers multiple strategies for generating income based on your risk 
-              preference and market outlook.
-            </motion.p>
-            
-            <motion.div 
-              className="space-y-4"
+          {activePersona === 'income' && (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
               variants={containerVariants}
             >
-              <motion.div variants={itemVariants}>
-                <PathCard
-                  icon={<Shield className="h-5 w-5" />}
-                  title="Conservative Income"
-                  description="Lower premiums but minimal risk exposure"
-                  persona="income"
-                />
+              <motion.div variants={pathVariants} className="mb-8 flex items-center">
+                <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mr-4">
+                  <TrendingUp className="h-6 w-6 text-amber-500" />
+                </div>
+                <h3 className="text-2xl font-bold">For Yield Seekers</h3>
               </motion.div>
               
-              <motion.div variants={itemVariants}>
-                <PathCard
-                  icon={<TrendingUp className="h-5 w-5" />}
-                  title="Balanced Returns"
-                  description="Moderate premiums with calculated risk parameters"
-                  persona="income"
-                />
-              </motion.div>
+              <motion.p 
+                variants={pathVariants}
+                className="text-muted-foreground mb-8"
+              >
+                BitHedge offers multiple strategies for generating income based on your risk 
+                preference and market outlook.
+              </motion.p>
               
-              <motion.div variants={itemVariants}>
-                <PathCard
-                  icon={<ArrowRight className="h-5 w-5" />}
-                  title="Yield Maximizer"
-                  description="Higher premiums with greater potential obligations"
-                  persona="income"
-                />
+              <motion.div 
+                className="space-y-4"
+                variants={containerVariants}
+              >
+                <motion.div variants={itemVariants}>
+                  <PathCard
+                    icon={<Shield className="h-5 w-5" />}
+                    title="Conservative Income"
+                    description="Lower premiums but minimal risk exposure"
+                    persona="income"
+                  />
+                </motion.div>
+                
+                <motion.div variants={itemVariants}>
+                  <PathCard
+                    icon={<TrendingUp className="h-5 w-5" />}
+                    title="Balanced Returns"
+                    description="Moderate premiums with calculated risk parameters"
+                    persona="income"
+                  />
+                </motion.div>
+                
+                <motion.div variants={itemVariants}>
+                  <PathCard
+                    icon={<ArrowRight className="h-5 w-5" />}
+                    title="Yield Maximizer"
+                    description="Higher premiums with greater potential obligations"
+                    persona="income"
+                  />
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
+          )}
         </div>
         
         <motion.div 

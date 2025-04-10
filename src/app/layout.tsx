@@ -25,8 +25,11 @@ export default function RootLayout({
 }>) {
   // This is a server component, we shouldn't use Date or other dynamic values here
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-sans min-h-screen bg-background text-foreground antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body 
+        className={`${inter.variable} font-sans min-h-screen bg-background text-foreground antialiased`}
+        suppressHydrationWarning={true}
+      >
         <div className="relative flex min-h-screen flex-col">
           <HeaderSelector />
           <main className="flex-1 pb-20 md:pb-0">{children}</main>

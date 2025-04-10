@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, TrendingUp, ChevronDown } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Persona } from "./hero";
 
 interface FAQItemProps {
   question: string;
@@ -29,8 +30,16 @@ function FAQItem({ question, answer }: FAQItemProps) {
   );
 }
 
-export function FAQ() {
-  const [activeTab, setActiveTab] = useState("protection");
+interface FAQProps {
+  activePersona: Persona;
+}
+
+export function FAQ({ activePersona }: FAQProps) {
+  const [activeTab, setActiveTab] = useState<string>(activePersona);
+
+  useEffect(() => {
+    setActiveTab(activePersona);
+  }, [activePersona]);
 
   const protectionFAQs = [
     {
