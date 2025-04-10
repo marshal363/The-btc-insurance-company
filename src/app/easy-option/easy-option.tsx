@@ -18,7 +18,7 @@ export default function EasyOption() {
   const { btcPrice = 48500 } = useMarketStore();
 
   // Step navigation state
-  const [currentStep, setCurrentStep] = useState<StepType>("type");
+  const [currentStep, setCurrentStep] = useState<StepType>("protection-type");
   
   // Option configuration state
   const [optionType, setOptionType] = useState<OptionType>("call");
@@ -35,6 +35,7 @@ export default function EasyOption() {
   const [isTypeValid, setIsTypeValid] = useState(true); // Type is pre-selected so valid by default
   const [isStrikeValid, setIsStrikeValid] = useState(true); // Strike is pre-set so valid by default
   const [isExpiryValid, setIsExpiryValid] = useState(true); // Expiry is pre-set so valid by default
+  const [isContractValid, setIsContractValid] = useState(false); // Contract must be selected
   
   // Update strike price when BTC price changes (only on initial mount)
   useEffect(() => {
@@ -44,10 +45,11 @@ export default function EasyOption() {
   // Check validation for current step
   const isCurrentStepValid = () => {
     switch (currentStep) {
-      case "type": return isTypeValid;
-      case "strike": return isStrikeValid;
-      case "expiry": return isExpiryValid;
-      case "review": return true; // Review step just displays info, always valid
+      case "protection-type": return isTypeValid;
+      case "coverage-amount": return isStrikeValid;
+      case "coverage-period": return isExpiryValid;
+      case "select-policy": return isContractValid || selectedContract !== null;
+      case "review-policy": return true; // Review step just displays info, always valid
       default: return false;
     }
   };
@@ -56,30 +58,32 @@ export default function EasyOption() {
   const handleNext = () => {
     if (!isCurrentStepValid()) return;
     
-    if (currentStep === "type") setCurrentStep("strike");
-    else if (currentStep === "strike") setCurrentStep("expiry");
-    else if (currentStep === "expiry") setCurrentStep("review");
+    if (currentStep === "protection-type") setCurrentStep("coverage-amount");
+    else if (currentStep === "coverage-amount") setCurrentStep("coverage-period");
+    else if (currentStep === "coverage-period") setCurrentStep("select-policy");
+    else if (currentStep === "select-policy") setCurrentStep("review-policy");
     
     // When moving from type to strike, toggle PnL panel open
-    if (currentStep === "type") {
+    if (currentStep === "protection-type") {
       setIsPnlPanelOpen(true);
     }
   };
 
   const handleBack = () => {
-    if (currentStep === "strike") setCurrentStep("type");
-    else if (currentStep === "expiry") setCurrentStep("strike");
-    else if (currentStep === "review") setCurrentStep("expiry");
+    if (currentStep === "coverage-amount") setCurrentStep("protection-type");
+    else if (currentStep === "coverage-period") setCurrentStep("coverage-amount");
+    else if (currentStep === "select-policy") setCurrentStep("coverage-period");
+    else if (currentStep === "review-policy") setCurrentStep("select-policy");
     
     // When going back to type, close PnL panel
-    if (currentStep === "strike") {
+    if (currentStep === "coverage-amount") {
       setIsPnlPanelOpen(false);
     }
   };
 
   const handlePurchaseOption = () => {
     // In a real app, this would call an API to purchase the option
-    alert("Option purchased successfully!");
+    alert("Protection policy activated successfully!");
   };
 
   const handleSelectContract = (contract: OptionContract) => {
@@ -88,12 +92,13 @@ export default function EasyOption() {
     setOptionType(contract.type);
     setStrikePrice(contract.strike);
     setExpiryDays(contract.daysToExpiry);
+    setIsContractValid(true);
     // Open the PnL panel when a contract is selected
     setIsPnlPanelOpen(true);
   };
 
   // Check if we're past the first step to enable simulation panel
-  const canShowPnlSimulation = currentStep !== "type";
+  const canShowPnlSimulation = currentStep !== "protection-type";
 
   // Toggle PnL simulation panel
   const togglePnlPanel = () => {
@@ -104,7 +109,7 @@ export default function EasyOption() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
-      <h1 className="text-3xl font-bold mb-6">Easy Option Trading</h1>
+      <h1 className="text-3xl font-bold mb-6">Bitcoin Protection Center</h1>
       
       {/* Step Indicator Component */}
       <StepIndicator currentStep={currentStep} />
@@ -116,7 +121,7 @@ export default function EasyOption() {
           {/* Card Content */}
           <div className="max-w-2xl mx-auto bg-card rounded-lg p-6 text-card-foreground shadow-sm mb-6">
             {/* Step Content */}
-            {currentStep === "type" && (
+            {currentStep === "protection-type" && (
               <OptionTypeSelector 
                 optionType={optionType} 
                 setOptionType={(type) => {
@@ -126,7 +131,7 @@ export default function EasyOption() {
               />
             )}
   
-            {currentStep === "strike" && (
+            {currentStep === "coverage-amount" && (
               <StrikePriceSelector 
                 strikePrice={strikePrice} 
                 setStrikePrice={(price) => {
@@ -138,7 +143,7 @@ export default function EasyOption() {
               />
             )}
   
-            {currentStep === "expiry" && (
+            {currentStep === "coverage-period" && (
               <ExpirySelector 
                 expiryDays={expiryDays} 
                 setExpiryDays={(days) => {
@@ -147,8 +152,18 @@ export default function EasyOption() {
                 }} 
               />
             )}
+            
+            {currentStep === "select-policy" && (
+              <AvailableContracts 
+                optionType={optionType}
+                strikePrice={strikePrice}
+                expiryDays={expiryDays}
+                currentBtcPrice={btcPrice}
+                onSelectContract={handleSelectContract}
+              />
+            )}
   
-            {currentStep === "review" && (
+            {currentStep === "review-policy" && (
               <OptionReview 
                 optionType={optionType} 
                 strikePrice={strikePrice} 
@@ -158,30 +173,19 @@ export default function EasyOption() {
               />
             )}
             
-            {/* Available Contracts after expiry selection */}
-            {currentStep === "expiry" && (
-              <AvailableContracts 
-                optionType={optionType}
-                strikePrice={strikePrice}
-                expiryDays={expiryDays}
-                currentBtcPrice={btcPrice}
-                onSelectContract={handleSelectContract}
-              />
-            )}
-            
-            {/* PnL Panel Toggle Button (mobile only) */}
+            {/* Protection Calculator Toggle Button (mobile only) */}
             {canShowPnlSimulation && (
               <div className="mt-4 md:hidden">
                 <button
                   onClick={togglePnlPanel}
                   className="w-full bg-muted py-2 px-4 rounded-md text-sm font-medium"
                 >
-                  {isPnlPanelOpen ? "Hide P&L Simulation" : "Show P&L Simulation"}
+                  {isPnlPanelOpen ? "Hide Protection Calculator" : "View Protection Calculator"}
                 </button>
               </div>
             )}
             
-            {/* Show PnL Toggle Button on desktop too */}
+            {/* Show Protection Calculator Toggle Button on desktop too */}
             {canShowPnlSimulation && !isPnlPanelOpen && (
               <div className="hidden md:block mt-4">
                 <button
@@ -191,7 +195,7 @@ export default function EasyOption() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18l6-6-6-6"/>
                   </svg>
-                  Show P&L Simulation
+                  View Protection Calculator
                 </button>
               </div>
             )}
@@ -207,7 +211,7 @@ export default function EasyOption() {
           />
         </div>
         
-        {/* PnL Simulation Panel (larger screens) */}
+        {/* Protection Calculator Panel (larger screens) */}
         <div className={`hidden md:block ${isPnlPanelOpen ? 'w-1/3' : 'w-0 overflow-hidden'} transition-all duration-300`}>
           <PnlSimulation 
             optionType={optionType}
@@ -220,7 +224,7 @@ export default function EasyOption() {
         </div>
       </div>
       
-      {/* Mobile PnL Simulation (shown when toggled) */}
+      {/* Mobile Protection Calculator (shown when toggled) */}
       <div className={`md:hidden ${isPnlPanelOpen ? 'block' : 'hidden'} mt-6`}>
         <div className="bg-card rounded-lg shadow-sm">
           <PnlSimulation 

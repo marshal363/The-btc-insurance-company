@@ -29,88 +29,96 @@ export function StrikePriceSelector({
   const getPriceExplanation = () => {
     if (optionType === "call") {
       if (strikePrice < currentBtcPrice) {
-        return "Lower target price means your option already has value (ITM), but costs more premium.";
+        return "Lower lock-in price means your guarantee already has value, but costs more.";
       } else if (strikePrice > currentBtcPrice) {
-        return "Higher target price means your option costs less, but BTC needs to rise more to be profitable.";
+        return "Higher lock-in price costs less, but Bitcoin needs to rise more to make your guarantee valuable.";
       } else {
-        return "AT-the-money option provides a balance between cost and profit potential.";
+        return "At-market price lock provides a balance between cost and value.";
       }
     } else {
       if (strikePrice > currentBtcPrice) {
-        return "Higher target price means your option already has value (ITM), but costs more premium.";
+        return "Higher protection value costs more, but provides immediate coverage above current market price.";
       } else if (strikePrice < currentBtcPrice) {
-        return "Lower target price means your option costs less, but BTC needs to fall more to be profitable.";
+        return "Lower protection value costs less, but Bitcoin needs to fall more before protection activates.";
       } else {
-        return "AT-the-money option provides a balance between cost and profit potential.";
+        return "Full current value protection provides a balance between cost and coverage.";
       }
     }
   };
-
+  
+  // Get strike price label based on option type
+  const getStrikePriceLabel = () => {
+    if (optionType === "call") {
+      return "What Bitcoin purchase price do you want to lock in?";
+    } else {
+      return "What Bitcoin value do you want to protect?";
+    }
+  };
+  
+  // Get moneyness text for human readable display
+  const getMoneynessText = () => {
+    if (strikePrice === currentBtcPrice) {
+      return "Full current value protection"; 
+    }
+    
+    if (optionType === "call") {
+      return strikePrice < currentBtcPrice ? "Enhanced purchase guarantee" : "Economy purchase guarantee";
+    } else {
+      return strikePrice > currentBtcPrice ? "Enhanced value protection" : "Partial value protection";
+    }
+  };
+  
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">
-        {optionType === "call" 
-          ? "Select your target price for BTC to rise above" 
-          : "Select your target price for BTC to fall below"}
-      </h2>
+      <h2 className="text-xl font-bold mb-4">{getStrikePriceLabel()}</h2>
       
       <div className="mb-6">
-        <div className="flex justify-between mb-2">
-          <span className="text-sm text-muted-foreground">Current BTC: ${currentBtcPrice.toLocaleString()}</span>
-          <span className="text-sm font-medium">Selected: ${strikePrice.toLocaleString()}</span>
-        </div>
-        
-        <div className="py-4 px-2">
-          <div className="relative mt-1 mb-6">
-            <div className="absolute left-0 right-0 flex justify-center -top-2">
-              <div className="px-2 py-1 rounded bg-muted text-xs text-center">
-                Current Price
-                <div className="absolute left-1/2 top-full -ml-1 -mt-px border-l border-t border-r border-muted-foreground/20 rotate-45 w-2 h-2 bg-muted"></div>
-              </div>
+        <div className="bg-muted/30 p-4 rounded-lg mb-4">
+          <div className="flex justify-between">
+            <div className="text-sm">
+              <span className="text-muted-foreground">Current BTC:</span> ${currentBtcPrice.toLocaleString()}
             </div>
+            <div className="text-sm">
+              <span className="text-muted-foreground">Selected:</span> ${strikePrice.toLocaleString()}
+            </div>
+          </div>
+        </div>
+        <div className="mb-6">
+          <div className="mb-2">
             <Slider
+              defaultValue={[strikePrice]}
               min={minPrice}
               max={maxPrice}
               step={50}
-              value={[strikePrice]}
               onValueChange={(values) => setStrikePrice(values[0])}
-              className="my-4"
             />
           </div>
-        </div>
-        
-        <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-          <span>-10% (${minPrice.toLocaleString()})</span>
-          <span>Current (${currentBtcPrice.toLocaleString()})</span>
-          <span>+10% (${maxPrice.toLocaleString()})</span>
-        </div>
-        
-        <div className="mt-6 p-4 bg-muted/30 rounded-md border border-muted">
-          <div className="flex items-center gap-3 mb-3 text-sm">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              strikePrice > currentBtcPrice 
-                ? "bg-orange-500/20 text-orange-600 dark:text-orange-400" 
-                : strikePrice < currentBtcPrice 
-                  ? "bg-blue-500/20 text-blue-600 dark:text-blue-400"
-                  : "bg-green-500/20 text-green-600 dark:text-green-400"
-            }`}>
-              {strikePrice > currentBtcPrice ? "↑" : strikePrice < currentBtcPrice ? "↓" : "="}
-            </div>
-            <div>
-              <p className="font-medium">
-                {optionType === "call" 
-                  ? `Your CALL will have value if BTC rises above $${strikePrice.toLocaleString()}` 
-                  : `Your PUT will have value if BTC falls below $${strikePrice.toLocaleString()}`}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {getPriceExplanation()}
-              </p>
-            </div>
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>-10% (${minPrice.toLocaleString()})</span>
+            <span>Current (${currentBtcPrice.toLocaleString()})</span>
+            <span>+10% (${maxPrice.toLocaleString()})</span>
           </div>
+        </div>
+        
+        <div className="bg-muted/10 border rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 flex items-center justify-center">
+              =
+            </div>
+            <p className="text-sm font-medium">
+              {optionType === "call" 
+                ? `Your price lock will have value if BTC rises above $${strikePrice.toLocaleString()}`
+                : `Your protection will have value if BTC falls below $${strikePrice.toLocaleString()}`
+              }
+            </p>
+          </div>
+          <p className="text-xs text-muted-foreground ml-10">{getMoneynessText()} {getPriceExplanation()}</p>
           
           <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
             <div className="p-2 bg-white/50 dark:bg-black/10 rounded">
-              <p className="text-muted-foreground">Target Price:</p>
+              <p className="text-muted-foreground">
+                {optionType === "call" ? "Lock-in Price:" : "Protected Value:"}
+              </p>
               <p className="font-medium">${strikePrice.toLocaleString()}</p>
             </div>
             <div className="p-2 bg-white/50 dark:bg-black/10 rounded">
@@ -118,7 +126,7 @@ export function StrikePriceSelector({
               <p className="font-medium">{pricePosition}</p>
             </div>
             <div className="p-2 bg-white/50 dark:bg-black/10 rounded">
-              <p className="text-muted-foreground">Price Position:</p>
+              <p className="text-muted-foreground">Coverage Level:</p>
               <p className="font-medium">
                 {strikePrice === currentBtcPrice 
                   ? "At The Money" 

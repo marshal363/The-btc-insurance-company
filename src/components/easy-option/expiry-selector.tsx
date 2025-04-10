@@ -8,19 +8,34 @@ interface ExpirySelectorProps {
 
 export function ExpirySelector({ expiryDays, setExpiryDays }: ExpirySelectorProps) {
   const expiryDate = addDays(new Date(), expiryDays);
-  const formattedDate = format(expiryDate, "MM/dd/yyyy");
   
+  // Coverage period options
   const options = [
-    { days: 7, label: "1 WEEK", riskLevel: "Lower Cost, Higher Risk", description: "Shorter timeframe means cheaper options but less time for price to move favorably" },
-    { days: 14, label: "2 WEEKS", riskLevel: "Balanced", description: "Medium timeframe balances cost and time for price movement" },
-    { days: 30, label: "1 MONTH", riskLevel: "Higher Cost, Lower Risk", description: "Longer timeframe costs more but gives more time for favorable movement" }
+    { 
+      days: 7, 
+      label: "1 Week Coverage", 
+      riskLevel: "Lower Cost, Higher Risk",
+      description: "Shorter coverage period costs less but gives less time for favorable market movement"
+    },
+    { 
+      days: 14, 
+      label: "2 Weeks Coverage", 
+      riskLevel: "Balanced",
+      description: "Medium coverage period balances cost and time for market movement"
+    },
+    { 
+      days: 30, 
+      label: "1 Month Coverage", 
+      riskLevel: "Higher Cost, Lower Risk",
+      description: "Longer coverage period costs more but gives more time for favorable movement"
+    }
   ];
-
+  
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">How much time do you need?</h2>
-      <p className="text-sm text-muted-foreground mb-4">
-        Choose when your option expires. Longer periods cost more but give you more time for price to move in your favor.
+      <h2 className="text-xl font-bold mb-4">How long do you need protection?</h2>
+      <p className="text-muted-foreground mb-6">
+        Choose when your protection policy expires. Longer periods cost more but give you more time for price to move in your favor.
       </p>
       
       <div className="mb-6">
@@ -62,35 +77,28 @@ export function ExpirySelector({ expiryDays, setExpiryDays }: ExpirySelectorProp
         </div>
       </div>
       
-      <div className="p-4 rounded-md bg-muted/30 border border-muted">
-        <div className="flex items-start gap-4">
-          <div className="bg-muted/50 rounded-full p-2 flex-shrink-0 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-sm font-medium mb-1">Your option will expire on:</h3>
-            <p className="text-sm mb-1">{formattedDate} ({expiryDays} days from now)</p>
-            <p className="text-xs text-muted-foreground">
-              After this date, your option will expire and cannot be exercised.
-              {expiryDays <= 7 && " Make sure to monitor it closely as the expiry approaches."}
-            </p>
-          </div>
+      <div className="flex items-start gap-4 p-4 bg-muted/30 rounded-lg">
+        <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-muted rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
         </div>
-        
-        <hr className="my-4 border-muted" />
-        
-        <div className="text-xs text-muted-foreground">
-          <p className="font-medium mb-1">How expiration affects your option:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Longer expiration = Higher cost but more time for favorable movement</li>
-            <li>Shorter expiration = Lower cost but less time for favorable movement</li>
-            <li>Options lose value as they approach expiration (time decay)</li>
-          </ul>
+        <div>
+          <p className="font-medium">Your protection policy will expire on:</p>
+          <p className="text-xl font-bold">{format(expiryDate, "MM/dd/yyyy")} ({expiryDays} days from now)</p>
+          <p className="text-sm text-muted-foreground mt-1">After this date, your policy will expire and cannot be exercised.</p>
+          
+          <div className="mt-4">
+            <p className="text-sm font-medium mb-2">How expiration affects your protection:</p>
+            <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
+              <li>Longer protection period = Higher cost but more time for favorable movement</li>
+              <li>Shorter protection period = Lower cost but less time for favorable movement</li>
+              <li>Protection policies lose value as they approach expiration (time decay)</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
