@@ -1,66 +1,50 @@
 import React from "react";
-import Link from "next/link";
-import { StepType } from "./step-indicator";
+import { Button } from "@/components/ui/button";
 
 interface NavigationButtonsProps {
-  currentStep: StepType;
-  handleBack: () => void;
-  handleNext: () => void;
-  handlePurchase?: () => void;
-  isNextDisabled?: boolean;
+  currentStep: number;
+  totalSteps: number;
+  onNext: () => void;
+  onBack: () => void;
+  onActivate: () => void;
+  showBackButton?: boolean;
+  showNextButton?: boolean;
 }
 
 export function NavigationButtons({ 
-  currentStep, 
-  handleBack, 
-  handleNext,
-  handlePurchase,
-  isNextDisabled = false
+  currentStep,
+  totalSteps,
+  onNext,
+  onBack,
+  onActivate,
+  showBackButton = true,
+  showNextButton = true
 }: NavigationButtonsProps) {
-  // Get context-aware button text based on current step
-  const getNextButtonText = () => {
-    switch (currentStep) {
-      case "protection-type": return "Choose Coverage Amount";
-      case "coverage-amount": return "Select Coverage Period";
-      case "coverage-period": return "View Available Policies";
-      case "select-policy": return "Review Policy";
-      default: return "Continue";
-    }
-  };
   
   return (
-    <div className="flex justify-between max-w-2xl mx-auto">
-      {currentStep !== "protection-type" ? (
-        <button
-          onClick={handleBack}
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+    <div className="flex justify-between mt-6">
+      {showBackButton ? (
+        <Button 
+          variant="outline" 
+          onClick={onBack}
         >
-          Previous Step
-        </button>
+          Back
+        </Button>
       ) : (
-        <Link
-          href="/home"
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-        >
-          Back to Home
-        </Link>
+        <div></div> // Empty div to maintain flex spacing
       )}
       
-      {currentStep !== "review-policy" ? (
-        <button
-          onClick={handleNext}
-          disabled={isNextDisabled}
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-        >
-          {getNextButtonText()}
-        </button>
+      {showNextButton ? (
+        <Button onClick={onNext}>
+          Continue
+        </Button>
       ) : (
-        <button
-          onClick={handlePurchase}
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+        <Button 
+          onClick={onActivate}
+          className="bg-primary"
         >
           Activate Protection
-        </button>
+        </Button>
       )}
     </div>
   );

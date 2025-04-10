@@ -20,6 +20,9 @@ interface MarketState {
   isLoading: boolean;
   lastUpdated: Date | null;
   error: string | null;
+  ethPrice: number;
+  updateBtcPrice: (price: number) => void;
+  updateEthPrice: (price: number) => void;
 }
 
 interface MarketActions {
@@ -39,6 +42,7 @@ export const useMarketStore = create<MarketStore>()((set) => ({
   isLoading: false,
   lastUpdated: null,
   error: null,
+  ethPrice: 3250,
 
   // Actions
   fetchMarketData: async () => {
@@ -125,4 +129,7 @@ export const useMarketStore = create<MarketStore>()((set) => ({
       });
     }
   },
+
+  updateBtcPrice: (price: number) => set({ btcPrice: price }),
+  updateEthPrice: (price: number) => set({ ethPrice: price }),
 }));

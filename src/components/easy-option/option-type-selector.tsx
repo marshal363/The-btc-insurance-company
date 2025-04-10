@@ -1,16 +1,27 @@
 import React from "react";
+import { ProtectionType } from "./protection-type-selector";
 
 export type OptionType = "call" | "put";
 
 interface OptionTypeSelectorProps {
   optionType: OptionType;
   setOptionType: (type: OptionType) => void;
+  protectionType: ProtectionType;
 }
 
-export function OptionTypeSelector({ optionType, setOptionType }: OptionTypeSelectorProps) {
+export function OptionTypeSelector({ optionType, setOptionType, protectionType }: OptionTypeSelectorProps) {
+  // Get heading based on protection type
+  const getHeading = () => {
+    if (protectionType === "hodl") {
+      return "How would you like to protect your Bitcoin?";
+    } else {
+      return "How would you like to secure your future purchase?";
+    }
+  };
+  
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">What are you looking to protect against?</h2>
+      <h2 className="text-xl font-bold mb-4">{getHeading()}</h2>
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div
           className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${
