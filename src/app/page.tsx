@@ -17,6 +17,7 @@ import { LandingFooter } from "@/components/shared/landing-footer";
 import { LandingHeader } from "@/components/shared/landing-header";
 import { Persona } from "@/components/landing/hero"; 
 import { CTA } from "@/components/landing/cta";
+import { Hero47 } from "@/components/landing/hero47";
 
 export default function Landing() {
   // Removed router hooks
@@ -70,7 +71,7 @@ export default function Landing() {
       />
       
       {/* Components with keys */}
-      <HeroSection key={`hero-${activePersona}`} activePersona={activePersona} /> 
+      <Hero47 key={`hero-${activePersona}`} activePersona={activePersona} /> 
       <ValueProposition key={`vp-${activePersona}`} activePersona={activePersona} />
       <HowItWorks key={`how-${activePersona}`} activePersona={activePersona} />
       <EducationalSection key={`edu-${activePersona}`} activePersona={activePersona} />
