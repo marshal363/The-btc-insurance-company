@@ -77,15 +77,33 @@ export function AvailableContracts({
       const basePremium = 50;
       
       // Premium multiplier based on duration
-      const durationMultiplier = (durationInfo.days / 30) * (1 - (Math.log(durationInfo.days) / 100));
+      const durationValue = durationInfo.days;
       
-      let premium = basePremium * durationMultiplier;
+      // Volatility factor (normally this would come from market data)
+      const annualVolatility = 0.65; // 65% annual volatility for Bitcoin
+      const volatilityFactor = Math.sqrt(durationValue / 365) * annualVolatility;
+      
+      // Calculate strike distance from current price
+      const strikePriceDelta = Math.abs(strike - strikeNum) / strikeNum;
+      
+      // Calculate moneyness factor based on type
+      let moneynessFactor = 1;
       
       if (moneyness === "ITM") {
-        premium = premium * 1.5;
+        // In-the-money options have higher premiums
+        moneynessFactor = 1.5 + (strikePriceDelta * 0.5); // Add impact of strike distance
       } else if (moneyness === "OTM") {
-        premium = premium * 0.7;
+        // Out-of-the-money options have lower premiums
+        moneynessFactor = 0.7 - (strikePriceDelta * 0.1); // Reduce premium more for far OTM options
+        // Ensure minimum value
+        moneynessFactor = Math.max(moneynessFactor, 0.3);
       }
+      
+      // Duration scaling (longer durations have slightly discounted rates per day)
+      const durationScaling = (durationValue / 30) * (1 - (Math.log(durationValue) / 100));
+      
+      // Calculate premium using the enhanced model
+      const premium = basePremium * durationScaling * volatilityFactor * moneynessFactor;
       
       return {
         id: `${index + 1}`,

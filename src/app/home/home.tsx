@@ -1,8 +1,8 @@
 "use client";
 
-import { useWalletStore } from "@/store/wallet-store";
 import { useMarketStore } from "@/store/market-store";
 import { useOptionsStore } from "@/store/options-store";
+import { useWallet } from "@/hooks/wallet/useWallet";
 import { useEffect } from "react";
 import { WelcomeSection } from "@/components/home/welcome-section";
 import { MarketOverview } from "@/components/home/market-overview";
@@ -12,10 +12,13 @@ import { PLVisualization } from "@/components/home/pl-visualization";
 import { HedgingCalculator } from "@/components/home/hedging-calculator";
 import { LearningResources } from "@/components/home/learning-resources";
 import { NetworkStatus } from "@/components/home/network-status";
+import { WalletConnect } from "@/components/wallet/WalletConnect";
 
 export default function Home() {
-  // Use type casting for properties not defined in the store types
-  const { isConnected, connectWallet } = useWalletStore();
+  // Use wallet hook for wallet-related state and actions
+  const { isConnected } = useWallet();
+  
+  // Use market and options stores
   const { btcPrice, btcPriceChange24h, availableOptions, fetchMarketData, fetchAvailableOptions } = useMarketStore();
   const { ownedOptions, fetchUserOptions } = useOptionsStore();
 
@@ -42,7 +45,7 @@ export default function Home() {
       {/* Welcome Banner (only when not connected) */}
       {!isConnected ? (
         <div className="mb-6">
-          <WelcomeSection onConnectWallet={connectWallet} />
+          <WelcomeSection />
         </div>
       ) : null}
 
@@ -80,12 +83,9 @@ export default function Home() {
             <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200 h-full flex flex-col justify-center">
               <h2 className="text-xl font-semibold mb-3">Connect to View Portfolio</h2>
               <p className="text-gray-600 mb-4">Connect your wallet to view your portfolio details and manage your options.</p>
-              <button 
-                onClick={connectWallet}
+              <WalletConnect 
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-              >
-                Connect Wallet
-              </button>
+              />
             </div>
           )}
         </div>

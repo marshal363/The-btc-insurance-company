@@ -1,12 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { WalletConnect } from "@/components/wallet/WalletConnect";
 
-interface WelcomeSectionProps {
-  onConnectWallet: () => void;
-}
-
-export function WelcomeSection({ onConnectWallet }: WelcomeSectionProps) {
+export function WelcomeSection() {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
       <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center">
@@ -33,12 +29,9 @@ export function WelcomeSection({ onConnectWallet }: WelcomeSectionProps) {
             </li>
           </ul>
           
-          <Button 
-            onClick={onConnectWallet}
+          <WalletConnect 
             className="w-full md:w-auto px-8 py-6 text-base md:text-lg font-medium"
-          >
-            Connect Wallet to Start
-          </Button>
+          />
         </div>
         
         <div className="hidden md:block md:flex-1 md:min-w-[300px]">

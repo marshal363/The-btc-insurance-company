@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { WalletAddress, useWalletStore } from "@/store/wallet-store";
-import { WalletIcon } from "lucide-react";
+import { WalletConnect } from "@/components/wallet/WalletConnect";
+import { useWallet } from "@/hooks/wallet/useWallet";
 
 const NavItems = [
   {
@@ -27,7 +27,7 @@ interface NavbarProps {
 
 export const Navbar = ({ className }: NavbarProps) => {
   const pathname = usePathname();
-  const { isConnected, address, connectWallet, disconnectWallet, connecting } = useWalletStore();
+  const { network } = useWallet();
 
   return (
     <header
@@ -62,44 +62,21 @@ export const Navbar = ({ className }: NavbarProps) => {
         </nav>
         
         <div className="ml-auto flex items-center gap-3">
-          {isConnected ? (
-            <div className="flex items-center gap-2">
-              <div className="bg-muted px-3 py-1.5 rounded-full flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">{formatAddress(address as WalletAddress)}</span>
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-              </div>
-              <button 
-                onClick={() => disconnectWallet()}
-                className="hidden md:block text-xs text-muted-foreground hover:text-foreground"
-              >
-                Disconnect
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => connectWallet()}
-              disabled={connecting}
-              className={cn(
-                "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-                "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-3 md:px-5 py-2",
-                connecting && "opacity-70 cursor-not-allowed"
-              )}
-            >
-              <WalletIcon className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">{connecting ? "Connecting..." : "Connect Wallet"}</span>
-            </button>
-          )}
-          <div className="bg-destructive/20 text-destructive px-2 md:px-3 py-1 md:py-1.5 text-xs font-medium rounded-md">
-            Testnet
+          <WalletConnect 
+            variant="outline" 
+            size="sm"
+            className="h-10"
+          />
+          <div className={cn(
+            "px-2 md:px-3 py-1 md:py-1.5 text-xs font-medium rounded-md capitalize",
+            network === "mainnet" 
+              ? "bg-green-600/20 text-green-600" 
+              : "bg-destructive/20 text-destructive"
+          )}>
+            {network}
           </div>
         </div>
       </div>
     </header>
   );
-};
-
-// Helper function to format wallet address
-const formatAddress = (address: WalletAddress): string => {
-  if (!address) return "";
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }; 

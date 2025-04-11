@@ -157,6 +157,90 @@ The redesigned interface is expected to deliver significant business benefits:
    - Clearer interface reduces user errors
    - More intuitive patterns lead to higher self-service success
 
+## Premium Calculation Consistency
+
+To ensure consistent premium calculations throughout the application, we've implemented the following changes:
+
+1. **Central Premium Calculation**: The main `easy-option.tsx` component now handles all premium calculations and shares this data with child components.
+
+2. **Contract-Based Premium**: When a user selects a specific contract from the Available Contracts view, that contract's premium is used as the source of truth throughout the application.
+
+3. **Premium Recalculation Triggers**: We've added effects to recalculate the premium:
+
+   - When moving to the Review & Activate step
+   - When opening the PnL simulation panel
+   - When relevant parameters change (amount, duration, strike price)
+   - When selecting a contract
+
+4. **PnL Simulation Synchronization**: The PnL simulation now properly uses the premium passed from the parent component and updates when the premium changes.
+
+5. **Type-Specific Terminology**: Throughout the application, we've ensured that premium is referred to appropriately based on option type:
+   - "Insurance Premium" for PUT options
+   - "Lock-in Fee" for CALL options
+
+## Interface Language
+
+Based on the insurance terminology mapping recommended in the product documentation, we've implemented the following user-focused language changes:
+
+1. **Protection-Focused Terminology**:
+
+   - "Bitcoin Protection Center" instead of "Options Trading"
+   - "Protection Type" instead of "Option Type"
+   - "Protected Value" instead of "Strike Price" for PUT options
+   - "Purchase Price" instead of "Strike Price" for CALL options
+
+2. **Moneyness Explained in User Terms**:
+
+   - ITM PUT options are labeled as "Full Value Protection"
+   - ATM PUT options are labeled as "Threshold Coverage"
+   - OTM PUT options are labeled as "Precautionary Coverage"
+   - ITM CALL options are labeled as "Valuable Guarantee"
+   - ATM CALL options are labeled as "At-market Guarantee"
+   - OTM CALL options are labeled as "Future-value Guarantee"
+
+3. **Visual Indicators**:
+   - Color-coded protection levels (blue for ITM, purple for ATM, amber for OTM)
+   - Shield icons for protection-related UI elements
+   - Lock icons for price guarantees
+
+## UI Improvements
+
+We've made significant UI improvements to make the application more user-friendly:
+
+1. **Card-Based Design**: All selection components now use a consistent card-based design with clear visual hierarchy.
+
+2. **Selection States**: Clear indicators show which options are selected, with badges and highlighted borders.
+
+3. **Premium Factor Transparency**: Users can now see all factors that influence their premium, including:
+
+   - Bitcoin amount
+   - Duration
+   - Position type (ITM/ATM/OTM)
+   - Volatility
+
+4. **Enhanced Visualizations**:
+   - The PnL simulation now uses Recharts for a more professional, interactive chart
+   - Reference lines clearly show current price and strike price
+   - Hover effects display precise values
+
+## Next Steps
+
+For future development, we recommend:
+
+1. **Dynamic Data**: Replace hardcoded Bitcoin price with live market data.
+
+2. **Mobile Optimization**: Enhance responsiveness for smaller screens, particularly for the chart components.
+
+3. **Premium Optimization**: Implement a more sophisticated options pricing model backed by real market data.
+
+4. **User Testing**: Conduct A/B testing to measure the effectiveness of the insurance-based terminology.
+
+5. **Educational Content**: Add tooltips and guided tutorials to further explain the protection mechanism.
+
+6. **Dashboard Integration**: Create a protection portfolio view where users can manage multiple protection policies.
+
+7. **Exercise Flow**: Implement the claim process (option exercise) for when market conditions trigger protection.
+
 ## Conclusion
 
 The BitHedge Protection Center redesign successfully transforms a complex financial interface into an accessible, engaging experience without sacrificing educational depth or functional power. By employing the insurance metaphor more effectively and using modern UX patterns like progressive disclosure, we've created an interface that can serve both beginners and experienced users.

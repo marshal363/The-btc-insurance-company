@@ -41,20 +41,32 @@ interface TooltipProps {
 
 export function PnlSimulation({
   optionType,
-  strikePrice: initialStrikePrice,
-  premium: initialPremium,
-  amount: initialAmount,
+  strikePrice,
+  premium,
+  amount,
   currentPrice,
   onClose
 }: PnlSimulationProps) {
-  // Local simulation state
-  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  const [expanded, setExpanded] = useState(true);
+  
+  // Simulation values state with premium from props
   const [simulationValues, setSimulationValues] = useState({
-    strikePrice: initialStrikePrice,
-    premium: initialPremium,
-    amount: initialAmount
+    strikePrice,
+    amount,
+    premium
   });
-  const [expanded, setExpanded] = useState(false);
+  
+  // Update simulationValues when props change
+  useEffect(() => {
+    setSimulationValues({
+      strikePrice,
+      amount,
+      premium
+    });
+  }, [strikePrice, amount, premium]);
+  
+  // Recalculate chart data when simulation values change
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   
   // Calculate break-even price
   const breakEvenPrice = 
@@ -69,20 +81,11 @@ export function PnlSimulation({
   // Reset simulation to original values
   const resetSimulation = () => {
     setSimulationValues({
-      strikePrice: initialStrikePrice,
-      premium: initialPremium,
-      amount: initialAmount
+      strikePrice,
+      amount,
+      premium
     });
   };
-  
-  // Update when initial props change
-  useEffect(() => {
-    setSimulationValues({
-      strikePrice: initialStrikePrice,
-      premium: initialPremium,
-      amount: initialAmount
-    });
-  }, [initialStrikePrice, initialPremium, initialAmount]);
   
   // Update chart data when simulation values change
   useEffect(() => {
@@ -149,10 +152,29 @@ export function PnlSimulation({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'strikePrice' | 'premium' | 'amount') => {
     const value = parseFloat(e.target.value);
     if (!isNaN(value) && value > 0) {
-      setSimulationValues(prev => ({
-        ...prev,
-        [field]: value
-      }));
+      if (field === 'strikePrice') {
+        // Recalculate premium when strike price changes
+        const newPremium = calculatePremium(value, simulationValues.amount);
+        setSimulationValues(prev => ({
+          ...prev,
+          strikePrice: value,
+          premium: newPremium
+        }));
+      } else if (field === 'amount') {
+        // Recalculate premium when amount changes
+        const newPremium = calculatePremium(simulationValues.strikePrice, value);
+        setSimulationValues(prev => ({
+          ...prev,
+          amount: value,
+          premium: newPremium
+        }));
+      } else {
+        // Allow manual premium override
+        setSimulationValues(prev => ({
+          ...prev,
+          [field]: value
+        }));
+      }
     }
   };
   
@@ -163,10 +185,51 @@ export function PnlSimulation({
     const max = currentPrice * 1.3;
     const newStrikePrice = min + (percentage / 100) * (max - min);
     
+    // Calculate new premium based on new strike price
+    const newPremium = calculatePremium(newStrikePrice, simulationValues.amount);
+    
     setSimulationValues(prev => ({
       ...prev,
-      strikePrice: newStrikePrice
+      strikePrice: newStrikePrice,
+      premium: newPremium
     }));
+  };
+  
+  // Calculate premium using enhanced model
+  const calculatePremium = (strikeValue: number, amountValue: number) => {
+    // We use 30 days as the default duration for the simulator
+    const durationValue = 30;
+    
+    // Volatility factor (normally this would come from market data)
+    const annualVolatility = 0.65; // 65% annual volatility for Bitcoin
+    const volatilityFactor = Math.sqrt(durationValue / 365) * annualVolatility;
+    
+    // Calculate strike distance from current price
+    const strikePriceDelta = Math.abs(strikeValue - currentPrice) / currentPrice;
+    
+    // Calculate moneyness factor (premium increases for ITM options)
+    let moneynessFactor = 1;
+    const isPut = optionType === "put";
+    const isITM = (isPut && strikeValue > currentPrice) || (!isPut && strikeValue < currentPrice);
+    
+    if (isITM) {
+      // In-the-money options have higher premiums
+      moneynessFactor = 1 + (strikePriceDelta * 1.5);
+    } else {
+      // Out-of-the-money options have lower premiums
+      moneynessFactor = 1 - (strikePriceDelta * 0.5);
+      // Ensure minimum value
+      moneynessFactor = Math.max(moneynessFactor, 0.3);
+    }
+    
+    // Duration scaling (shorter duration for simulator)
+    const durationScaling = 1;
+    
+    // Base rate (percentage of protected amount)
+    const baseRate = 0.05; // 5%
+    
+    // Calculate premium
+    return amountValue * baseRate * durationScaling * volatilityFactor * moneynessFactor;
   };
   
   // Calculate strike price slider percentage

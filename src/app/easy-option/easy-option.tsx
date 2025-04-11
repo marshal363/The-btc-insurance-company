@@ -5,6 +5,7 @@ import { useMarketStore } from "@/store/market-store";
 import { useToast } from "@/components/ui/use-toast";
 import { STEPS, STEPS_TYPE } from "@/constants/steps";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 // Import our component modules
 import { StepIndicator, StepType } from "@/components/easy-option/step-indicator";
@@ -69,6 +70,13 @@ export default function EasyOption() {
   useEffect(() => {
     setStrikePrice(btcPrice.toString());
   }, [btcPrice]);
+
+  // Update premium calculation when moving to review step or showing PnL
+  React.useEffect(() => {
+    if (currentStep === STEPS.REVIEW_ACTIVATE || isPnlPanelOpen) {
+      calculatePayment();
+    }
+  }, [currentStep, isPnlPanelOpen]);
 
   // Step navigation functions
   const handleNextStep = () => {
@@ -161,10 +169,18 @@ export default function EasyOption() {
     router.push("/home");
   };
 
+  // Handle contract selection
   const handleSelectContract = (contract: OptionContract) => {
     setSelectedContract(contract);
     setOptionType(contract.type);
     setStrikePrice(contract.strike.toString());
+    
+    // Update policy with selected contract's premium
+    setPolicy({
+      premium: contract.premium,
+      fees: contract.premium * 0.02, // 2% fee
+      total: contract.premium + (contract.premium * 0.02)
+    });
     
     // Open the PnL panel when a contract is selected
     setIsPnlPanelOpen(true);
@@ -182,8 +198,18 @@ export default function EasyOption() {
 
   // For the auto-filled values in the Payment Details component
   const calculatePayment = () => {
-    // Simplified calculation for demo purposes
-    // In a real app, we would call an API to get the exact premium
+    // If a contract has been selected, use its premium
+    if (selectedContract) {
+      setPolicy({
+        premium: selectedContract.premium,
+        fees: selectedContract.premium * 0.02, // 2% fee
+        total: selectedContract.premium + (selectedContract.premium * 0.02)
+      });
+      return;
+    }
+    
+    // Otherwise, calculate using our model
+    // Get effective duration days
     let durationValue = 30; 
     
     // Calculate effective days for premium calculation
@@ -195,10 +221,42 @@ export default function EasyOption() {
     else if (duration === "halving") durationValue = 200; // Approximate days until next halving
     else if (duration === "custom") durationValue = 120; // Default for custom
 
-    // Calculate premium with scaling factor for longer durations
+    // Enhanced premium calculation with multiple factors
+    const btcAmountValue = parseFloat(amount);
+    const strikeValue = parseFloat(strikePrice);
+    
+    // Volatility factor (normally this would come from market data)
+    const annualVolatility = 0.65; // 65% annual volatility for Bitcoin
+    const volatilityFactor = Math.sqrt(durationValue / 365) * annualVolatility;
+    
+    // Calculate strike distance from current price
+    const strikePriceDelta = Math.abs(strikeValue - btcPrice) / btcPrice;
+    
+    // Calculate moneyness factor (premium increases for ITM options)
+    let moneynessFactor = 1;
+    const isPut = optionType === "put";
+    const isITM = (isPut && strikeValue > btcPrice) || (!isPut && strikeValue < btcPrice);
+    
+    if (isITM) {
+      // In-the-money options have higher premiums
+      moneynessFactor = 1 + (strikePriceDelta * 1.5);
+    } else {
+      // Out-of-the-money options have lower premiums
+      moneynessFactor = 1 - (strikePriceDelta * 0.5);
+      // Ensure minimum value
+      moneynessFactor = Math.max(moneynessFactor, 0.3);
+    }
+    
+    // Duration scaling (longer durations have slightly discounted rates per day)
+    const durationScaling = (durationValue / 30) * (1 - (Math.log(durationValue) / 100));
+    
+    // Base rate (percentage of protected amount)
     const baseRate = 0.05; // 5%
-    const durationMultiplier = (durationValue / 30) * (1 - (Math.log(durationValue) / 100));
-    const premium = parseFloat(amount) * baseRate * durationMultiplier;
+    
+    // Calculate premium
+    const premium = btcAmountValue * baseRate * durationScaling * volatilityFactor * moneynessFactor;
+    
+    // Calculate fees (2% of premium)
     const fees = premium * 0.02;
     const total = premium + fees;
     
@@ -207,6 +265,19 @@ export default function EasyOption() {
       fees,
       total,
     });
+  };
+
+  // Effect to recalculate payment whenever relevant values change
+  React.useEffect(() => {
+    calculatePayment();
+  }, [strikePrice, amount, duration, selectedContract]);
+  
+  // Function for PnL simulation to use correct premium value
+  const getCorrectPremium = () => {
+    if (selectedContract) {
+      return selectedContract.premium;
+    }
+    return policy.premium;
   };
 
   // Get step number from enum
@@ -302,7 +373,7 @@ export default function EasyOption() {
             optionType={optionType}
             strikePrice={parseFloat(strikePrice)}
             currentPrice={btcPrice}
-            premium={policy.premium}
+            premium={getCorrectPremium()}
             amount={parseFloat(amount)}
             onClose={() => setIsPnlPanelOpen(false)}
           />

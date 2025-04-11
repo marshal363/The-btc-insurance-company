@@ -39,12 +39,24 @@ export function QuantityAndDuration({
     else if (duration === "halving") durationValue = 200; // Approximate days until next halving 
     else if (duration === "custom") durationValue = customDays;
     
-    // Premium calculation with scaling factor for longer durations
-    // Longer durations have slightly discounted rates
-    const baseRate = 0.05; // 5%
-    const durationMultiplier = (durationValue / 30) * (1 - (Math.log(durationValue) / 100));
+    // Enhanced premium calculation with multiple factors
     
-    return amountValue * baseRate * durationMultiplier;
+    // Volatility factor (normally this would come from market data)
+    const annualVolatility = 0.65; // 65% annual volatility for Bitcoin
+    const volatilityFactor = Math.sqrt(durationValue / 365) * annualVolatility;
+    
+    // For the Duration component, we assume ATM (at-the-money) option
+    // so the strike price delta is 0, and moneyness factor is 1
+    const moneynessFactor = 1;
+    
+    // Duration scaling (longer durations have slightly discounted rates per day)
+    const durationScaling = (durationValue / 30) * (1 - (Math.log(durationValue) / 100));
+    
+    // Base rate (percentage of protected amount)
+    const baseRate = 0.05; // 5%
+    
+    // Calculate premium
+    return amountValue * baseRate * durationScaling * volatilityFactor * moneynessFactor;
   };
   
   const estimatedPremium = calculateEstimatedPremium();
