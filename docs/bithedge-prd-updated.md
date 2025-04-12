@@ -2,348 +2,353 @@
 
 ## Introduction
 
-I'm thrilled you're excited about BitHedge! Below is an extremely detailed and well-redacted Product Requirements Document (PRD) for the BitHedge project—a decentralized application (dApp) built on the Stacks blockchain. BitHedge enables users to hedge Bitcoin volatility using sBTC call options, designed specifically for the Bitcoin Vegas Hackathon's Stacks Track. This PRD outlines a functional Minimum Viable Product (MVP) tailored to the needs of "Risk-Averse Rachel," a persona representing users who want to protect their Bitcoin portfolios during significant price drops. It includes the project's vision, features, technical requirements, UI/UX design, and more, ensuring a comprehensive yet actionable plan.
+BitHedge is a decentralized application built on the Stacks blockchain that helps everyday Bitcoin users protect the value of their Bitcoin holdings against market volatility. While traditional hedging tools like options contracts exist, they remain inaccessible to regular users due to complex financial jargon and intimidating interfaces. BitHedge solves this problem by transforming options contracts into simple, understandable "Bitcoin protection policies" that function like familiar insurance products.
+
+This PRD outlines a complete Bitcoin Protection Center focused on our primary persona "Protective Peter" - an everyday Bitcoin user who wants security against price drops without needing to understand complex trading terminology.
 
 ## Document Information
 
-- **Version**: 2.0
+- **Version**: 3.0
 - **Date**: November 15, 2024
-- **Author**: [Your Name], Product Designer & Marketer
-- **Project**: BitHedge – sBTC Options for Hedging Bitcoin Volatility
-- **Hackathon**: Bitcoin Vegas Hackathon, Stacks Track
+- **Project**: BitHedge – Bitcoin Protection Center
+- **Focus**: Making Bitcoin value protection accessible to everyone
 
 ## 1. Executive Summary
 
-BitHedge is a decentralized application (dApp) on the Stacks blockchain that allows users to hedge Bitcoin volatility by purchasing call options for sBTC, a 1:1 Bitcoin-backed asset. Leveraging Clarity smart contracts and Stacks' Bitcoin-secured finality, BitHedge offers a secure, trustless platform for users to safeguard their Bitcoin portfolios against price drops. The MVP provides a multi-view interface where users can explore the options market, execute trades through a simplified interface, and analyze market data, emphasizing simplicity, control, and emotional reassurance for risk-averse individuals while also accommodating more advanced users.
+BitHedge is a decentralized application that allows everyday Bitcoin users to protect themselves against price volatility through easy-to-understand protection policies. Using familiar insurance concepts instead of complex financial jargon, our Bitcoin Protection Center guides users through selecting, customizing, and activating protection for their Bitcoin holdings or future purchases. Built on the Stacks blockchain, the platform ensures self-custody and trustlessness while providing peace of mind through guaranteed Bitcoin value protection.
 
 ## 2. Vision & Objectives
 
 ### Vision
 
-To empower Bitcoin holders with decentralized, Bitcoin-secured hedging tools that mitigate volatility risks while upholding the principles of trustlessness and censorship resistance.
+To empower everyday Bitcoin users with simple protection tools that shield them from market volatility, making long-term Bitcoin holding accessible to risk-averse individuals without requiring financial expertise.
 
 ### Objectives
 
-- **Primary**: Enable users to hedge Bitcoin volatility through sBTC call options.
-- **Secondary**: Deliver an intuitive multi-view interface for options exploration, trading, and market analysis.
-- **Hackathon Goal**: Build a functional MVP with a working Clarity smart contract, frontend interface, and demo-ready user flow.
+- **Primary**: Provide Bitcoin holders with understandable, accessible protection against price volatility
+- **Secondary**: Eliminate financial jargon barriers through insurance-based terminology
+- **Tertiary**: Create a step-by-step guided experience anyone can follow
 
-## 3. Target Audience & Persona
+## 3. Target Audience
 
-### Primary Persona: Risk-Averse Rachel
+### Primary Persona: "Protective Peter"
 
-- **Demographics**: 35-year-old female financial analyst and part-time crypto investor from suburban Canada.
+- **Profile**: 35-year-old software developer who invested in Bitcoin but worries about market volatility
+- **Technical Proficiency**: Comfortable with Bitcoin wallets but has no trading experience
 - **Goals**:
-  - Protect her Bitcoin portfolio from significant price declines.
-  - Utilize decentralized tools anchored to Bitcoin's security.
-  - Achieve peace of mind with transparent, predictable outcomes.
+  - Protect the value of his Bitcoin during market downturns
+  - Maintain ownership of his Bitcoin (self-custody)
+  - Avoid complex trading platforms with unfamiliar terminology
 - **Pain Points**:
-  - Fear of losing funds in overly complex DeFi platforms.
-  - Anxiety over hidden fees or expiration risks.
-  - Limited knowledge of Stacks and sBTC ecosystems.
-- **Technical Proficiency**: Intermediate; familiar with Bitcoin wallets and basic DeFi, but new to Stacks.
+  - Anxiety during market crashes
+  - Confusion with financial terminology
+  - Fear of making mistakes with complex trading tools
+- **Needs**:
+  - Simple, clear language without financial jargon
+  - Step-by-step guidance through protection setup
+  - Visual confirmation of protection coverage
+  - Transparent cost structure with no hidden fees
 
-### Secondary Audience
+### Secondary Personas
 
-- Experienced traders seeking advanced options market data (Option Data View).
-- Bitcoin enthusiasts exploring decentralized finance.
-- Stacks developers experimenting with sBTC use cases.
-- Hackathon judges and mentors evaluating project innovation.
+- **"Future Fred"**: Wants to lock in today's Bitcoin price for a future purchase
+- **"Income Irene"**: Seeks to earn premiums by providing protection to others
+- **"Newbie Nancy"**: First-time Bitcoin buyer looking for beginner-friendly protection
 
 ## 4. Key Features & Functionality
 
-### MVP Features
+### Bitcoin Protection Center
 
-#### Clarity Smart Contract:
+A guided, step-by-step flow that transforms options contracts into approachable protection policies:
 
-- Supports creating, buying, exercising, and expiring sBTC call options.
-- Example parameters: Locks 0.1 sBTC, premium of 50 STX, strike price of 100 STX, expires in 500 blocks.
+#### Step 1: Protection Type Selection
 
-#### Multi-View UI:
+- **Question-Based Approach**: "What are you looking to protect?"
+- **Simplified Options**:
+  - "Protect my Bitcoin holdings" (downside protection)
+  - "Protect my future purchase" (price lock protection)
+- **Educational Elements**: How Bitcoin protection works using insurance concepts
 
-- **Home View**: Central hub with market overview, portfolio summary, and navigation to specialized views.
-- **Easy Option View**: Simplified, step-by-step interface for buying and managing options.
-- **Option Data View**: Advanced market analytics showing option chains, open interest, volume, and implied volatility.
+#### Step 2: Coverage Details
 
-#### Core Components:
+- **Amount Selection**: Choose how much Bitcoin to protect
+- **Protection Level**: Visual slider to select protected value (with real-time feedback)
+- **Visualizations**: Clear illustrations of protection activation levels
 
-- **P&L Visualization**: Shows price vs. gain/loss graphs for option positions.
-- **Portfolio Summary**: Displays STX/sBTC balances and hedging status.
-- **Options Market Overview**: Presents available options with key metrics.
-- **Hedging Calculator**: Allows users to determine options needed based on portfolio size.
+#### Step 3: Policy Duration
 
-#### Wallet Integration:
+- **Tiered Protection Timeframes**: Four distinct duration categories aligned with Bitcoin market dynamics:
+  - **Standard Protection** (30, 60, 90 days): "Affordable short-term coverage for immediate concerns"
+  - **Extended Protection** (6 months, 1 year): "Longer-term coverage for hodlers with premium discounts"
+  - **Strategic Protection** (until next halving): "Bitcoin-aware protection aligned with market cycles"
+  - **Customizable Protection**: "Build your own protection based on specific timeframes or market events"
+- **Duration Explanation**: Educational content explaining how Bitcoin's unique market cycles affect protection costs
+- **Volatility Visualization**: Interactive tool showing how Bitcoin's volatility increases premium costs over time
+- **User-Appropriate Recommendations**: Suggestions based on user profile and protection amount
 
-- Connects to Hiro Wallet (Stacks-compatible).
-- Facilitates STX and sBTC transactions.
+#### Step 4: Available Policies
 
-#### Real-Time Feedback:
+- **Policy Comparison**: View available protection options based on selections
+- **Plain-Language Descriptions**:
+  - "Full Value Protection" (ITM options)
+  - "Threshold Coverage" (ATM options)
+  - "Precautionary Coverage" (OTM options)
+- **Protection Simulator**: Visualization tool showing outcomes in different scenarios
 
-- Updates block height dynamically.
-- Confirms transactions with status notifications.
+#### Step 5: Review & Activate
 
-### Future Features (Post-MVP)
+- **Protection Summary**: Clear overview of all selected parameters
+- **Cost Breakdown**: Transparent presentation of premium and fees
+- **Activation Confirmation**: Explanation of what happens after activation
 
-- Integration of live BTC/STX price feeds.
-- Support for sBTC put options.
-- Advanced charting tools for technical analysis.
-- Portfolio management dashboard.
-- Mobile-responsive interface.
+### Technical Underpinnings
 
-## 5. User Stories
+The Bitcoin Protection Center is powered by Clarity smart contracts on the Stacks blockchain that implement options contracts with these core functions:
 
-### As Risk-Averse Rachel, I want to:
+- **Create Protection Policy**: Protection provider locks sBTC to offer coverage
+- **Purchase Protection**: User pays premium to acquire protection
+- **Exercise Protection**: User claims protected value when Bitcoin price falls below protection level
+- **Policy Expiration**: Protection expires after the selected time period if not exercised
 
-#### Set Up Easily:
+### Wallet Integration
 
-- Install Hiro Wallet and fund it with Testnet STX/sBTC.
-- Connect my wallet to BitHedge with a single click from any view.
+- Seamless connection with Hiro Wallet for Stacks/sBTC transactions
+- Clear transaction confirmation and status updates
+- Non-custodial protection (users maintain control of their assets)
 
-#### Navigate Between Views:
+## 5. User Journeys
 
-- Access a Home view that gives me a market overview and my portfolio status.
-- Use an Easy Option View for simplified trading when I want to hedge.
-- Explore the Option Data View when I'm ready for more advanced analysis.
+### Primary User Journey: Protecting Bitcoin Holdings
 
-#### Understand My Hedge:
+#### 1. Discovery & Education
 
-- View my portfolio's hedging status (e.g., "12% Hedged") on the Home view.
-- See a P&L graph illustrating protection against BTC price drops.
+- User arrives at BitHedge landing page
+- Learns about Bitcoin protection through simple explanations
+- Clicks "Get Protected" to begin
 
-#### Calculate My Needs:
+#### 2. Protection Setup
 
-- Use the Hedging Calculator to input my BTC holdings and desired hedge percentage.
-- Receive a recommendation for the number of options to purchase.
+- Connects wallet to BitHedge
+- Selects "Protect my Bitcoin holdings"
+- Specifies amount to protect (e.g., 0.25 BTC)
+- Selects protection level (e.g., 10% below current price)
+- Chooses 30-day protection period
+- Reviews available policies and selects Threshold Coverage
 
-#### Buy an Option Simply:
+#### 3. Activation & Monitoring
 
-- Navigate to the Easy Option View for a guided purchase experience.
-- Select option parameters through intuitive controls.
-- View potential outcomes before confirming my trade.
+- Reviews protection summary showing:
+  - Protected amount: 0.25 BTC ($12,125)
+  - Protected value: $43,650 (10% below current price)
+  - Protection period: 30 days
+  - Premium cost: $9.18 total
+- Confirms and activates protection
+- Receives confirmation of active protection policy
 
-#### Monitor Market Data:
+#### 4. Protection Outcome Scenarios
 
-- Visit the Option Data View to see open interest, volume, and volatility data.
-- Identify market trends that might affect my hedging strategy.
+- **Scenario A**: If Bitcoin stays above $43,650, protection remains dormant
+- **Scenario B**: If Bitcoin drops below $43,650, user can exercise protection to maintain value
+- **Scenario C**: After 30 days, protection expires if not exercised
 
-#### Exercise or Wait:
+### Secondary User Journey: Protecting Future Purchase
 
-- Receive notifications about option expiry and price movements.
-- Exercise my option if BTC drops, paying the strike price.
-- Let it expire if BTC remains stable, with my maximum loss limited to the premium.
+- User selects "Protect my future purchase"
+- Configures purchase amount, price level, and timeframe
+- Activates price lock protection
+- Can purchase Bitcoin at guaranteed price if market rises
 
-## 6. Technical Requirements
+## 6. Interface Requirements
 
-### Smart Contract (Clarity)
+### Global Elements
 
-- **Language**: Clarity, Stacks' secure smart contract language.
-- **Functions**:
-  - `create-option`: Locks 0.1 sBTC to create an option.
-  - `buy-option`: Transfers 50 STX premium to purchase an option.
-  - `exercise-option`: Pays 100 STX strike price to receive 0.1 sBTC.
-  - `expire-option`: Reclaims sBTC if unexercised after 500 blocks.
-  - `get-option-details`: Retrieves option state (e.g., owner, status).
-- **Deployment**: Deployed on Stacks Testnet using Clarinet or Hiro Explorer.
+- **Header**: BitHedge logo, wallet connection status, network indicator
+- **Progress Indicator**: 5-step visual tracker showing current position in process
+- **Navigation**: Back/Continue buttons for moving between steps
 
-### Frontend (Web App)
+### Step-Specific Elements
 
-- **Framework**: React with Stacks.js for blockchain integration.
-- **Page Structure**:
-  - Home View (central hub with market overview)
-  - Easy Option View (simplified trading interface)
-  - Option Data View (advanced market analytics)
-- **Components**:
-  - Shared Navigation Bar: Consistent across all views.
-  - Wallet Connect Button: Present in all views for authentication.
-  - P&L Visualization: Adapted for each view's context.
-  - Market Overview: Featured on Home and Option Data views.
-  - Trading Interface: Focused on Easy Option View.
-- **Real-Time Data**: Polls get-block-info? every 10 seconds for block height.
+#### Protection Type Selection Screen
+
+- Two clear options with descriptive cards
+- Shield icons with appropriate colors
+- Clear benefit statements and use cases
+- "How Bitcoin Protection Works" explainer section
+
+#### Coverage Details Screen
+
+- Current BTC price display
+- Protection level selector with visual slider
+- Amount input with real-time USD conversion
+- Minimum amount requirements information
+
+#### Policy Duration Screen
+
+- Duration options with clear categorization
+- Premium estimation based on selections
+- Coverage summary showing selected parameters
+- Educational content about duration impact
+
+#### Available Policies Screen
+
+- Policy cards with different protection strategies
+- Clear premium costs and duration information
+- Select buttons for choosing preferred policy
+- "Show Protection Value Simulator" option
+
+#### Review & Activate Screen
+
+- Protection summary with policy type indication
+- Detailed breakdown of protection parameters
+- Payment details with premium breakdown
+- "Activate Protection" button with terms acknowledgment
+
+### Visual Design Principles
+
+- **Clarity**: Simple cards, concise text, consistent color coding
+- **Reassurance**: Shield icons, protection-focused imagery
+- **Accessibility**: High contrast, readable typography, responsive design
+- **Education**: Contextual explanations at point of relevance
+
+## 7. Technical Requirements
 
 ### Blockchain Integration
 
-- **Stacks.js**: Handles authentication, contract calls, and transaction signing.
-- **sBTC Token**: Utilizes Testnet sBTC for transfers.
-- **Block Height**: Tracks option expiry relative to the current block.
+- **Platform**: Stacks blockchain for Bitcoin-secured finality
+- **Token**: sBTC (1:1 Bitcoin-backed asset)
+- **Smart Contracts**: Clarity smart contracts implementing options mechanics
+- **Transaction Handling**: Proper post-conditions for safe transfers
 
-### Development Tools
+### Frontend Implementation
 
-- **Clarinet**: Local testing environment for Clarity contracts.
-- **Hiro Wallet**: Testnet wallet for managing STX and sBTC.
-- **Node.js**: Runs the frontend locally during development.
-- **Chart.js**: Implements data visualizations across all views.
+- **Framework**: Next.js with App Router
+- **Component Library**: shadcn/ui with Tailwind CSS
+- **State Management**: Zustand for predictable state flow
+- **Form Handling**: React Hook Form with Zod validation
+- **Visualization**: Recharts/D3.js for protection simulations
 
-## 7. UI/UX Components
+### Data Requirements
 
-### Global Elements (All Views)
+- **Bitcoin Price Data**: Current BTC/USD price (via API or oracle)
+- **Protection Parameters**: Strike prices, premiums, durations
+- **User Data**: Connected wallet, protection policies, transaction history
+- **Contract Data**: Available protection policies, exercise status
 
-- **Navigation Header**: Consistent menu with links to all main views.
-- **Wallet Connection**: Visible wallet status or connect button.
-- **Network Indicator**: Testnet badge for clarity.
-- **Footer**: Contains current block height and system status.
-
-### Home View
-
-- **Welcome Hero**: Introduction and value proposition (when not connected).
-- **Market Overview Panel**: Shows available options, BTC price, and volume.
-- **Portfolio Summary**: Displays STX/sBTC balances and hedging status (when connected).
-- **Featured Options Grid**: Highlights key options available in the market.
-- **Quick Action Cards**: Direct paths to create, buy, or manage options.
-- **Simplified P&L Visualization**: Adapted version of the full graph.
-- **Educational Resources**: Introductory materials for new users.
-
-### Easy Option View
-
-- **Step Indicator**: Visual tracker showing progress in the trade flow.
-- **Option Type Selector**: Simplified choice between call and put options.
-- **Strike Price Selector**: Visual slider with presets and current price indicator.
-- **Expiration Selector**: Calendar view with duration presets.
-- **Premium Calculator**: Clear display of costs and maximum loss.
-- **P&L Scenario Visualizer**: Shows outcomes in different price scenarios.
-- **Trade Confirmation Panel**: Final review before execution.
-- **Post-Trade Management**: Tools for monitoring and exercising options.
-
-### Option Data View
-
-- **Market Statistics Panel**: Comprehensive data on current market conditions.
-- **Tab Navigation**: Organized sections for different data types.
-- **Options Chain Matrix**: Grid of premiums across strikes and expirations.
-- **Open Interest Chart**: Visualizes market positioning across strikes.
-- **Volume Distribution Chart**: Shows trading activity concentration.
-- **Implied Volatility Charts**: Displays market's price expectations.
-- **Detailed Options Table**: Sortable data with filtering controls.
-- **Heat Map Visualization**: Color-coded grid for quick pattern identification.
-
-### Design Principles
-
-- **Clarity**: Uses simple cards, concise text, and consistent color coding.
-- **Progressive Disclosure**: Reveals complexity as users navigate from Home to specialized views.
-- **Feedback**: Provides real-time updates and confirmations of actions.
-- **Trust**: Incorporates Stacks branding and security-focused visual elements.
-- **Accessibility**: Ensures high contrast, keyboard navigation, and responsive design.
-
-### Key Interactions
-
-- **Connect Wallet**: Triggers Hiro Wallet pop-up and displays the connected address.
-- **View Navigation**: Switches between Home, Easy Option, and Option Data views.
-- **Option Purchase**: Guided flow through the Easy Option View to purchase.
-- **Market Analysis**: Interactive charts and filters in the Option Data View.
-- **Portfolio Management**: Monitoring and action tools across all views.
-
-## 8. Success Metrics & KPIs
-
-### Hackathon Metrics
-
-- **Functional MVP**: Fully operational contract, multi-view frontend, and user flow.
-- **Demo Quality**: 3-5 minute video demonstrating all views and key interactions.
-- **Code Quality**: Well-documented Clarity and JavaScript code.
-- **Innovation**: Pioneering sBTC options with a hedging focus and comprehensive UI.
+## 8. Success Metrics
 
 ### User-Centric Metrics
 
-- **Setup Time**: Less than 20 minutes to connect and fund a wallet.
-- **Task Completion**: 90% of users can buy an option through Easy Option View without assistance.
-- **Navigation**: Users can successfully move between all three views.
-- **Satisfaction**: 85% of users rate the hedging process as "clear" or "very clear."
+- **Comprehension Rate**: 90% of users can correctly explain their protection policy
+- **Completion Rate**: 80% of users who begin the protection flow complete it
+- **Confidence Score**: 85% of users report feeling "confident" or "very confident" in their protection
+- **Protection Activation**: Users successfully exercise protection when appropriate
 
-## 9. Risks & Mitigations
+### Business Metrics
 
-### Risks
+- **Protection Volume**: Total value of Bitcoin protected through the platform
+- **Active Policies**: Number of active protection policies
+- **Renewal Rate**: Percentage of users who renew protection after expiry
+- **User Growth**: Month-over-month increase in unique users
 
-- **UI Complexity**: Multiple views may confuse new users.
-  - **Mitigation**: Clear navigation, consistent design language, and guided starting points.
-- **Testnet Delays**: Slow block times (~10 seconds) may frustrate users.
-  - **Mitigation**: Display "Processing…" spinners and estimated times.
-- **Wallet Issues**: Hiro Wallet bugs or funding difficulties.
-  - **Mitigation**: Include a troubleshooting guide and mock balance fallback.
-- **Contract Errors**: Clarity bugs causing fund loss.
-  - **Mitigation**: Conduct thorough Clarinet testing and use post-conditions.
-- **User Confusion**: Block-based expiry unclear to non-Stacks users.
-  - **Mitigation**: Display time estimates (e.g., "3d 12h") alongside block height.
+## 9. Limitations & Constraints
 
-## 10. Project Timeline & Milestones
+- **Education Required**: Even with simplified language, some basic explanation is needed
+- **Price Data Dependency**: Accurate and timely Bitcoin price data is essential
+- **Block Confirmation Times**: Stacks block times affect transaction confirmation speed
+- **Initial Liquidity**: Early platform adoption requires sufficient protection providers
 
-### Hackathon Timeline (Example)
+## 10. Implementation Plan
 
-#### Day 1:
+### Phase 1: Core Protection Flow
 
-- Develop Clarity contract and test in Clarinet.
-- Set up React app with navigation structure for all three views.
+- Implement the 5-step protection journey
+- Build key protection components
+- Integrate with Stacks blockchain
+- Deploy smart contracts
 
-#### Day 2:
+### Phase 2: Protection Experience
 
-- Build Home View with market overview and navigation.
-- Implement Easy Option View's core purchase flow.
+- Refine insurance terminology throughout
+- Add contextual educational elements
+- Implement protection simulation tools
+- Optimize visual feedback
 
-#### Day 3:
+### Phase 3: Testing & Refinement
 
-- Develop Option Data View with essential visualizations.
-- Connect all views to contract functions (buy, exercise).
+- Conduct user testing with everyday Bitcoin users
+- Identify and eliminate remaining jargon
+- Optimize the experience for clarity and confidence
+- Prepare for launch
 
-#### Day 4:
+## 11. Future Enhancements
 
-- Implement P&L visualizations across all views.
-- Test end-to-end flow and record demo video.
+- Mobile app version of Bitcoin Protection Center
+- Advanced protection strategies (laddered, rolling)
+- Portfolio view of active protection policies
+- **Enhanced Duration Options**: Implementation of Strategic and Customizable Protection timeframes
+- **Cycle-Based Protection Bundles**: Pre-configured protection packages aligned with Bitcoin market cycles
+- **Dynamic Premium Pricing**: Time-based discounts for longer protection commitments
+- **Milestone-Based Protection**: Protection triggered by specific Bitcoin events rather than calendar dates
+- Protection bundle packages
 
-### Deliverables
+## 12. Appendix
 
-- **GitHub Repository**: Contains Clarity contract and React frontend.
-- **Deployed Contract**: Live on Stacks Testnet via Hiro Explorer.
-- **Demo Video**: 3-5 minutes showcasing all views and key user flows.
-- **Documentation**: README with setup instructions, usage guide, and architecture overview.
+### A. Insurance Terminology Mapping
 
-## 11. Marketing & Branding
+| Traditional Term | Insurance-Based Term (PUT)    | Insurance-Based Term (CALL) |
+| ---------------- | ----------------------------- | --------------------------- |
+| Options contract | Bitcoin protection policy     | Bitcoin price lock policy   |
+| Premium          | Insurance premium             | Lock-in fee                 |
+| Strike price     | Protected value               | Guaranteed purchase price   |
+| Expiration       | Policy period/Coverage period | Price guarantee period      |
+| Exercise         | File a claim                  | Redeem price guarantee      |
+| Moneyness (ITM)  | Active coverage               | Valuable guarantee          |
+| Moneyness (ATM)  | Threshold coverage            | At-market guarantee         |
+| Moneyness (OTM)  | Precautionary coverage        | Future-value guarantee      |
 
-### Name
+### B. Protection Scenarios Visualization
 
-BitHedge: Reflects Bitcoin hedging in a concise, memorable way.
+For a PUT protection policy with:
 
-### Tagline
+- Protected amount: 0.25 BTC
+- Current price: $48,500
+- Protected value: $43,650 (10% below current)
+- Premium: $9.00 + $0.18 fee
 
-"Hedge Smart, Stay Bitcoin."
+**Scenario 1**: BTC falls to $38,000
 
-### Logo Concept
+- Without protection: 0.25 BTC valued at $9,500 (loss of $2,625)
+- With protection: Can sell at $43,650 (saving $1,412.50 minus premium)
 
-A green "H" transitioning into the Bitcoin symbol, symbolizing protection and growth.
+**Scenario 2**: BTC rises to $55,000
 
-### Pitch for Hackathon
+- Value increases to $13,750
+- Protection not needed (only cost is premium paid)
 
-"BitHedge introduces decentralized options to Bitcoin via sBTC and Stacks, enabling users to hedge volatility without leaving the Bitcoin ecosystem. With a multi-view interface catering to both beginners and advanced users, it combines clarity and security with powerful analytics, making it the ideal tool for risk-averse Bitcoin holders."
+### C. Educational Content Examples
 
-## 12. Compliance & Legal Notes
+**How Bitcoin Protection Works**
 
-- **Testnet Only**: Operates with no real financial risk.
-- **Disclaimer**: "This is a demo. Not financial advice. Use at your own risk."
-- **Open Source**: Released under the MIT License.
+- Bitcoin protection policies give you financial security against adverse price movements
+- Pay a small premium for guaranteed price protection
+- Choose your protection amount and duration
+- Exercise your protection only if market conditions are unfavorable
+- Maintain full upside potential with limited downside risk
 
-## 13. Appendices
+**Understanding Bitcoin Protection Durations**
 
-### Appendix A: User Journey Maps
+- **Standard Protection (30-90 days)**: Ideal for short-term concerns and immediate price volatility
+- **Extended Protection (6 months-1 year)**: Provides longer coverage with premium discounts for hodlers
+- **Strategic Protection (until next halving)**: Aligns with Bitcoin's natural 4-year market cycles
+- **Customizable Protection**: Creates personalized coverage based on your specific needs and market outlook
 
-- **Beginner Journey**: Home → Easy Option View → Purchase → Monitoring
-- **Advanced User Journey**: Home → Option Data View → Market Analysis → Trade Decision
-- **Emotions**: Curiosity → Confidence → Relief → Control
+**How Bitcoin Cycles Affect Protection Costs**
 
-### Appendix B: View Mockups
+- Bitcoin's 4-year halving cycles create predictable volatility patterns
+- Protection costs increase with duration due to increased uncertainty
+- Strategic timeframes can optimize protection costs relative to historical cycle patterns
+- Longer durations provide greater peace of mind but at incrementally higher premium costs
 
-Please refer to the following UI/UX design approach documents for detailed mockups:
+## Conclusion
 
-- ui-ux-design-approach-home-page.md
-- ui-ux-design-approach-easy-option-view.md
-- ui-ux-design-approach-option-data-view.md
-
-### Appendix C: Smart Contract Draft
-
-**Sample Clarity Code**:
-
-```clarity
-(define-public (buy-option (option-id uint))
-  (let ((option (unwrap! (map-get? options { id: option-id }) (err u1))))
-    (try! (stx-transfer? u50 tx-sender (get seller option)))
-    (map-set options { id: option-id } (merge option { owner: tx-sender }))
-    (ok true)))
-```
-
----
-
-This updated PRD provides a detailed roadmap for BitHedge's multi-view approach, balancing Rachel's needs with expanded functionality for users at all experience levels. It's ready to guide development and impress hackathon judges with its comprehensive vision and feasible implementation plan.
+The BitHedge Bitcoin Protection Center represents a fundamental reimagining of how Bitcoin users can protect themselves against market volatility. By transforming complex options mechanisms into familiar insurance concepts, we make sophisticated financial protection accessible to everyday users without requiring specialized knowledge. This approach democratizes risk management tools, enabling broader Bitcoin adoption by addressing the volatility concerns that prevent many potential users from holding Bitcoin long-term.

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface LandingFooterProps {
   className?: string;
@@ -42,10 +43,10 @@ export function LandingFooter({ className }: LandingFooterProps) {
           <div className="text-center">
             <h3 className="font-medium text-slate-800 mb-4 text-lg">Quick Links</h3>
             <ul className="space-y-3 text-sm">
-              <li><a href="/home" className="text-slate-600 hover:text-blue-600 transition-colors">Home</a></li>
-              <li><a href="/option-data" className="text-slate-600 hover:text-blue-600 transition-colors">Option Data</a></li>
-              <li><a href="/easy-option" className="text-slate-600 hover:text-blue-600 transition-colors">Easy Trade</a></li>
-              <li><a href="#hedging-calculator" className="text-slate-600 hover:text-blue-600 transition-colors">Hedging Calculator</a></li>
+              <li><Link href="/home" className="text-slate-600 hover:text-blue-600 transition-colors">Home</Link></li>
+              <li><Link href="/option-data" className="text-slate-600 hover:text-blue-600 transition-colors">Option Data</Link></li>
+              <li><Link href="/easy-option" className="text-slate-600 hover:text-blue-600 transition-colors">Easy Trade</Link></li>
+              <li><Link href="#hedging-calculator" className="text-slate-600 hover:text-blue-600 transition-colors">Hedging Calculator</Link></li>
             </ul>
           </div>
           

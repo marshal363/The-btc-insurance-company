@@ -86,15 +86,41 @@ For the time dimension, instead of asking about expiration, we would ask:
 
 **"How long do you need protection?"**
 
-With options clearly framed as:
+Our approach to protection duration is uniquely tailored to Bitcoin's market characteristics with a tiered system:
 
-- "1 Week Coverage (Lower premium, basic protection)"
-- "2 Weeks Coverage (Standard protection plan)"
-- "1 Month Coverage (Extended protection, higher premium)"
+1. **Standard Protection** (for immediate concerns):
+
+   - "30 Days (Basic Protection): Lower premium, immediate peace of mind"
+   - "60 Days (Standard Protection): Balanced cost and duration"
+   - "90 Days (Extended Protection): Greater coverage for short-term volatility"
+
+2. **Extended Protection** (for committed hodlers):
+
+   - "6 Months (Half-Year Protection): Significant discount over monthly rates"
+   - "1 Year (Annual Protection): Our most comprehensive standard timeframe"
+
+3. **Strategic Protection** (for Bitcoin-aware users):
+
+   - "Until Next Halving: Protection aligned with Bitcoin's natural market cycles"
+   - "Custom Cycle-Based Coverage: Protection tailored to specific Bitcoin market events"
+
+4. **Customizable Protection** (for advanced users):
+   - "Build Your Own: Select specific timeframes or triggering events"
+   - "Milestone-Based Coverage: Protection that adapts to changing market conditions"
+
+Each tier includes clear explanations of:
+
+- Premium cost structure (with potential discounts for longer commitments)
+- Specific calendar dates covered (e.g., "Coverage until December 15, 2024")
+- How Bitcoin's volatility and cyclical nature affect protection pricing
+- Recommended use cases based on the user's Bitcoin strategy
 
 The confirmation would state:
 
-- "Your Bitcoin value protection policy will be active until [date]."
+- "Your Bitcoin value protection policy will be active until [specific calendar date]."
+- For halving-based protection: "Your protection extends through Bitcoin's next halving event (estimated April 2024)."
+
+This sophisticated duration approach acknowledges the unique nature of Bitcoin's market cycles, appealing both to short-term protection seekers and long-term holders with different risk profiles.
 
 #### For CALL options (Price Lock Guarantee):
 
@@ -221,6 +247,8 @@ Measuring:
 
 - Develop a "Protection Basics" guide using consistent insurance terminology
 - Create scenario-based tutorials showing how protection works in different market conditions
+- **Develop "Bitcoin Cycles & Protection" educational module explaining how halvings and market cycles affect protection strategies**
+- **Create visualization tools that illustrate the relationship between protection duration, Bitcoin volatility, and premium costs**
 - Consider video explainers using relatable everyday insurance analogies
 
 ## Technical Considerations

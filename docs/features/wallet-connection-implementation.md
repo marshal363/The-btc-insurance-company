@@ -8,15 +8,39 @@
 - [x] Create WalletConnect component
 - [x] Update navbar and homepage components
 - [x] Implement error handling with console logs
-- [ ] Test connection flow
-- [ ] Implement balance fetching
+- [x] Advanced address extraction with fallback methods
+- [x] Multi-wallet provider detection (Hiro, Leather, Xverse)
+- [x] User-friendly error messages
+- [x] UI components for connected/disconnected states
+- [x] Dropdown menu for wallet info and disconnection
+- [ ] Test connection flow (partially complete)
+- [ ] Implement balance fetching (currently using mock data)
 - [ ] Add network switching UI
+- [ ] Implement transaction signing flow
+
+## Current Status (Updated: May 2024)
+
+The wallet connection implementation has made significant progress, with core functionality now working. Users can successfully connect using different wallet providers (Hiro, Leather, Xverse) with robust error handling. The UI properly displays connected/disconnected states and provides basic wallet information with a dropdown menu.
+
+## Next Steps & Timeline
+
+| Task                  | Description                                           | Priority | Timeline | Dependencies     |
+| --------------------- | ----------------------------------------------------- | -------- | -------- | ---------------- |
+| Balance Fetching      | Implement actual API calls to fetch STX/sBTC balances | High     | 2 days   | None             |
+| Balance Refresh       | Add mechanism to refresh balances periodically        | Medium   | 1 day    | Balance Fetching |
+| Network Switching     | Create UI for network toggling                        | Medium   | 2 days   | None             |
+| Transaction Flow      | Implement transaction signing components              | High     | 3 days   | None             |
+| Transaction Status    | Add tracking for transaction status                   | Medium   | 2 days   | Transaction Flow |
+| Comprehensive Testing | Create test suite for wallet functionality            | High     | 3 days   | All features     |
 
 ## Recent Updates
 
 - **Simplified Implementation**: Removed redundant custom wallet selection UI in favor of using the Stacks Connect modal directly
 - **Streamlined UX**: Now clicking "Connect Wallet" directly opens the Stacks Connect modal with all available wallet options
 - **Improved Code**: Removed unnecessary provider selection logic and simplified the connection flow
+- **Enhanced Error Handling**: Added robust address extraction with multiple fallback methods for different wallet providers
+- **UI Polish**: Implemented proper dropdown menu for connected wallet state with disconnect option
+- **State Management**: Fixed state persistence problems and implemented state consistency checks
 
 ## Overview
 

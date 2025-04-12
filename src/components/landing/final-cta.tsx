@@ -33,7 +33,7 @@ export function FinalCTA({ activePersona }: FinalCTAProps) {
               </p>
               
               <Link 
-                href="/protection"
+                href="/home"
                 className="mt-auto inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 py-3"
               >
                 Create Your Protection Policy
@@ -52,7 +52,7 @@ export function FinalCTA({ activePersona }: FinalCTAProps) {
               </p>
               
               <Link 
-                href="/income"
+                href="/home"
                 className="mt-auto inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-amber-500 text-white hover:bg-amber-600 h-11 px-8 py-3"
               >
                 Start Providing Protection

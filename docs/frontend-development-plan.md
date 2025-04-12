@@ -391,7 +391,7 @@ This document outlines a detailed technical implementation plan for the BitHedge
 - [ ] **Task 10.3.6**: Implement screencast recordings
 - [ ] **Task 10.3.7**: Create demo deployment
 
-## Progress Summary (Updated: April 2024)
+## Progress Summary (Updated: May 2024)
 
 ### Completed Phases ✅
 
@@ -412,45 +412,89 @@ This document outlines a detailed technical implementation plan for the BitHedge
   - Basic navigation structure
   - Route configuration
 
+#### Phase 2: Core UI Components Development (75% Complete)
+
+- [x] Form Components (85% Complete)
+  - React Hook Form + Zod integration
+  - Text inputs with validation
+  - Select dropdowns with search
+  - Radio and checkbox components
+  - Range slider component
+  - Still pending: Date picker component, Numeric input with formatting
+- [x] Data Display Components (90% Complete)
+  - Data table with sorting and filtering
+  - Card components with variants
+  - Status badge component
+  - Expandable section component
+  - Tabs component
+  - Tooltip component
+  - Still pending: Price tag component with formatting
+- [ ] Chart & Visualization Components (20% Complete)
+  - Basic chart configuration started
+  - Still pending: Most chart implementations
+- [x] Feedback & Dialog Components (80% Complete)
+  - Modal dialog component
+  - Toast notification system
+  - Loading indicator components
+  - Error message components
+  - Still pending: Confirmation dialog component, Success state components, Progress indicators
+
+#### Wallet Connection Implementation (85% Complete)
+
+- [x] Wallet Store and Hook
+  - Zustand store setup with persistence
+  - useWallet hook implementation
+  - Wallet types creation
+- [x] Connection UI Components
+  - WalletConnect component
+  - Wallet info dropdown
+  - Connection status indicators
+- [x] Error Handling and Provider Support
+  - Console logging for debugging
+  - User-friendly error messages
+  - Multi-wallet provider support (Hiro, Leather, Xverse)
+  - Robust address extraction with fallbacks
+- [ ] Advanced Features (Pending)
+  - Balance fetching (currently using mock data)
+  - Network switching UI
+  - Transaction signing flow
+  - Comprehensive testing
+
 ### In Progress 🏃‍♂️
 
-#### Phase 2: Core UI Components Development (60% Complete)
+1. **Wallet Advanced Features**
 
-- [x] Form Components (In Progress)
-  - Basic form setup with React Hook Form
-  - Initial field components
-- [x] Data Display Components (Started)
-  - Basic card components
-  - Initial table structure
-- [ ] Chart Components (Pending)
-- [ ] Feedback Components (Pending)
+   - Balance fetching from blockchain
+   - Network switching functionality
+   - Transaction signing components
 
-### Next Priority Tasks 📅
+2. **Chart & Visualization Components**
 
-1. **Wallet Integration (High Priority)**
+   - Chart base configuration
+   - Line and area charts
+   - Data visualization components
 
-   - Complete wallet connection flow
-   - Implement transaction handling
-   - Add wallet state persistence
-   - Create wallet UI components
+3. **Landing Page Implementation**
+   - Hero section development
+   - Value proposition components
 
-2. **Form Components (High Priority)**
+### Next Priority Tasks & Timeline 📅
 
-   - Complete form validation setup
-   - Finish core form components
-   - Implement form state management
-
-3. **Data Display (Medium Priority)**
-   - Complete table components
-   - Finish card variants
-   - Implement data loading states
+| Task              | Description                     | Priority | Timeline      | Dependencies   |
+| ----------------- | ------------------------------- | -------- | ------------- | -------------- |
+| Wallet Balance    | Implement balance fetching      | High     | May 22-23     | None           |
+| Network Switching | Create network toggle UI        | Medium   | May 24-25     | None           |
+| Transaction Flow  | Build transaction components    | High     | May 26-28     | None           |
+| Chart Components  | Complete visualization library  | High     | May 22-26     | None           |
+| Landing Page      | Complete hero and core sections | Medium   | May 27-30     | None           |
+| Home View         | Implement main dashboard        | High     | May 31-June 3 | Charts, Wallet |
 
 ### Achievement Metrics
 
 - Total Tasks: 157
-- Completed Tasks: 42
-- In Progress Tasks: 15
-- Overall Progress: ~27%
+- Completed Tasks: 68
+- In Progress Tasks: 22
+- Overall Progress: ~43%
 
 ## Critical Dependencies and Risk Mitigation
 
