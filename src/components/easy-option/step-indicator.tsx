@@ -11,30 +11,91 @@ export interface StepIndicatorProps {
 }
 
 export function StepIndicator({ steps }: StepIndicatorProps) {
+  // Find active step and its index
+  const activeStep = steps.find(step => step.active);
+  const activeIndex = activeStep ? steps.indexOf(activeStep) : 0;
+  
+  // Determine which steps to show in carousel (prev, current, next)
+  const visibleSteps = [];
+  
+  // Add previous step if it exists
+  if (activeIndex > 0) {
+    visibleSteps.push({
+      step: steps[activeIndex - 1],
+      index: activeIndex - 1,
+      position: "previous"
+    });
+  }
+  
+  // Add current step
+  visibleSteps.push({
+    step: steps[activeIndex],
+    index: activeIndex,
+    position: "current"
+  });
+  
+  // Add next step if it exists
+  if (activeIndex < steps.length - 1) {
+    visibleSteps.push({
+      step: steps[activeIndex + 1],
+      index: activeIndex + 1,
+      position: "next"
+    });
+  }
+
   return (
-    <div className="flex justify-between items-center mb-8 max-w-2xl mx-auto">
-      {steps.map((step, index) => (
-        <React.Fragment key={index}>
-          <div className={`flex flex-col items-center w-1/5 ${step.active ? "text-primary" : "text-muted-foreground"}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
-              step.completed ? "bg-primary/20 text-primary" : 
-              step.active ? "bg-primary text-primary-foreground" : 
-              "bg-muted"
-            }`}>
-              {step.completed ? "✓" : index + 1}
+    <div className="mb-6">
+      {/* Carousel-style step indicator */}
+      <div className="flex justify-center items-center mb-4">
+        {/* Visible steps */}
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          {visibleSteps.map(({ step, index, position }) => (
+            <div 
+              key={index} 
+              className={`flex flex-col items-center ${
+                position === "current" 
+                  ? "text-primary" 
+                  : "text-muted-foreground"
+              }`}
+            >
+              <div 
+                className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center mb-1.5 ${
+                  step.completed ? "bg-primary/20 text-primary" : 
+                  position === "current" ? "bg-primary text-primary-foreground" : 
+                  "bg-muted"
+                }`}
+              >
+                {step.completed ? "✓" : index + 1}
+              </div>
+              <span 
+                className={`text-xs sm:text-sm whitespace-nowrap font-medium ${
+                  position === "current" 
+                    ? "opacity-100" 
+                    : "opacity-70"
+                }`}
+              >
+                {step.name}
+              </span>
             </div>
-            <span className="text-sm">{step.name}</span>
-          </div>
-          
-          {index < steps.length - 1 && (
-            <div className={`w-1/9 h-0.5 ${
-              steps[index + 1].active || steps[index + 1].completed || step.completed 
-                ? "bg-primary/20" 
-                : "bg-muted"
-            }`}></div>
-          )}
-        </React.Fragment>
-      ))}
+          ))}
+        </div>
+      </div>
+      
+      {/* Dots for overall progress - visible on all screen sizes */}
+      <div className="flex justify-center items-center gap-1.5">
+        {steps.map((step, index) => (
+          <div 
+            key={index}
+            className={`w-1.5 h-1.5 rounded-full transition-all ${
+              activeIndex === index 
+                ? "w-3 bg-primary" 
+                : step.completed 
+                  ? "bg-primary/50" 
+                  : "bg-muted"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 } 

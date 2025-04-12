@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { WalletConnect } from "@/components/wallet/WalletConnect";
-import { useWallet } from "@/hooks/wallet/useWallet";
 
 const NavItems = [
   {
@@ -27,7 +26,6 @@ interface NavbarProps {
 
 export const Navbar = ({ className }: NavbarProps) => {
   const pathname = usePathname();
-  const { network } = useWallet();
 
   return (
     <header
@@ -67,14 +65,6 @@ export const Navbar = ({ className }: NavbarProps) => {
             size="sm"
             className="h-10"
           />
-          <div className={cn(
-            "px-2 md:px-3 py-1 md:py-1.5 text-xs font-medium rounded-md capitalize",
-            network === "mainnet" 
-              ? "bg-green-600/20 text-green-600" 
-              : "bg-destructive/20 text-destructive"
-          )}>
-            {network}
-          </div>
         </div>
       </div>
     </header>

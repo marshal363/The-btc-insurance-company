@@ -332,7 +332,7 @@ export default function EasyOption() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-medium">Bitcoin Protection Center</h1>
+        <h1 className="text-3xl font-medium hidden sm:block">Bitcoin Protection Center</h1>
       </div>
       
       <div className="mb-8">
