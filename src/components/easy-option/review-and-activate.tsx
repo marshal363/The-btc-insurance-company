@@ -1,9 +1,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Shield, BarChart2, Info, Clock, Zap } from "lucide-react";
-import type { ProtectionType } from "./protection-type-selector";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Shield, Check, AlertTriangle, Calculator } from "lucide-react";
+import { useMarketStore } from "@/store/market-store";
+import { ProtectionType } from "./protection-type-selector";
 
 interface ReviewAndActivateProps {
   optionType: "call" | "put";
@@ -15,6 +14,7 @@ interface ReviewAndActivateProps {
     premium: number;
     fees: number;
     total: number;
+    protectionLevel: string;
   };
   onActivate: () => void;
   togglePnlPanel: () => void;
@@ -28,254 +28,190 @@ export function ReviewAndActivate({
   duration,
   policy,
   onActivate,
-  togglePnlPanel,
+  togglePnlPanel
 }: ReviewAndActivateProps) {
-  const btcAmount = parseFloat(amount);
-  const btcPrice = 48500; // Hardcoded current price
-  const usdValue = btcAmount * btcPrice;
-  const strikePriceNumber = parseFloat(strikePrice);
+  const { btcPrice = 48500 } = useMarketStore();
   
-  // Format duration display string
-  const formatDuration = (duration: string) => {
-    if (duration === "halving") {
-      return "Until next Bitcoin halving";
-    } else if (duration === "custom") {
-      return "Custom period"; // In a real app, would show actual days from state
-    } else if (duration === "180") {
-      return "6 months";
-    } else if (duration === "365") {
-      return "1 year";
+  // Helper to format dates
+  const formatDate = (daysToAdd: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    return date.toLocaleDateString();
+  };
+  
+  // Calculate expiration date
+  const getExpirationDate = () => {
+    if (duration === "30" || duration === "60" || duration === "90" || 
+        duration === "180" || duration === "365") {
+      return formatDate(parseInt(duration));
+    } else if (duration === "halving") {
+      return "Approx. April 2024"; // Example - would be dynamic in real app
     } else {
-      return `${duration} days`;
+      return "Custom date"; // For custom duration
     }
   };
   
-  // Get duration value in days for display
-  const getDurationDays = (duration: string): number => {
-    if (duration === "halving") return 200; // Approximation
-    if (duration === "custom") return 120; // Default value
-    if (duration === "180") return 180;
-    if (duration === "365") return 365;
-    return parseInt(duration);
-  };
+  const expirationDate = getExpirationDate();
   
-  // Get protection direction text
-  const protectionTypeText = 
-    protectionType === "hodl" ? "Protect my Bitcoin holdings" : "Protect my future purchase";
+  // Calculate protected USD value
+  const protectedUsdValue = parseFloat(amount) * parseFloat(strikePrice);
   
-  // Get option type text
-  const optionTypeText = 
-    optionType === "put" ? "Downside Protection (Put)" : "Upside Protection (Call)";
-  
-  // Get protection level
-  const protectionLevel = 
-    optionType === "put" 
-      ? 100 - Math.round((strikePriceNumber / btcPrice) * 100)
-      : Math.round((strikePriceNumber / btcPrice) * 100) - 100;
-  
-  const protectionLevelText = 
-    optionType === "put"
-      ? `${Math.abs(protectionLevel)}% downside protection`
-      : `Lock in price ${Math.abs(protectionLevel)}% ${protectionLevel >= 0 ? 'above' : 'below'} current`;
-  
-  // Calculate moneyness for display
-  const getMoneyness = (): "ITM" | "ATM" | "OTM" => {
-    const isPut = optionType === "put";
-    
-    if (strikePriceNumber === btcPrice) {
-      return "ATM";
-    } else if ((isPut && strikePriceNumber > btcPrice) || (!isPut && strikePriceNumber < btcPrice)) {
-      return "ITM";
-    } else {
-      return "OTM";
-    }
-  };
-  
-  const moneyness = getMoneyness();
-  
-  // Get moneyness badge color
-  const getMoneynessColor = (moneyness: "ITM" | "ATM" | "OTM"): string => {
-    switch (moneyness) {
-      case "ITM": return "bg-blue-100 text-blue-700 border-blue-200";
-      case "ATM": return "bg-purple-100 text-purple-700 border-purple-200";
-      case "OTM": return "bg-amber-100 text-amber-700 border-amber-200";
-    }
-  };
-  
-  // Get user-friendly moneyness term
-  const getMoneynessLabel = (moneyness: "ITM" | "ATM" | "OTM"): string => {
+  // Get title and key terms based on option type
+  const getTitle = () => {
     if (optionType === "put") {
-      switch (moneyness) {
-        case "ITM": return "Full Value Protection";
-        case "ATM": return "Threshold Coverage";
-        case "OTM": return "Precautionary Coverage";
-      }
+      return "Activate Bitcoin Price Drop Protection";
     } else {
-      switch (moneyness) {
-        case "ITM": return "Valuable Guarantee";
-        case "ATM": return "At-market Guarantee";
-        case "OTM": return "Future-value Guarantee";
-      }
+      return "Activate Bitcoin Price Lock Guarantee";
     }
   };
   
-  // Format currency for display
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(value);
+  const getActivationDescription = () => {
+    if (optionType === "put") {
+      return "You're about to activate price drop protection for your Bitcoin holdings.";
+    } else {
+      return "You're about to activate a price lock guarantee for your future Bitcoin purchase.";
+    }
+  };
+  
+  const getProtectionDetails = () => {
+    if (optionType === "put") {
+      return `Your Bitcoin will be protected at $${parseInt(strikePrice).toLocaleString()} per BTC, regardless of how low the market price falls.`;
+    } else {
+      return `You can purchase Bitcoin at $${parseInt(strikePrice).toLocaleString()} per BTC, regardless of how high the market price rises.`;
+    }
+  };
+  
+  const getActionDescription = () => {
+    if (optionType === "put") {
+      return "If the price falls below your protected value, you can activate your protection to sell at the protected price.";
+    } else {
+      return "If the price rises above your locked price, you can use your guarantee to buy at the locked price.";
+    }
   };
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Review & Activate</h2>
+      <h2 className="text-2xl font-bold mb-2">{getTitle()}</h2>
       <p className="text-muted-foreground mb-6">
-        Review your Bitcoin protection details before activation.
+        {getActivationDescription()} Review the details and confirm to proceed.
       </p>
       
+      {/* Policy Details */}
       <div className="mb-8 space-y-6">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
-              <Shield className="w-5 h-5 text-primary" />
+        <div className="bg-gradient-to-r from-zinc-50 to-zinc-100 p-4 rounded-lg border">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-blue-600" />
+              <h3 className="text-lg font-medium">
+                {protectionType === "hodl" ? "Price Drop Protection" : "Purchase Price Lock"}
+              </h3>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold">{protectionTypeText}</h3>
-              <Badge variant="outline" className={`mt-1 font-medium text-xs py-0.5 px-2 ${getMoneynessColor(moneyness)}`}>
-                {getMoneynessLabel(moneyness)}
-              </Badge>
+            <div className="text-sm font-medium text-blue-600">
+              {policy.protectionLevel}
             </div>
           </div>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="border rounded-lg p-4">
+            <h4 className="text-sm text-gray-500 mb-1">Protected Value</h4>
+            <p className="text-xl font-semibold">${parseInt(strikePrice).toLocaleString()} per BTC</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {optionType === "put" 
+                ? `If Bitcoin falls below this value, your protection activates.` 
+                : `If Bitcoin rises above this value, your price lock becomes valuable.`}
+            </p>
+          </div>
+          
+          <div className="border rounded-lg p-4">
+            <h4 className="text-sm text-gray-500 mb-1">Protection Period</h4>
+            <p className="text-xl font-semibold">
+              {duration === "halving" ? "Until next halving" : 
+               duration === "custom" ? "Custom period" : 
+               `${duration} days`}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              Active until {expirationDate}
+            </p>
+          </div>
+          
+          <div className="border rounded-lg p-4">
+            <h4 className="text-sm text-gray-500 mb-1">Protected Amount</h4>
+            <p className="text-xl font-semibold">{amount} BTC</p>
+            <p className="text-xs text-gray-500 mt-1">
+              ≈ ${protectedUsdValue.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })}
+            </p>
+          </div>
+          
+          <div className="border rounded-lg p-4">
+            <h4 className="text-sm text-gray-500 mb-1">Protection Cost</h4>
+            <p className="text-xl font-semibold">${policy.total.toFixed(2)}</p>
+            <p className="text-xs text-gray-500 mt-1">
+              One-time premium payment
+            </p>
+          </div>
+        </div>
+        
+        <div className="border p-6 rounded-lg space-y-4">
+          <h3 className="text-lg font-medium flex items-center gap-2">
+            <Shield className="w-5 h-5 text-blue-600" />
+            <span>Protection Details</span>
+          </h3>
+          
+          <div className="space-y-3">
+            <p className="text-sm text-gray-600">
+              {getProtectionDetails()}
+            </p>
+            <p className="text-sm text-gray-600">
+              {getActionDescription()}
+            </p>
+            <p className="text-sm text-gray-600">
+              Your protection remains active until {expirationDate}.
+            </p>
+          </div>
+          
           <Button 
             variant="outline" 
             size="sm" 
             onClick={togglePnlPanel}
-            className="flex items-center gap-2"
+            className="mt-2 text-blue-600"
           >
-            <BarChart2 className="w-4 h-4" />
-            <span>Value Simulation</span>
+            <Calculator className="mr-2 h-4 w-4" />
+            View protection simulation
           </Button>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border rounded-lg p-5">
-            <h4 className="text-sm font-medium flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
-              <span>Protection Details</span>
-            </h4>
-            <ul className="space-y-4 mt-4">
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">Type</span>
-                <span className="font-medium">{optionTypeText}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">Amount</span>
-                <span className="font-medium">{btcAmount} BTC <span className="text-muted-foreground text-sm">(${usdValue.toLocaleString()})</span></span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">Duration</span>
-                <span className="font-medium flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                  {formatDuration(duration)}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">Current Price</span>
-                <span className="font-medium">${btcPrice.toLocaleString()}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">{optionType === "put" ? "Protected Value" : "Purchase Price"}</span>
-                <span className="font-medium">${strikePriceNumber.toLocaleString()}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">Protection Level</span>
-                <span className="font-medium">{protectionLevelText}</span>
-              </li>
-            </ul>
-          </Card>
-          
-          <Card className="border rounded-lg p-5">
-            <h4 className="text-sm font-medium flex items-center gap-2">
-              <Zap className="w-4 h-4 text-primary" />
-              <span>Payment Details</span>
-            </h4>
-            <ul className="space-y-4 mt-4">
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">{optionType === "put" ? "Insurance Premium" : "Lock-in Fee"}</span>
-                <span className="font-medium">{formatCurrency(policy.premium)}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">Platform Fee</span>
-                <span className="font-medium">{formatCurrency(policy.fees)}</span>
-              </li>
-              <li className="flex justify-between border-t pt-3 mt-2">
-                <span className="font-medium">Total Payment</span>
-                <span className="font-semibold text-lg">{formatCurrency(policy.total)}</span>
-              </li>
-            </ul>
-            
-            <div className="mt-5 p-4 bg-muted/20 rounded-lg">
-              <h5 className="text-xs font-medium mb-2 flex items-center gap-1.5">
-                <Info className="h-3.5 w-3.5 text-muted-foreground" />
-                Premium Factors
-              </h5>
-              <ul className="text-xs space-y-2 text-muted-foreground">
-                <li className="flex justify-between">
-                  <span>Bitcoin Amount:</span>
-                  <span className="font-medium">{btcAmount} BTC</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Duration:</span>
-                  <span className="font-medium">{getDurationDays(duration)} days</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Position Type:</span>
-                  <span className="font-medium">{moneyness}</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>BTC Volatility:</span>
-                  <span className="font-medium">65%</span>
-                </li>
-              </ul>
-            </div>
-          </Card>
-        </div>
-        
-        <Card className="p-5 border rounded-lg bg-muted/10">
-          <h4 className="font-medium mb-3 flex items-center gap-2">
-            <CheckCircle className="w-4.5 h-4.5 text-green-500" />
-            <span>Activation Confirmation</span>
-          </h4>
-          <div className="space-y-3 text-sm text-muted-foreground pl-7">
-            <p>
-              Your Bitcoin protection will be activated immediately upon payment. The protection will remain active for {formatDuration(duration)}.
-            </p>
-            <p>
-              If market conditions become unfavorable (
-              {optionType === "put" ? "price falls below" : "price rises above"} ${strikePriceNumber.toLocaleString()}),
-              you can exercise your protection through your protection center.
-            </p>
-            <p>
-              The premium has been calculated based on current market conditions, including Bitcoin price volatility, position type, and protection duration.
-            </p>
-          </div>
-        </Card>
       </div>
       
-      <Button 
-        className="w-full py-6 text-lg"
-        onClick={onActivate}
-      >
-        Activate Protection
-        <ArrowRight className="ml-2 h-5 w-5" />
-      </Button>
+      {/* Disclaimer */}
+      <div className="mb-8 p-4 border border-yellow-200 bg-yellow-50 rounded-lg">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <h4 className="text-sm font-medium text-yellow-800 mb-1">Important Information</h4>
+            <p className="text-xs text-yellow-700">
+              By activating this protection, you agree to pay the protection premium. 
+              Your maximum cost is limited to this premium amount. Protection is non-custodial 
+              and does not require depositing your Bitcoin. You retain full control of your assets 
+              at all times.
+            </p>
+          </div>
+        </div>
+      </div>
       
-      <p className="text-xs text-center text-muted-foreground mt-3">
-        By activating, you agree to our Terms of Service and Privacy Policy.
-      </p>
+      {/* Activation Button */}
+      <div className="flex justify-center">
+        <Button 
+          size="lg" 
+          onClick={onActivate}
+          className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto min-w-[200px]"
+        >
+          <Check className="mr-2 h-5 w-5" />
+          Activate Protection
+        </Button>
+      </div>
     </div>
   );
 } 

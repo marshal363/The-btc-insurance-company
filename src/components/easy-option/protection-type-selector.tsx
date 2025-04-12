@@ -16,15 +16,15 @@ export function ProtectionTypeSelector({
 }: ProtectionTypeSelectorProps) {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">What are you looking to protect?</h2>
+      <h2 className="text-2xl font-bold mb-2">What are you looking to protect against?</h2>
       <p className="text-muted-foreground mb-4">
-        Select the type of protection that best fits your Bitcoin investment needs.
+        Select the type of protection that best fits your Bitcoin needs.
       </p>
       
       {!protectionType && (
         <div className="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-700 flex items-center gap-2">
           <Shield className="h-4 w-4 flex-shrink-0" />
-          <p>Please select a protection type to continue to the next step.</p>
+          <p>Please select a protection goal to continue to the next step.</p>
         </div>
       )}
       
@@ -49,28 +49,28 @@ export function ProtectionTypeSelector({
               <div className="p-3 rounded-full bg-blue-100 text-blue-700">
                 <Shield className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-semibold">Protect my Bitcoin holdings</h3>
+              <h3 className="text-lg font-semibold">Protect against Bitcoin price drops</h3>
             </div>
             
             <div className="flex items-center gap-2 mb-3">
               <TrendingDown className="w-4 h-4 text-red-500" />
               <p className="text-sm font-medium">
-                Get protection against price drops
+                Price Drop Protection
               </p>
             </div>
             
             <p className="text-sm text-gray-600 mb-5">
-              Secure your Bitcoin value with a price floor that guarantees you can sell at a predetermined price even if the market falls.
+              Set a HODL Floor that ensures you can sell your Bitcoin at a guaranteed price even if the market falls, while keeping full upside potential.
             </p>
             
             <div className="grid grid-cols-2 gap-4 text-sm mt-6">
               <div>
-                <span className="block text-gray-500 mb-1">Maximum loss exposure</span>
+                <span className="block text-gray-500 mb-1">Maximum cost</span>
                 <span className="font-medium">Limited to premium</span>
               </div>
               <div>
                 <span className="block text-gray-500 mb-1">Ideal for</span>
-                <span className="font-medium">Current BTC holders</span>
+                <span className="font-medium">Bitcoin HODLers</span>
               </div>
             </div>
           </div>
@@ -96,24 +96,24 @@ export function ProtectionTypeSelector({
               <div className="p-3 rounded-full bg-green-100 text-green-700">
                 <Shield className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-semibold">Protect my future purchase</h3>
+              <h3 className="text-lg font-semibold">Lock in Bitcoin purchase price now</h3>
             </div>
             
             <div className="flex items-center gap-2 mb-3">
               <TrendingUp className="w-4 h-4 text-green-500" />
               <p className="text-sm font-medium">
-                Lock in your Bitcoin purchase price
+                Purchase Price Lock
               </p>
             </div>
             
             <p className="text-sm text-gray-600 mb-5">
-              Reserve the right to buy Bitcoin at today's price even if the market rises, ensuring you don't miss out on future opportunities.
+              Secure the right to buy Bitcoin at today&apos;s price even if the market rises, ensuring you don&apos;t miss out on future opportunities.
             </p>
             
             <div className="grid grid-cols-2 gap-4 text-sm mt-6">
               <div>
-                <span className="block text-gray-500 mb-1">Maximum loss exposure</span>
-                <span className="font-medium">Limited to reservation fee</span>
+                <span className="block text-gray-500 mb-1">Maximum cost</span>
+                <span className="font-medium">Limited to lock-in fee</span>
               </div>
               <div>
                 <span className="block text-gray-500 mb-1">Ideal for</span>
@@ -130,13 +130,13 @@ export function ProtectionTypeSelector({
           <span>How Bitcoin Protection Works</span>
         </h3>
         <p className="text-sm text-muted-foreground mb-3">
-          Bitcoin protection policies give you financial security against adverse price movements while maintaining potential upside.
+          Bitcoin protection policies give you financial security against adverse price movements while maintaining your Bitcoin&apos;s potential upside.
         </p>
         <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-2">
-          <li>Pay a small premium for guaranteed price protection</li>
-          <li>Choose your protection amount and duration</li>
-          <li>Exercise your protection only if market conditions are unfavorable</li>
-          <li>Maintain full upside potential with limited downside risk</li>
+          <li>Pay a one-time premium for guaranteed value protection</li>
+          <li>Choose your protected value and protection period</li>
+          <li>Activate your protection only when market conditions are unfavorable</li>
+          <li>Keep control of your Bitcoin with non-custodial protection</li>
         </ul>
       </div>
     </div>

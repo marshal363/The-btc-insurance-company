@@ -6,25 +6,30 @@ import { useToast } from "@/components/ui/use-toast";
 import { STEPS, STEPS_TYPE } from "@/constants/steps";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 
 // Import our component modules
 import { StepIndicator, StepType } from "@/components/easy-option/step-indicator";
 import { NavigationButtons } from "@/components/easy-option/navigation-buttons";
 import { ProtectionTypeSelector, ProtectionType } from "@/components/easy-option/protection-type-selector";
 import { StrikePrice } from "@/components/easy-option/strike-price";
-import { AvailableContracts, OptionContract } from "@/components/easy-option/available-contracts";
 import { QuantityAndDuration } from "@/components/easy-option/quantity-and-duration";
-import { ReviewAndActivate } from "@/components/easy-option/review-and-activate";
+import { PolicyPreview } from "@/components/easy-option/policy-preview";
 import { PnlSimulation } from "@/components/easy-option/pnl-simulation";
 
 // Define array of step names
 const STEP_NAMES = [
-  "Protection Type",
-  "Coverage Details",
-  "Policy Duration",
-  "Available Policies",
-  "Activate Protection",
+  "Protection Goal",
+  "Protected Value",
+  "Protection Amount", 
+  "Protection Period",
+  "Protection Simulation",
+  "Policy Review & Activation",
 ];
+
+// Now we can use STEPS directly as it already contains our custom steps
+const CUSTOM_STEPS = STEPS;
 
 export default function EasyOption() {
   const { toast } = useToast();
@@ -33,8 +38,8 @@ export default function EasyOption() {
   // State from market store
   const { btcPrice = 48500 } = useMarketStore();
 
-  // Step state
-  const [currentStep, setCurrentStep] = useState<STEPS_TYPE>(STEPS.PROTECTION_TYPE);
+  // Step state - updated to use the steps from constants
+  const [currentStep, setCurrentStep] = useState<STEPS_TYPE>(STEPS.PROTECTION_GOAL);
 
   // Protection type state
   const [protectionType, setProtectionType] = useState<ProtectionType>("hodl");
@@ -42,69 +47,118 @@ export default function EasyOption() {
   // Option selection state (derived from protection type)
   const [optionType, setOptionType] = useState<"call" | "put">("put");
   
-  // Strike price selection state
-  const [strikePrice, setStrikePrice] = useState<string>("34000");
+  // Protection strategy state
+  const [protectionStrategy, setProtectionStrategy] = useState<"maximum" | "standard" | "flexible" | "crash">("standard");
   
-  // Bitcoin amount and duration state 
+  // Strike price selection state (now determined by strategy)
+  const [protectedValue, setProtectedValue] = useState<string>(Math.round(btcPrice * 0.9).toString());
+  
+  // Bitcoin amount state 
   const [amount, setAmount] = useState<string>("0.25");
+  
+  // Protection period state
   const [duration, setDuration] = useState<"30" | "60" | "90" | "180" | "365" | "halving" | "custom">("30");
 
-  // PnL simulation panel state
+  // PnL simulation panel state - no longer needed as a panel toggle since it's a dedicated step
   const [isPnlPanelOpen, setIsPnlPanelOpen] = useState(false);
   
-  // Selected contract state
-  const [selectedContract, setSelectedContract] = useState<OptionContract | null>(null);
-  
-  // Policy payment state
+  // Policy state - directly derived from strategy rather than contract selection
   const [policy, setPolicy] = useState<{
     premium: number;
     fees: number;
     total: number;
+    protectionLevel: string; // Added to track protection level description
   }>({
     premium: 0,
     fees: 0,
     total: 0,
+    protectionLevel: "Standard Protection (90% of current value)"
   });
   
-  // Update strike price when BTC price changes (only on initial mount)
+  // Update protected value when BTC price changes (only on initial mount)
   useEffect(() => {
-    setStrikePrice(btcPrice.toString());
+    const initialProtectedValue = Math.round(btcPrice * 0.9).toString(); // Default to standard protection (90%)
+    setProtectedValue(initialProtectedValue);
   }, [btcPrice]);
 
-  // Update premium calculation when moving to review step or showing PnL
+  // Update premium calculation when moving to simulation or policy preview
   React.useEffect(() => {
-    if (currentStep === STEPS.REVIEW_ACTIVATE || isPnlPanelOpen) {
+    if (currentStep === CUSTOM_STEPS.PROTECTION_SIMULATION || 
+        currentStep === CUSTOM_STEPS.POLICY_PREVIEW) {
       calculatePayment();
     }
-  }, [currentStep, isPnlPanelOpen]);
+  }, [currentStep]);
+
+  // Calculate protected value based on strategy
+  const setProtectionStrategyAndValue = (strategy: "maximum" | "standard" | "flexible" | "crash") => {
+    setProtectionStrategy(strategy);
+    
+    // Calculate protected value based on selected strategy
+    let protectionPercentage = 1.0; // Maximum (100%)
+    
+    switch(strategy) {
+      case "maximum":
+        protectionPercentage = 1.0; // 100% of current value
+        break;
+      case "standard":
+        protectionPercentage = 0.9; // 90% of current value
+        break;
+      case "flexible":
+        protectionPercentage = 0.8; // 80% of current value
+        break;
+      case "crash":
+        protectionPercentage = 0.7; // 70% of current value
+        break;
+    }
+    
+    const newProtectedValue = Math.round(btcPrice * protectionPercentage).toString();
+    setProtectedValue(newProtectedValue);
+    
+    // Update policy protection level description
+    const protectionLevel = {
+      "maximum": "Maximum Protection (100% of current value)",
+      "standard": "Standard Protection (90% of current value)",
+      "flexible": "Flexible Protection (80% of current value)",
+      "crash": "Crash Insurance (70% of current value)"
+    }[strategy];
+    
+    setPolicy(prev => ({
+      ...prev,
+      protectionLevel
+    }));
+  };
 
   // Step navigation functions
   const handleNextStep = () => {
     // Validate current step
-    if (currentStep === STEPS.PROTECTION_TYPE) {
+    if (currentStep === CUSTOM_STEPS.PROTECTION_GOAL) {
       // Validation for protection type
       if (!protectionType) {
         toast({
-          title: "Please select a protection type",
+          title: "Please select a protection goal",
           description: "Select the type of protection you need for your Bitcoin.",
           variant: "destructive",
         });
         return;
       }
-      // Map protection type to option type and go directly to strike price
+      // Map protection type to option type
       setOptionType(protectionType === "hodl" ? "put" : "call");
-      setCurrentStep(STEPS.STRIKE_PRICE);
+      setCurrentStep(CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY);
     } 
-    else if (currentStep === STEPS.STRIKE_PRICE) {
-      // Validation for strike price and amount
-      if (!strikePrice || isNaN(parseFloat(strikePrice))) {
+    else if (currentStep === CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY) {
+      // Validation for protected value strategy
+      if (!protectedValue || isNaN(parseFloat(protectedValue))) {
         toast({
-          title: "Please enter a valid protected value",
-          description: "Protected value should be a number.",
+          title: "Please select a valid protection strategy",
+          description: "Choose a protection strategy that best fits your needs.",
           variant: "destructive",
         });
         return;
       }
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_AMOUNT);
+    }
+    else if (currentStep === CUSTOM_STEPS.PROTECTION_AMOUNT) {
+      // Validation for amount
       if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) < 0.01) {
         toast({
           title: "Please enter a valid Bitcoin amount",
@@ -113,49 +167,45 @@ export default function EasyOption() {
         });
         return;
       }
-      setCurrentStep(STEPS.QUANTITY_DURATION);
-    } 
-    else if (currentStep === STEPS.QUANTITY_DURATION) {
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_PERIOD);
+    }
+    else if (currentStep === CUSTOM_STEPS.PROTECTION_PERIOD) {
       // Validate duration
       if (!duration) {
         toast({
-          title: "Please select a policy duration",
+          title: "Please select a protection period",
           description: "Choose how long you want your protection to remain active.",
           variant: "destructive",
         });
         return;
       }
-      setCurrentStep(STEPS.AVAILABLE_CONTRACTS);
-    } 
-    else if (currentStep === STEPS.AVAILABLE_CONTRACTS) {
-      // Validation for selected contract
-      if (!selectedContract) {
-        toast({
-          title: "Please select a protection policy",
-          description: "Choose a policy that best fits your needs.",
-          variant: "destructive",
-        });
-        return;
-      }
       
-      // Calculate premium based on selections
+      // Calculate policy based on selected parameters
       calculatePayment();
-      setCurrentStep(STEPS.REVIEW_ACTIVATE);
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_SIMULATION);
+    } 
+    else if (currentStep === CUSTOM_STEPS.PROTECTION_SIMULATION) {
+      // Move from simulation to policy preview
+      calculatePayment();
+      setCurrentStep(CUSTOM_STEPS.POLICY_PREVIEW);
     }
   };
   
   const handlePreviousStep = () => {
-    if (currentStep === STEPS.STRIKE_PRICE) {
-      setCurrentStep(STEPS.PROTECTION_TYPE);
+    if (currentStep === CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY) {
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_GOAL);
     } 
-    else if (currentStep === STEPS.QUANTITY_DURATION) {
-      setCurrentStep(STEPS.STRIKE_PRICE);
+    else if (currentStep === CUSTOM_STEPS.PROTECTION_AMOUNT) {
+      setCurrentStep(CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY);
     }
-    else if (currentStep === STEPS.AVAILABLE_CONTRACTS) {
-      setCurrentStep(STEPS.QUANTITY_DURATION);
+    else if (currentStep === CUSTOM_STEPS.PROTECTION_PERIOD) {
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_AMOUNT);
+    }
+    else if (currentStep === CUSTOM_STEPS.PROTECTION_SIMULATION) {
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_PERIOD);
     } 
-    else if (currentStep === STEPS.REVIEW_ACTIVATE) {
-      setCurrentStep(STEPS.AVAILABLE_CONTRACTS);
+    else if (currentStep === CUSTOM_STEPS.POLICY_PREVIEW) {
+      setCurrentStep(CUSTOM_STEPS.PROTECTION_SIMULATION);
     }
   };
   
@@ -169,46 +219,23 @@ export default function EasyOption() {
     router.push("/home");
   };
 
-  // Handle contract selection
-  const handleSelectContract = (contract: OptionContract) => {
-    setSelectedContract(contract);
-    setOptionType(contract.type);
-    setStrikePrice(contract.strike.toString());
-    
-    // Update policy with selected contract's premium
-    setPolicy({
-      premium: contract.premium,
-      fees: contract.premium * 0.02, // 2% fee
-      total: contract.premium + (contract.premium * 0.02)
-    });
-    
-    // Open the PnL panel when a contract is selected
-    setIsPnlPanelOpen(true);
-  };
-
   // Check if we're past the first step to enable simulation panel
-  const canShowPnlSimulation = currentStep !== STEPS.PROTECTION_TYPE;
+  const canShowPnlSimulation = currentStep !== CUSTOM_STEPS.PROTECTION_GOAL;
 
   // Toggle PnL simulation panel
   const togglePnlPanel = () => {
     if (canShowPnlSimulation) {
-      setIsPnlPanelOpen(!isPnlPanelOpen);
+      // If we're in the policy preview, go back to simulation step
+      if (currentStep === CUSTOM_STEPS.POLICY_PREVIEW) {
+        setCurrentStep(CUSTOM_STEPS.PROTECTION_SIMULATION);
+      } else {
+        setIsPnlPanelOpen(!isPnlPanelOpen);
+      }
     }
   };
 
   // For the auto-filled values in the Payment Details component
   const calculatePayment = () => {
-    // If a contract has been selected, use its premium
-    if (selectedContract) {
-      setPolicy({
-        premium: selectedContract.premium,
-        fees: selectedContract.premium * 0.02, // 2% fee
-        total: selectedContract.premium + (selectedContract.premium * 0.02)
-      });
-      return;
-    }
-    
-    // Otherwise, calculate using our model
     // Get effective duration days
     let durationValue = 30; 
     
@@ -223,26 +250,26 @@ export default function EasyOption() {
 
     // Enhanced premium calculation with multiple factors
     const btcAmountValue = parseFloat(amount);
-    const strikeValue = parseFloat(strikePrice);
+    const protectedValueNumber = parseFloat(protectedValue);
     
     // Volatility factor (normally this would come from market data)
     const annualVolatility = 0.65; // 65% annual volatility for Bitcoin
     const volatilityFactor = Math.sqrt(durationValue / 365) * annualVolatility;
     
     // Calculate strike distance from current price
-    const strikePriceDelta = Math.abs(strikeValue - btcPrice) / btcPrice;
+    const protectedValueDelta = Math.abs(protectedValueNumber - btcPrice) / btcPrice;
     
     // Calculate moneyness factor (premium increases for ITM options)
     let moneynessFactor = 1;
     const isPut = optionType === "put";
-    const isITM = (isPut && strikeValue > btcPrice) || (!isPut && strikeValue < btcPrice);
+    const isITM = (isPut && protectedValueNumber > btcPrice) || (!isPut && protectedValueNumber < btcPrice);
     
     if (isITM) {
       // In-the-money options have higher premiums
-      moneynessFactor = 1 + (strikePriceDelta * 1.5);
+      moneynessFactor = 1 + (protectedValueDelta * 1.5);
     } else {
       // Out-of-the-money options have lower premiums
-      moneynessFactor = 1 - (strikePriceDelta * 0.5);
+      moneynessFactor = 1 - (protectedValueDelta * 0.5);
       // Ensure minimum value
       moneynessFactor = Math.max(moneynessFactor, 0.3);
     }
@@ -260,33 +287,32 @@ export default function EasyOption() {
     const fees = premium * 0.02;
     const total = premium + fees;
     
-    setPolicy({
+    setPolicy(prev => ({
+      ...prev,
       premium,
       fees,
-      total,
-    });
+      total
+    }));
   };
 
   // Effect to recalculate payment whenever relevant values change
   React.useEffect(() => {
     calculatePayment();
-  }, [strikePrice, amount, duration, selectedContract]);
+  }, [protectedValue, amount, duration, protectionStrategy]);
   
   // Function for PnL simulation to use correct premium value
   const getCorrectPremium = () => {
-    if (selectedContract) {
-      return selectedContract.premium;
-    }
     return policy.premium;
   };
 
-  // Get step number from enum
+  // Get step number from enum (updated to use custom steps and new flow)
   const currentStepNumber: number = 
-    currentStep === STEPS.PROTECTION_TYPE ? 1 :
-    currentStep === STEPS.STRIKE_PRICE ? 2 :
-    currentStep === STEPS.QUANTITY_DURATION ? 3 :
-    currentStep === STEPS.AVAILABLE_CONTRACTS ? 4 :
-    currentStep === STEPS.REVIEW_ACTIVATE ? 5 : 1;
+    currentStep === CUSTOM_STEPS.PROTECTION_GOAL ? 1 :
+    currentStep === CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY ? 2 :
+    currentStep === CUSTOM_STEPS.PROTECTION_AMOUNT ? 3 :
+    currentStep === CUSTOM_STEPS.PROTECTION_PERIOD ? 4 :
+    currentStep === CUSTOM_STEPS.PROTECTION_SIMULATION ? 5 :
+    currentStep === CUSTOM_STEPS.POLICY_PREVIEW ? 6 : 1;
   
   // Array of step objects for StepIndicator component
   const steps: StepType[] = STEP_NAMES.map((name, index) => {
@@ -298,10 +324,10 @@ export default function EasyOption() {
   });
   
   // Determine if back button should be shown
-  const showBackButton = currentStep !== STEPS.PROTECTION_TYPE;
+  const showBackButton = currentStep !== CUSTOM_STEPS.PROTECTION_GOAL;
   
-  // Determine if next button should be shown
-  const showNextButton = currentStep !== STEPS.REVIEW_ACTIVATE;
+  // Determine if next button should be shown and what it should say
+  const showNextButton = currentStep !== CUSTOM_STEPS.POLICY_PREVIEW;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -314,71 +340,111 @@ export default function EasyOption() {
       </div>
     
       <div className="border rounded-lg p-8 mb-8">
-        {currentStep === STEPS.PROTECTION_TYPE && (
+        {currentStep === CUSTOM_STEPS.PROTECTION_GOAL && (
           <ProtectionTypeSelector 
             protectionType={protectionType} 
             setProtectionType={setProtectionType} 
           />
         )}
   
-        {currentStep === STEPS.STRIKE_PRICE && (
+        {currentStep === CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY && (
           <StrikePrice 
             optionType={optionType}
-                strikePrice={strikePrice} 
-            setStrikePrice={setStrikePrice}
+            strikePrice={protectedValue} 
+            setStrikePrice={setProtectedValue}
             protectionType={protectionType}
             amount={amount}
             setAmount={setAmount}
+            protectionStrategy={protectionStrategy}
+            setProtectionStrategy={setProtectionStrategyAndValue}
+            showAmountSelection={false}
           />
         )}
 
-        {currentStep === STEPS.QUANTITY_DURATION && (
+        {currentStep === CUSTOM_STEPS.PROTECTION_AMOUNT && (
+          <StrikePrice 
+            optionType={optionType}
+            strikePrice={protectedValue} 
+            setStrikePrice={setProtectedValue}
+            protectionType={protectionType}
+            amount={amount}
+            setAmount={setAmount}
+            protectionStrategy={protectionStrategy}
+            setProtectionStrategy={setProtectionStrategyAndValue}
+            showAmountSelection={true}
+            showStrategySelection={false}
+          />
+        )}
+
+        {currentStep === CUSTOM_STEPS.PROTECTION_PERIOD && (
           <QuantityAndDuration 
             amount={amount}
-            setAmount={setAmount}
             duration={duration}
             setDuration={setDuration}
+            hideSummary={true}
           />
         )}
 
-        {currentStep === STEPS.AVAILABLE_CONTRACTS && (
-          <AvailableContracts 
-            optionType={optionType}
-            strikePrice={strikePrice}
-            duration={duration}
-            customDays={duration === "custom" ? 120 : undefined}
-            onSelectContract={handleSelectContract}
-            selectedContract={selectedContract}
-            togglePnlPanel={togglePnlPanel}
-          />
+        {currentStep === CUSTOM_STEPS.PROTECTION_SIMULATION && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Protection Value Simulator</h2>
+              <p className="text-muted-foreground mb-6">
+                See how your protection performs under different market scenarios.
+              </p>
+            </div>
+            
+            <PnlSimulation 
+              optionType={optionType}
+              strikePrice={parseFloat(protectedValue)}
+              currentPrice={btcPrice}
+              premium={getCorrectPremium()}
+              amount={parseFloat(amount)}
+            />
+            
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mt-6">
+              <div className="flex items-start gap-3">
+                <div className="text-sm text-blue-800">
+                  <p className="font-medium mb-1">Understanding Your Protection Value</p>
+                  <p className="text-sm">
+                    This simulator helps you visualize how your protection policy would perform at different Bitcoin price levels. 
+                    You can adjust variables to see how changes would affect your protection outcomes.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
         
-        {currentStep === STEPS.REVIEW_ACTIVATE && (
-          <ReviewAndActivate 
-            optionType={optionType}
-            protectionType={protectionType}
-            strikePrice={strikePrice}
-            amount={amount}
-            duration={duration}
-            policy={policy}
-            onActivate={handleActivate}
-            togglePnlPanel={togglePnlPanel}
-          />
+        {currentStep === CUSTOM_STEPS.POLICY_PREVIEW && (
+          <div>
+            <h2 className="text-2xl font-bold mb-2">Activate Bitcoin Price Drop Protection</h2>
+            <p className="text-muted-foreground mb-6">
+              You&apos;re about to activate price drop protection for your Bitcoin holdings. Review the details and confirm to proceed.
+            </p>
+            <PolicyPreview 
+              policy={policy}
+              optionType={optionType}
+              protectedValue={protectedValue}
+              amount={amount}
+              duration={duration}
+              togglePnlPanel={togglePnlPanel}
+            />
+            
+            {/* Add activation button directly in the policy preview step */}
+            <div className="flex justify-center mt-8">
+              <Button 
+                size="lg" 
+                onClick={handleActivate}
+                className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto min-w-[200px]"
+              >
+                <Check className="mr-2 h-5 w-5" />
+                Activate Protection
+              </Button>
+            </div>
+          </div>
         )}
       </div>
-      
-      {isPnlPanelOpen && canShowPnlSimulation && (
-        <div className="mb-6">
-          <PnlSimulation 
-            optionType={optionType}
-            strikePrice={parseFloat(strikePrice)}
-            currentPrice={btcPrice}
-            premium={getCorrectPremium()}
-            amount={parseFloat(amount)}
-            onClose={() => setIsPnlPanelOpen(false)}
-          />
-        </div>
-      )}
       
       <NavigationButtons
         currentStep={currentStepNumber}
