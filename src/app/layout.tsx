@@ -10,6 +10,14 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 export const metadata: Metadata = {
   title: "The Bitcoin Insurance Company - Bitcoin Protection Through Options",
   description: "Protect your Bitcoin against volatility with options backed by Bitcoin's own security",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: { url: '/favicon.png', sizes: '180x180', type: 'image/png' },
+  },
 };
 
 export const viewport: Viewport = {

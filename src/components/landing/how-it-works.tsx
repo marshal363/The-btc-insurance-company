@@ -1,7 +1,8 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { Shield, Wallet, Settings, Play, Bell, User, RefreshCw, DollarSign, BarChart, ArrowDown, ArrowUp, Info, ChevronRight, Scale, FileCode, Bitcoin, CoinsIcon, DollarSignIcon } from "lucide-react";
+import { Shield, Wallet, Settings, Play, Bell, User, RefreshCw, DollarSign, BarChart, ArrowDown, ArrowUp, Info, ChevronRight, Scale, FileCode, Bitcoin, DollarSignIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Persona } from "./old/hero";
 import { motion } from "framer-motion";
@@ -15,37 +16,65 @@ interface JourneyStepProps {
 }
 
 function JourneyStep({ number, title, description, icon, persona }: JourneyStepProps) {
-  const colorScheme = persona === 'protection'
+  // Define colors based on persona
+  const colors = persona === 'protection' 
     ? {
-        bg: 'bg-white dark:bg-gray-900',
-        border: 'border-gray-200 dark:border-gray-800',
-        accent: 'bg-primary text-primary-foreground',
-        iconBg: 'bg-blue-100/70 dark:bg-blue-900/30',
-        iconColor: 'text-primary',
-        hover: 'hover:border-blue-300 dark:hover:border-blue-700'
+        gradient: "from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/30",
+        border: "border border-blue-100 dark:border-blue-800",
+        accent: "bg-primary",
+        iconBg: "bg-blue-100 dark:bg-blue-900/40",
+        iconColor: "text-primary",
+        iconBorder: "border-blue-200 dark:border-blue-700"
       }
     : {
-        bg: 'bg-white dark:bg-gray-900',
-        border: 'border-gray-200 dark:border-gray-800',
-        accent: 'bg-amber-500 text-white',
-        iconBg: 'bg-amber-100/70 dark:bg-amber-900/30',
-        iconColor: 'text-amber-500',
-        hover: 'hover:border-amber-300 dark:hover:border-amber-700'
+        gradient: "from-white to-amber-50 dark:from-gray-800 dark:to-amber-900/30",
+        border: "border border-amber-100 dark:border-amber-800",
+        accent: "bg-amber-500",
+        iconBg: "bg-amber-100 dark:bg-amber-900/40",
+        iconColor: "text-amber-500",
+        iconBorder: "border-amber-200 dark:border-amber-700"
       };
-  
+
   return (
-    <div className={`rounded-xl p-6 border ${colorScheme.border} ${colorScheme.bg} text-card-foreground shadow-sm w-full transition-all duration-200 ${colorScheme.hover} hover:shadow-md h-full flex flex-col`}>
-      <div className="flex items-start gap-3 mb-3">
-        <div className={`w-8 h-8 rounded-full ${colorScheme.accent} flex items-center justify-center text-sm font-semibold flex-shrink-0`}>
+    <motion.div 
+      whileHover={{ y: -5 }}
+      className={`relative bg-gradient-to-br ${colors.gradient} rounded-xl p-6 shadow-md ${colors.border} w-full transition-all duration-200 hover:shadow-lg h-full`}
+    >
+      {/* Colored accent bar at top */}
+      <div className={`absolute top-0 left-0 w-full h-1 ${colors.accent} rounded-t-xl`}></div>
+      
+      {/* Step number (keep in original position) */}
+      <div className="absolute top-6 left-6">
+        <div className="w-8 h-8 rounded-full bg-gray-900 dark:bg-gray-800 text-white flex items-center justify-center text-sm font-semibold">
           {number}
         </div>
-        <div className={`w-8 h-8 rounded-full ${colorScheme.iconBg} flex items-center justify-center flex-shrink-0`}>
-          <div className={colorScheme.iconColor}>{icon}</div>
-        </div>
-        <h3 className="text-base font-semibold mt-0.5">{title}</h3>
       </div>
-      <p className="text-muted-foreground text-sm ml-12">{description}</p>
-    </div>
+      
+      {/* Central icon with pulsing border effect */}
+      <div className={`w-20 h-20 rounded-full ${colors.iconBg} flex items-center justify-center mx-auto mb-4 shadow-inner relative mt-6`}>
+        <div className={`${colors.iconColor} relative`}>
+          {icon}
+          <motion.div 
+            animate={{ 
+              opacity: [0.4, 1, 0.4],
+              scale: [1.3, 1.4, 1.3] 
+            }}
+            transition={{ 
+              repeat: Infinity, 
+              duration: 2.5,
+              repeatType: "loop" 
+            }}
+            className={`absolute inset-0 rounded-full border-2 ${colors.iconBorder}`}
+          ></motion.div>
+        </div>
+      </div>
+      
+      {/* Title and description - centered like reference cards */}
+      <div className="text-center">
+        <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">{title}</h4>
+        <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -94,49 +123,49 @@ export function HowItWorks({ activePersona }: HowItWorksProps) {
       number: 1,
       title: "Connect Your Wallet",
       description: "Connect with Hiro Wallet or other compatible wallets",
-      icon: <Wallet className="h-4 w-4" />
+      icon: <Wallet className="h-10 w-10" />
     },
     {
       number: 2,
       title: "Select Policy",
       description: "Choose the amount of Bitcoin to protect",
-      icon: <Shield className="h-4 w-4" />
+      icon: <Shield className="h-10 w-10" />
     },
     {
       number: 3,
       title: "Configure Parameters",
       description: "Set your protection level and duration",
-      icon: <Settings className="h-4 w-4" />
+      icon: <Settings className="h-10 w-10" />
     },
     {
       number: 4,
       title: "Activate Policy",
       description: "Confirm and activate your policy with one click",
-      icon: <Play className="h-4 w-4" />
+      icon: <Play className="h-10 w-10" />
     },
     {
       number: 5,
       title: "Monitor Policy",
       description: "Track your policy status in your dashboard",
-      icon: <BarChart className="h-4 w-4" />
+      icon: <BarChart className="h-10 w-10" />
     },
     {
       number: 6,
       title: "Receive Notifications",
       description: "Get alerts when prices approach your protection level",
-      icon: <Bell className="h-4 w-4" />
+      icon: <Bell className="h-10 w-10" />
     },
     {
       number: 7,
       title: "Claim If Needed",
       description: "If prices fall below your level, claim your value",
-      icon: <DollarSign className="h-4 w-4" />
+      icon: <DollarSign className="h-10 w-10" />
     },
     {
       number: 8,
       title: "Renew or Let Expire",
       description: "Choose to extend your policy or let it expire",
-      icon: <RefreshCw className="h-4 w-4" />
+      icon: <RefreshCw className="h-10 w-10" />
     }
   ];
 
@@ -145,49 +174,49 @@ export function HowItWorks({ activePersona }: HowItWorksProps) {
       number: 1,
       title: "Connect Your Wallet",
       description: "Connect with Hiro Wallet or other compatible wallets",
-      icon: <Wallet className="h-4 w-4" />
+      icon: <Wallet className="h-10 w-10" />
     },
     {
       number: 2,
       title: "Allocate Capital",
       description: "Decide how much STX you want to commit",
-      icon: <DollarSign className="h-4 w-4" />
+      icon: <DollarSign className="h-10 w-10" />
     },
     {
       number: 3,
       title: "Set Parameters",
       description: "Choose your premium rate and policy parameters",
-      icon: <Settings className="h-4 w-4" />
+      icon: <Settings className="h-10 w-10" />
     },
     {
       number: 4,
       title: "Activate Strategy",
       description: "Confirm and activate your income strategy",
-      icon: <Play className="h-4 w-4" />
+      icon: <Play className="h-10 w-10" />
     },
     {
       number: 5,
       title: "Receive Premiums",
       description: "Collect premium payments immediately",
-      icon: <DollarSign className="h-4 w-4" />
+      icon: <DollarSign className="h-10 w-10" />
     },
     {
       number: 6,
       title: "Monitor Activity",
       description: "Track your active strategies and exposure",
-      icon: <BarChart className="h-4 w-4" />
+      icon: <BarChart className="h-10 w-10" />
     },
     {
       number: 7,
       title: "Fulfill If Needed",
       description: "If policy is claimed, fulfill your obligation",
-      icon: <User className="h-4 w-4" />
+      icon: <User className="h-10 w-10" />
     },
     {
       number: 8,
       title: "Renew or Adjust",
       description: "Extend your strategy or adjust your parameters",
-      icon: <RefreshCw className="h-4 w-4" />
+      icon: <RefreshCw className="h-10 w-10" />
     }
   ];
 
@@ -394,14 +423,14 @@ export function HowItWorks({ activePersona }: HowItWorksProps) {
                         <motion.div 
                           animate={{ 
                             opacity: [0.4, 1, 0.4],
-                            scale: [1.2, 1.4, 1.2] 
+                            scale: [1.3, 1.4, 1.3] 
                           }}
                           transition={{ 
                             repeat: Infinity, 
                             duration: 2.5,
                             repeatType: "loop" 
                           }}
-                          className="absolute inset-0 rounded-full border-2 border-primary/50"
+                          className="absolute inset-0 rounded-full border-2 border-blue-200 dark:border-blue-700"
                         ></motion.div>
                       </div>
                     </div>
@@ -431,14 +460,14 @@ export function HowItWorks({ activePersona }: HowItWorksProps) {
                         <motion.div 
                           animate={{ 
                             opacity: [0.4, 1, 0.4],
-                            scale: [1.2, 1.4, 1.2] 
+                            scale: [1.3, 1.4, 1.3] 
                           }}
                           transition={{ 
                             repeat: Infinity, 
                             duration: 2,
                             repeatType: "loop" 
                           }}
-                          className="absolute inset-0 rounded-full border-2 border-gray-400 dark:border-gray-500"
+                          className="absolute inset-0 rounded-full border-2 border-gray-300 dark:border-gray-600"
                         ></motion.div>
                       </div>
                     </div>
@@ -463,14 +492,14 @@ export function HowItWorks({ activePersona }: HowItWorksProps) {
                         <motion.div 
                           animate={{ 
                             opacity: [0.4, 1, 0.4],
-                            scale: [1.2, 1.4, 1.2] 
+                            scale: [1.3, 1.4, 1.3] 
                           }}
                           transition={{ 
                             repeat: Infinity, 
                             duration: 2.2,
                             repeatType: "loop" 
                           }}
-                          className="absolute inset-0 rounded-full border-2 border-amber-500/50"
+                          className="absolute inset-0 rounded-full border-2 border-amber-200 dark:border-amber-700"
                         ></motion.div>
                       </div>
                     </div>

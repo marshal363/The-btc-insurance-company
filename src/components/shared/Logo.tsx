@@ -25,16 +25,16 @@ export function Logo({
   const iconSize = variant === "stacked" ? "w-14 h-14" : variant === "icon-only" ? "w-8 h-8" : "w-10 h-10";
   const symbolSize = variant === "stacked" ? "text-4xl" : variant === "icon-only" ? "text-2xl" : "text-2xl";
   
-  const theStyling = "text-xs font-semibold leading-none text-orange-600 tracking-wide";
-  const bitcoinStyling = "text-2xl font-bold leading-none text-orange-600 tracking-tight";
-  const insuranceStyling = "text-base font-medium leading-none text-orange-600 tracking-tight";
-  const companyStyling = "text-sm font-medium leading-none text-orange-600";
+  const theStyling = "text-xs font-semibold leading-none text-amber-500 tracking-wide";
+  const bitcoinStyling = "text-2xl font-bold leading-none text-amber-500 tracking-tight";
+  const insuranceStyling = "text-base font-medium leading-none text-amber-500 tracking-tight";
+  const companyStyling = "text-sm font-medium leading-none text-amber-500";
   
   return (
     <Link href={href} className={cn("flex items-center", linkClassName)}>
       <div className={cn("flex items-center", className)}>
         {/* Shield with Bitcoin logo */}
-        <div className="relative flex items-center justify-center text-orange-600">
+        <div className="relative flex items-center justify-center text-amber-500">
           <Shield 
             strokeWidth={2} 
             className={cn(
@@ -45,7 +45,7 @@ export function Logo({
           />
           
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className={cn("text-orange-600 font-bold", symbolSize)}>
+            <span className={cn("text-amber-500 font-bold", symbolSize)}>
               ₿
             </span>
           </div>

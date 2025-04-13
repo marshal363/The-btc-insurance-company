@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Lightbulb, BookOpen, GraduationCap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from '@/components/ui/badge';
 import { Persona } from "./old/hero";
 import { CTABanner } from './cta-banner';
 
@@ -403,26 +402,78 @@ interface EducationalCardProps {
 }
 
 function EducationalCard({ icon, title, description, badge, persona }: EducationalCardProps) {
+  // Define colors based on persona like in value-proposition.tsx
+  const colors = persona === 'protection' 
+    ? {
+        gradient: "from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/30",
+        border: "border-blue-100 dark:border-blue-800",
+        accent: "bg-primary",
+        iconBg: "bg-blue-100 dark:bg-blue-900/40",
+        iconColor: "text-primary",
+        iconBorder: "border-blue-200 dark:border-blue-700",
+        badgeBg: "bg-primary/10 dark:bg-primary/20",
+        badgeText: "text-primary"
+      }
+    : {
+        gradient: "from-white to-amber-50 dark:from-gray-800 dark:to-amber-900/30",
+        border: "border-amber-100 dark:border-amber-800",
+        accent: "bg-amber-500",
+        iconBg: "bg-amber-100 dark:bg-amber-900/40",
+        iconColor: "text-amber-500",
+        iconBorder: "border-amber-500/50",
+        badgeBg: "bg-amber-500/10 dark:bg-amber-500/20",
+        badgeText: "text-amber-500 dark:text-amber-400"
+      };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -5 }}
       transition={{ duration: 0.5, delay: 0.1 }}
       viewport={{ once: true }}
-      className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow h-full flex flex-col"
+      className={`bg-gradient-to-br ${colors.gradient} rounded-xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-lg transition-all duration-200 h-full flex flex-col relative`}
     >
-      <div className={`p-3 rounded-full w-fit mb-4 ${
-        persona === 'protection' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400'
-      }`}>
-        {icon}
+      {/* Colored accent bar at top */}
+      <div className={`absolute top-0 left-0 w-full h-1 ${colors.accent} rounded-t-xl`}></div>
+      
+      {/* Icon with pulsing effect - similar to Policy Buyer card */}
+      <div className="mb-4">
+        <div className={`w-20 h-20 rounded-full ${colors.iconBg} flex items-center justify-center shadow-inner relative`}>
+          <div className={`${colors.iconColor} relative`}>
+            <div className="h-10 w-10 flex items-center justify-center">
+              {icon}
+            </div>
+            <motion.div 
+              animate={{ 
+                opacity: [0.4, 1, 0.4],
+                scale: [1.3, 1.4, 1.3] 
+              }}
+              transition={{ 
+                repeat: Infinity, 
+                duration: 2.5,
+                repeatType: "loop" 
+              }}
+              className={`absolute inset-0 rounded-full border-2 ${colors.iconBorder}`}
+            ></motion.div>
+          </div>
+        </div>
       </div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4 flex-grow">{description}</p>
-      <Badge variant="outline" className={`${
-        persona === 'protection' ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800' : 'text-amber-600 border-amber-200 dark:text-amber-400 dark:border-amber-800'
-      }`}>
-        {badge}
-      </Badge>
+      
+      {/* Content - maintaining existing structure but with enhanced styling */}
+      <div className="flex-grow">
+        <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-gray-100">{title}</h3>
+        {/* Improved separator that matches the Policy Buyer card */}
+        <div className="w-full border-t border-gray-200 dark:border-gray-700 my-4"></div>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">{description}</p>
+      </div>
+      
+      {/* Improved badge styling to match the Policy Buyer/Income Provider cards */}
+      <div className="mt-4 pt-4">
+        <div className={`${colors.badgeBg} ${colors.badgeText} px-3 py-2 rounded-full text-sm font-medium inline-block`}>
+          {badge}
+        </div>
+      </div>
     </motion.div>
   );
 } 
