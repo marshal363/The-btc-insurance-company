@@ -10,7 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
 
 interface FAQItemProps {
   question: string;
@@ -55,8 +55,8 @@ export function FAQ({ activePersona }: FAQProps) {
       answer: "Absolutely. You can create multiple protection policies for different amounts, at different protected values, and with different expiration dates - giving you complete flexibility."
     },
     {
-      question: "Do I need to send my Bitcoin to BitHedge to get protection?",
-      answer: "No. BitHedge is completely non-custodial. Your Bitcoin remains in your wallet at all times, even when protected."
+      question: "Do I need to send my Bitcoin to The Bitcoin Insurance Company to get protection?",
+      answer: "No. The Bitcoin Insurance Company is completely non-custodial. Your Bitcoin remains in your wallet at all times, even when protected."
     }
   ];
 
@@ -81,16 +81,16 @@ export function FAQ({ activePersona }: FAQProps) {
 
   const commonFAQs = [
     {
-      question: "Is BitHedge fully non-custodial?",
-      answer: "Yes. BitHedge never takes custody of your assets. All transactions occur directly through Stacks smart contracts, with assets remaining in your control at all times."
+      question: "Is The Bitcoin Insurance Company fully non-custodial?",
+      answer: "Yes. The Bitcoin Insurance Company never takes custody of your assets. All transactions occur directly through Stacks smart contracts, with assets remaining in your control at all times."
     },
     {
-      question: "How is BitHedge different from centralized options platforms?",
-      answer: "Unlike centralized alternatives, BitHedge requires no KYC, operates entirely on-chain, provides full transparency, and is secured by Bitcoin's unmatched security model."
+      question: "How is The Bitcoin Insurance Company different from centralized options platforms?",
+      answer: "Unlike centralized alternatives, The Bitcoin Insurance Company requires no KYC, operates entirely on-chain, provides full transparency, and is secured by Bitcoin's unmatched security model."
     },
     {
       question: "Which wallets are supported?",
-      answer: "BitHedge currently supports Hiro Wallet and Xverse, with more wallet integrations coming soon."
+      answer: "The Bitcoin Insurance Company currently supports Hiro Wallet and Xverse, with more wallet integrations coming soon."
     },
     {
       question: "Is there a mobile app available?",
@@ -112,7 +112,7 @@ export function FAQ({ activePersona }: FAQProps) {
             Questions About Bitcoin Protection & Income?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Get answers to the most common questions about BitHedge
+            Get answers to the most common questions about The Bitcoin Insurance Company
           </p>
         </motion.div>
         

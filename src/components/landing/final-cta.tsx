@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Shield, TrendingUp } from "lucide-react";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
 
 interface FinalCTAProps {
   activePersona: Persona;
@@ -63,7 +63,7 @@ export function FinalCTA({ activePersona }: FinalCTAProps) {
         
         <div className="mt-12 text-center">
           <p className="text-muted-foreground max-w-3xl mx-auto mb-6">
-            Join the thousands of Bitcoin holders who sleep better at night, knowing their positions are protected by BitHedge&apos;s decentralized options platform.
+            Join the thousands of Bitcoin holders who sleep better at night, knowing their positions are protected by The Bitcoin Insurance Company&apos;s decentralized options platform.
           </p>
           
           <div className="text-sm text-muted-foreground border-t border-border pt-6 max-w-lg mx-auto">

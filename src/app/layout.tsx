@@ -8,8 +8,8 @@ import { BottomNav } from "@/components/shared/navigation/bottom-nav";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "BitHedge - sBTC Options for Hedging Bitcoin Volatility",
-  description: "Hedge Bitcoin volatility with sBTC options secured by Bitcoin's own security",
+  title: "The Bitcoin Insurance Company - Bitcoin Protection Through Options",
+  description: "Protect your Bitcoin against volatility with options backed by Bitcoin's own security",
 };
 
 export const viewport: Viewport = {

@@ -1,8 +1,8 @@
 "use client";
 
-import { Shield, TrendingUp, CheckCircle2, LayoutDashboard, Gauge, Lightbulb, Percent } from "lucide-react";
+import { Shield, CheckCircle2, Gauge, Percent } from "lucide-react";
 import { motion } from "framer-motion";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
 
 interface ValuePropositionProps {
   activePersona: Persona;
@@ -35,7 +35,7 @@ export function ValueProposition({ activePersona }: ValuePropositionProps) {
     <section className="py-16 md:py-24 w-full bg-gradient-to-b from-background to-background/70">
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
-          className="text-center mb-12"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -45,377 +45,121 @@ export function ValueProposition({ activePersona }: ValuePropositionProps) {
             className="text-3xl md:text-4xl font-bold mb-4 tracking-tight"
           >
             {activePersona === "protection" ? (
-              <span>The missing piece in <span className="text-primary">Bitcoin</span> <span className="text-primary">risk management</span></span>
+              <span>Insurance Policies That Work For You</span>
             ) : (
-              <span>Unlock premium <span className="text-amber-500">yield streams</span></span>
+              <span>Why Bitcoiners Choose Our Income Platform</span>
             )}
           </motion.h2>
           <motion.p 
-            className="text-muted-foreground max-w-2xl mx-auto"
+            className="text-muted-foreground max-w-2xl mx-auto text-lg"
           >
             {activePersona === "protection" 
-              ? "Secure your Bitcoin with guaranteed protection levels while maintaining upside potential." 
-              : "Generate consistent premium income by providing protection to Bitcoin holders."}
+              ? "Get the protection you need with full control and transparent terms." 
+              : "Generate consistent premium income while maintaining security and control."}
           </motion.p>
         </motion.div>
 
         {activePersona === "protection" ? (
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6"
+            className="space-y-8 max-w-4xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Main feature card - Sleep Well */}
-            <motion.div 
-              className="col-span-1 md:col-span-6 lg:col-span-6"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 group hover:shadow-md">
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-4">
-                      <Shield className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-bold">Sleep Well During Bitcoin Volatility</h3>
-                  </div>
-                  
-                  <p className="text-muted-foreground mb-6">
-                    When Bitcoin crashed 53% in May 2021, unprotected holders lost thousands overnight. 
-                    BitHedge users maintained their guaranteed selling price, preserving their wealth
-                    during the downturn.
-                  </p>
-                  
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Protection kicks in automatically when prices drop</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Peace of mind regardless of market conditions</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Maintain upside potential if Bitcoin price increases</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6">
-                    <div className="text-sm mb-3 font-medium">
-                      Bitcoin Price Drop Simulation
-                    </div>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                          <div className="text-red-500 font-medium text-lg flex items-center">
-                            <span className="mr-1">↘</span> -$12,400
-                          </div>
-                          <div className="text-xs text-muted-foreground">Without Protection</div>
-                        </div>
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                          <div className="text-green-500 font-medium text-lg flex items-center">
-                            <span className="mr-1">↗</span> +$320
-                          </div>
-                          <div className="text-xs text-muted-foreground">With BitHedge</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Feature 1 */}
+            <motion.div variants={itemVariants} className="flex gap-8 rounded-xl p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Shield className="h-8 w-8 text-primary" />
                 </div>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Full ownership maintained</h3>
+                <p className="text-muted-foreground mb-2">→ You always keep control of your Bitcoin</p>
+                <p className="text-sm">Your Bitcoin never leaves your wallet. Our non-custodial smart contracts ensure you maintain full ownership while still getting the protection you need.</p>
               </div>
             </motion.div>
             
-            {/* Feature card - Protection Without Complexity */}
-            <motion.div 
-              className="col-span-1 md:col-span-6 lg:col-span-6"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 group hover:shadow-md">
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-4">
-                      <LayoutDashboard className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-bold">Protection Without Complexity</h3>
-                  </div>
-                  
-                  <p className="text-muted-foreground mb-6">
-                    Traditional options platforms require advanced financial knowledge. BitHedge&apos;s 
-                    protection policies use familiar insurance concepts you already understand.
-                  </p>
-                  
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Customizable coverage amounts</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Flexible protection periods</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Transparent maximum costs</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6">
-                    <div className="text-sm mb-3 font-medium">
-                      Simple vs. Complex
-                    </div>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
-                          <div className="text-red-500 font-medium mb-1">Traditional Options</div>
-                          <div className="text-xs text-muted-foreground">Greeks, IV, premium decay...</div>
-                        </div>
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
-                          <div className="text-green-500 font-medium mb-1">BitHedge</div>
-                          <div className="text-xs text-muted-foreground">Pay once, stay protected</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Feature 2 */}
+            <motion.div variants={itemVariants} className="flex gap-8 rounded-xl p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Percent className="h-8 w-8 text-primary" />
                 </div>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">One-time policy premium</h3>
+                <p className="text-muted-foreground mb-2">→ No recurring fees or hidden costs</p>
+                <p className="text-sm">Pay once and stay protected until your policy expiration date. All costs are shown upfront with complete transparency before you commit.</p>
               </div>
             </motion.div>
             
-            {/* Stats cards - 3 small cards in a row */}
-            <motion.div 
-              className="col-span-1 md:col-span-4 lg:col-span-4"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
+            {/* Feature 3 */}
+            <motion.div variants={itemVariants} className="flex gap-8 rounded-xl p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Gauge className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-3xl font-bold mb-1">$24.7M+</h3>
-                <p className="text-muted-foreground text-sm">Bitcoin Protected</p>
               </div>
-            </motion.div>
-            
-            <motion.div 
-              className="col-span-1 md:col-span-4 lg:col-span-4"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
-                  <Percent className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-3xl font-bold mb-1">97%</h3>
-                <p className="text-muted-foreground text-sm">Automatic Renewal Rate</p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="col-span-1 md:col-span-4 lg:col-span-4"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
-                  <Lightbulb className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-3xl font-bold mb-1">3,200+</h3>
-                <p className="text-muted-foreground text-sm">Active Protection Policies</p>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Activate only when needed</h3>
+                <p className="text-muted-foreground mb-2">→ Your policy stays dormant until prices fall</p>
+                <p className="text-sm">No action required unless Bitcoin drops below your protected price. Your policy automatically becomes active exactly when you need it most.</p>
               </div>
             </motion.div>
           </motion.div>
         ) : (
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6"
+            className="space-y-8 max-w-4xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Main feature card - Unlock Yield Streams */}
-            <motion.div 
-              className="col-span-1 md:col-span-6 lg:col-span-6"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 group hover:shadow-md">
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-4">
-                      <TrendingUp className="h-5 w-5 text-amber-500" />
-                    </div>
-                    <h3 className="text-xl font-bold">Unlock New Yield Streams From Your STX</h3>
-                  </div>
-                  
-                  <p className="text-muted-foreground mb-6">
-                    While regular stacking offers 8-10% APY, BitHedge protection providers earned 
-                    an average of 23% APY in premium income during recent market volatility.
-                  </p>
-                  
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <span>Premium collection upfront, before providing protection</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <span>Multiple protection strategies to maximize earnings</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <span>Complete control over risk and protection terms</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6">
-                    <div className="text-sm mb-3 font-medium">
-                      Yield Comparison
-                    </div>
-                    <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl">
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
-                          <div className="text-amber-500 font-medium text-lg">8-10%</div>
-                          <div className="text-xs text-muted-foreground">Stacking</div>
-                        </div>
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
-                          <div className="text-amber-500 font-medium text-lg">5-12%</div>
-                          <div className="text-xs text-muted-foreground">DeFi Lending</div>
-                        </div>
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
-                          <div className="text-amber-500 font-medium text-lg">15-25%</div>
-                          <div className="text-xs text-muted-foreground">BitHedge</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Feature 1 */}
+            <motion.div variants={itemVariants} className="flex gap-8 rounded-xl p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <CheckCircle2 className="h-8 w-8 text-amber-500" />
                 </div>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Earn income immediately</h3>
+                <p className="text-muted-foreground">Receive premiums upfront as soon as your protection offering is matched with a buyer. No waiting periods or delayed payments.</p>
               </div>
             </motion.div>
             
-            {/* Feature card - Risk Visualization */}
-            <motion.div 
-              className="col-span-1 md:col-span-6 lg:col-span-6"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 group hover:shadow-md">
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-4">
-                      <Gauge className="h-5 w-5 text-amber-500" />
-                    </div>
-                    <h3 className="text-xl font-bold">Complete Risk Visualization</h3>
-                  </div>
-                  
-                  <p className="text-muted-foreground mb-6">
-                    BitHedge gives protection providers unprecedented visibility into their position 
-                    with real-time metrics and projections.
-                  </p>
-                  
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <span>Premium yield calculator</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <span>Auto-suggested protection parameters</span>
-                    </div>
-                    <div className="flex items-start">
-                      <div className="mt-0.5 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <CheckCircle2 className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <span>Comprehensive risk dashboard</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6">
-                    <div className="text-sm mb-3 font-medium">
-                      Risk Management Tools
-                    </div>
-                    <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl">
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg flex flex-col items-center">
-                          <div className="w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center mb-2">
-                            <TrendingUp className="h-4 w-4 text-amber-500" />
-                          </div>
-                          <div className="text-xs text-center">Real-time metrics</div>
-                        </div>
-                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg flex flex-col items-center">
-                          <div className="w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center mb-2">
-                            <Shield className="h-4 w-4 text-amber-500" />
-                          </div>
-                          <div className="text-xs text-center">Smart risk controls</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Feature 2 */}
+            <motion.div variants={itemVariants} className="flex gap-8 rounded-xl p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <CheckCircle2 className="h-8 w-8 text-amber-500" />
                 </div>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Set your own risk parameters</h3>
+                <p className="text-muted-foreground">Choose exactly which price levels you&apos;re willing to protect and for how long. Maintain complete control over your risk exposure and income potential.</p>
               </div>
             </motion.div>
             
-            {/* Stats cards - 3 small cards in a row */}
-            <motion.div 
-              className="col-span-1 md:col-span-4 lg:col-span-4"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
-                  <TrendingUp className="h-6 w-6 text-amber-500" />
+            {/* Feature 3 */}
+            <motion.div variants={itemVariants} className="flex gap-8 rounded-xl p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <CheckCircle2 className="h-8 w-8 text-amber-500" />
                 </div>
-                <h3 className="text-3xl font-bold mb-1">$1.2M+</h3>
-                <p className="text-muted-foreground text-sm">Premiums Distributed</p>
               </div>
-            </motion.div>
-            
-            <motion.div 
-              className="col-span-1 md:col-span-4 lg:col-span-4"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
-                  <Percent className="h-6 w-6 text-amber-500" />
-                </div>
-                <h3 className="text-3xl font-bold mb-1">23%</h3>
-                <p className="text-muted-foreground text-sm">Average APY</p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="col-span-1 md:col-span-4 lg:col-span-4"
-              variants={itemVariants}
-            >
-              <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden h-full border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-4">
-                  <Lightbulb className="h-6 w-6 text-amber-500" />
-                </div>
-                <h3 className="text-3xl font-bold mb-1">200+</h3>
-                <p className="text-muted-foreground text-sm">Active Providers</p>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Always retain full custody</h3>
+                <p className="text-muted-foreground">Your collateral remains securely locked in non-custodial smart contracts, never controlled by centralized entities. Maintain ownership while earning.</p>
               </div>
             </motion.div>
           </motion.div>
         )}
 
         <motion.div 
-          className="mt-12 text-center"
+          className="mt-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}

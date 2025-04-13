@@ -1,61 +1,68 @@
 "use client";
 
 import Link from "next/link";
-import { Shield, TrendingUp, ArrowRight, ArrowDown, ChevronRight } from "lucide-react";
+import { Shield, Wallet, Settings, Play, Bell, User, RefreshCw, DollarSign, BarChart, ArrowDown, ArrowUp, Info, ChevronRight, Scale, FileCode, Bitcoin, CoinsIcon, DollarSignIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
+import { motion } from "framer-motion";
 
-interface StepProps {
+interface JourneyStepProps {
   number: number;
   title: string;
   description: string;
+  icon: React.ReactNode;
   persona: 'protection' | 'income';
 }
 
-function Step({ number, title, description, persona }: StepProps) {
+function JourneyStep({ number, title, description, icon, persona }: JourneyStepProps) {
   const colorScheme = persona === 'protection'
     ? {
-        bg: 'bg-blue-50/80 dark:bg-blue-950/20',
-        border: 'border-blue-200 dark:border-blue-800/60',
+        bg: 'bg-white dark:bg-gray-900',
+        border: 'border-gray-200 dark:border-gray-800',
         accent: 'bg-primary text-primary-foreground',
+        iconBg: 'bg-blue-100/70 dark:bg-blue-900/30',
+        iconColor: 'text-primary',
         hover: 'hover:border-blue-300 dark:hover:border-blue-700'
       }
     : {
-        bg: 'bg-amber-50/80 dark:bg-amber-950/20',
-        border: 'border-amber-200 dark:border-amber-800/60',
+        bg: 'bg-white dark:bg-gray-900',
+        border: 'border-gray-200 dark:border-gray-800',
         accent: 'bg-amber-500 text-white',
+        iconBg: 'bg-amber-100/70 dark:bg-amber-900/30',
+        iconColor: 'text-amber-500',
         hover: 'hover:border-amber-300 dark:hover:border-amber-700'
       };
   
   return (
-    <div className={`rounded-xl p-5 md:p-6 border ${colorScheme.border} ${colorScheme.bg} text-card-foreground shadow-sm w-full flex flex-col transition-all duration-200 ${colorScheme.hover} hover:shadow-md`}>
-      <div className={`${colorScheme.accent} w-9 h-9 rounded-full flex items-center justify-center mb-4 text-lg font-semibold`}>
-        {number}
+    <div className={`rounded-xl p-6 border ${colorScheme.border} ${colorScheme.bg} text-card-foreground shadow-sm w-full transition-all duration-200 ${colorScheme.hover} hover:shadow-md h-full flex flex-col`}>
+      <div className="flex items-start gap-3 mb-3">
+        <div className={`w-8 h-8 rounded-full ${colorScheme.accent} flex items-center justify-center text-sm font-semibold flex-shrink-0`}>
+          {number}
+        </div>
+        <div className={`w-8 h-8 rounded-full ${colorScheme.iconBg} flex items-center justify-center flex-shrink-0`}>
+          <div className={colorScheme.iconColor}>{icon}</div>
+        </div>
+        <h3 className="text-base font-semibold mt-0.5">{title}</h3>
       </div>
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground text-sm">{description}</p>
+      <p className="text-muted-foreground text-sm ml-12">{description}</p>
     </div>
   );
 }
 
-function ConnectorLine({ direction = 'down', type = 'protection' }: { direction?: 'down' | 'up' | 'right'; type?: 'protection' | 'income' }) {
-  const colorClass = type === 'protection' ? 'text-primary/60' : 'text-amber-500/60';
-  
-  if (direction === 'right') {
+function ConnectorLine({ direction = "horizontal" }: { direction?: "horizontal" | "vertical" }) {
+  if (direction === "horizontal") {
     return (
-      <div className="hidden md:flex items-center justify-center h-full">
-        <div className={`w-12 border-t-2 ${type === 'protection' ? 'border-primary/30' : 'border-amber-500/30'}`}></div>
-        <ChevronRight className={colorClass} size={18} />
+      <div className="hidden md:flex items-center justify-center w-full h-6 px-8">
+        <div className="border-t-2 border-dashed border-gray-200 dark:border-gray-700 w-full"></div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="hidden md:flex justify-center h-12">
+        <div className="border-l-2 border-dashed border-gray-200 dark:border-gray-700 h-full"></div>
       </div>
     );
   }
-  
-  return (
-    <div className="flex justify-center py-3">
-      <div className={`h-8 border-l-2 ${type === 'protection' ? 'border-primary/30' : 'border-amber-500/30'}`}></div>
-      <ArrowDown className={colorClass} size={18} />
-    </div>
-  );
 }
 
 interface HowItWorksProps {
@@ -63,240 +70,522 @@ interface HowItWorksProps {
 }
 
 export function HowItWorks({ activePersona }: HowItWorksProps) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
+  const protectionSteps = [
+    {
+      number: 1,
+      title: "Connect Your Wallet",
+      description: "Connect with Hiro Wallet or other compatible wallets",
+      icon: <Wallet className="h-4 w-4" />
+    },
+    {
+      number: 2,
+      title: "Select Policy",
+      description: "Choose the amount of Bitcoin to protect",
+      icon: <Shield className="h-4 w-4" />
+    },
+    {
+      number: 3,
+      title: "Configure Parameters",
+      description: "Set your protection level and duration",
+      icon: <Settings className="h-4 w-4" />
+    },
+    {
+      number: 4,
+      title: "Activate Policy",
+      description: "Confirm and activate your policy with one click",
+      icon: <Play className="h-4 w-4" />
+    },
+    {
+      number: 5,
+      title: "Monitor Policy",
+      description: "Track your policy status in your dashboard",
+      icon: <BarChart className="h-4 w-4" />
+    },
+    {
+      number: 6,
+      title: "Receive Notifications",
+      description: "Get alerts when prices approach your protection level",
+      icon: <Bell className="h-4 w-4" />
+    },
+    {
+      number: 7,
+      title: "Claim If Needed",
+      description: "If prices fall below your level, claim your value",
+      icon: <DollarSign className="h-4 w-4" />
+    },
+    {
+      number: 8,
+      title: "Renew or Let Expire",
+      description: "Choose to extend your policy or let it expire",
+      icon: <RefreshCw className="h-4 w-4" />
+    }
+  ];
+
+  const incomeSteps = [
+    {
+      number: 1,
+      title: "Connect Your Wallet",
+      description: "Connect with Hiro Wallet or other compatible wallets",
+      icon: <Wallet className="h-4 w-4" />
+    },
+    {
+      number: 2,
+      title: "Allocate Capital",
+      description: "Decide how much STX you want to commit",
+      icon: <DollarSign className="h-4 w-4" />
+    },
+    {
+      number: 3,
+      title: "Set Parameters",
+      description: "Choose your premium rate and policy parameters",
+      icon: <Settings className="h-4 w-4" />
+    },
+    {
+      number: 4,
+      title: "Activate Strategy",
+      description: "Confirm and activate your income strategy",
+      icon: <Play className="h-4 w-4" />
+    },
+    {
+      number: 5,
+      title: "Receive Premiums",
+      description: "Collect premium payments immediately",
+      icon: <DollarSign className="h-4 w-4" />
+    },
+    {
+      number: 6,
+      title: "Monitor Activity",
+      description: "Track your active strategies and exposure",
+      icon: <BarChart className="h-4 w-4" />
+    },
+    {
+      number: 7,
+      title: "Fulfill If Needed",
+      description: "If policy is claimed, fulfill your obligation",
+      icon: <User className="h-4 w-4" />
+    },
+    {
+      number: 8,
+      title: "Renew or Adjust",
+      description: "Extend your strategy or adjust your parameters",
+      icon: <RefreshCw className="h-4 w-4" />
+    }
+  ];
+
   return (
-    <section className="py-16 md:py-24 w-full bg-gray-50/80 dark:bg-gray-900/20" id="how-it-works">
+    <section className="py-16 md:py-24 w-full bg-muted/30" id="how-it-works">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Two Sides, One Seamless Platform
+            Complete {activePersona === "protection" ? "Policy" : "Income"} Journey
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Watch how protection needs and income generation perfectly balance in our ecosystem
+            {activePersona === "protection"
+              ? "From setup to protection, a guided experience through every step of your Bitcoin insurance policy"
+              : "From capital allocation to premium collection, the complete path to maximizing your STX yield"}
           </p>
         </div>
         
-        {/* Journey Headers */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 mb-8">
-          <div className="flex items-center p-4 bg-blue-50/80 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800/60 mb-6 md:mb-0">
-            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mr-3">
-              <Shield className="h-5 w-5 text-primary" />
-            </div>
-            <h3 className="text-xl font-bold">Protection Journey</h3>
-          </div>
-          
-          <div className="flex items-center p-4 bg-amber-50/80 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800/60">
-            <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mr-3">
-              <TrendingUp className="h-5 w-5 text-amber-500" />
-            </div>
-            <h3 className="text-xl font-bold">Income Journey</h3>
+        {/* Mobile journey steps - visible only on small screens */}
+        <div className="md:hidden">
+          <div className="space-y-4">
+            {activePersona === "protection" ? (
+              protectionSteps.map((step, index) => (
+                <div key={`protection-step-mobile-${index}`} className="flex flex-col">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <JourneyStep 
+                      number={step.number}
+                      title={step.title}
+                      description={step.description}
+                      icon={step.icon}
+                      persona="protection"
+                    />
+                  </motion.div>
+                  {index < protectionSteps.length - 1 && (
+                    <div className="flex justify-center h-8">
+                      <ArrowDown className="text-muted-foreground h-5 w-5 mt-2" />
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              incomeSteps.map((step, index) => (
+                <div key={`income-step-mobile-${index}`} className="flex flex-col">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <JourneyStep 
+                      number={step.number}
+                      title={step.title}
+                      description={step.description}
+                      icon={step.icon}
+                      persona="income"
+                    />
+                  </motion.div>
+                  {index < incomeSteps.length - 1 && (
+                    <div className="flex justify-center h-8">
+                      <ArrowDown className="text-muted-foreground h-5 w-5 mt-2" />
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
         
-        {/* Step 1 */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-2">
-          <div className="md:col-span-2">
-            <Step
-              number={1}
-              title="Select Protection Amount"
-              description="Choose how much of your Bitcoin you want to protect and at what value."
-              persona="protection"
-            />
+        {/* Desktop journey visualization - hidden on mobile */}
+        <div className="hidden md:block">
+          {/* First Row (Steps 1-4) */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-4 gap-4 mb-4"
+          >
+            {activePersona === "protection" ? (
+              <>
+                {protectionSteps.slice(0, 4).map((step, index) => (
+                  <div key={`protection-step-${index}`} className="flex flex-col">
+                    <motion.div variants={itemVariants}>
+                      <JourneyStep 
+                        number={step.number}
+                        title={step.title}
+                        description={step.description}
+                        icon={step.icon}
+                        persona="protection"
+                      />
+                    </motion.div>
+                    {index < 3 && <ConnectorLine />}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {incomeSteps.slice(0, 4).map((step, index) => (
+                  <div key={`income-step-${index}`} className="flex flex-col">
+                    <motion.div variants={itemVariants}>
+                      <JourneyStep 
+                        number={step.number}
+                        title={step.title}
+                        description={step.description}
+                        icon={step.icon}
+                        persona="income"
+                      />
+                    </motion.div>
+                    {index < 3 && <ConnectorLine />}
+                  </div>
+                ))}
+              </>
+            )}
+          </motion.div>
+          
+          {/* Vertical connectors */}
+          <div className="grid grid-cols-4 h-12">
+            {[0, 1, 2, 3].map(index => (
+              <div key={`connector-v-${index}`} className="flex justify-center">
+                <div className="border-l-2 border-dashed border-gray-200 dark:border-gray-700 h-full"></div>
+              </div>
+            ))}
           </div>
           
-          <div className="hidden md:flex md:col-span-1 items-center justify-center">
-            <div className="relative w-full h-[90px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[90%] border-t-2 border-dashed border-gray-300 dark:border-gray-700"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-gray-50/80 dark:bg-gray-900/20 p-2 rounded-full border border-gray-200 dark:border-gray-800 z-10">
-                  <ArrowRight className="h-5 w-5 text-gray-500" />
+          {/* Second Row (Steps 5-8) */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-4 gap-4 mb-12"
+          >
+            {activePersona === "protection" ? (
+              <>
+                {protectionSteps.slice(4, 8).map((step, index) => (
+                  <div key={`protection-step-${index+4}`} className="flex flex-col">
+                    <motion.div variants={itemVariants}>
+                      <JourneyStep 
+                        number={step.number}
+                        title={step.title}
+                        description={step.description}
+                        icon={step.icon}
+                        persona="protection"
+                      />
+                    </motion.div>
+                    {index < 3 && <ConnectorLine />}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {incomeSteps.slice(4, 8).map((step, index) => (
+                  <div key={`income-step-${index+4}`} className="flex flex-col">
+                    <motion.div variants={itemVariants}>
+                      <JourneyStep 
+                        number={step.number}
+                        title={step.title}
+                        description={step.description}
+                        icon={step.icon}
+                        persona="income"
+                      />
+                    </motion.div>
+                    {index < 3 && <ConnectorLine />}
+                  </div>
+                ))}
+              </>
+            )}
+          </motion.div>
+        </div>
+        
+        {/* How Policies and Income Connect Section - Enhanced */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-amber-50/50 dark:from-blue-950/20 dark:to-amber-950/20 rounded-2xl z-0"></div>
+          <div className="border border-gray-200 dark:border-gray-800 rounded-2xl p-6 md:p-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-lg relative z-10">
+            <h3 className="text-2xl md:text-3xl font-bold mb-8 text-center">How Policies and Income Connect</h3>
+            
+            {/* Dynamic interactive diagram */}
+            <div className="mb-10">
+              <div className="max-w-4xl mx-auto">
+                {/* Participants cards - enhanced for better visualization */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+                  {/* Policy Buyer Card */}
+                  <motion.div 
+                    whileHover={{ y: -5 }}
+                    className="relative bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/30 rounded-xl p-6 shadow-md border border-blue-100 dark:border-blue-800 text-center group"
+                  >
+                    <div className="absolute top-0 left-0 w-full h-1 bg-primary rounded-t-xl"></div>
+                    <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mx-auto mb-4 shadow-inner">
+                      <div className="relative">
+                        <Shield className="h-10 w-10 text-primary" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Bitcoin className="h-5 w-5 text-primary" />
+                        </div>
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.4, 1, 0.4],
+                            scale: [1.2, 1.4, 1.2] 
+                          }}
+                          transition={{ 
+                            repeat: Infinity, 
+                            duration: 2.5,
+                            repeatType: "loop" 
+                          }}
+                          className="absolute inset-0 rounded-full border-2 border-primary/50"
+                        ></motion.div>
+                      </div>
+                    </div>
+                    <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">Policy Buyer</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Protects Bitcoin value</p>
+                    
+                    <div className="mt-4 pt-4 border-t border-blue-100 dark:border-blue-800/50">
+                      <motion.div 
+                        initial={{ opacity: 0.8 }}
+                        whileHover={{ opacity: 1, scale: 1.05 }}
+                        className="bg-primary/10 dark:bg-primary/20 text-primary px-3 py-2 rounded-full text-sm font-medium"
+                      >
+                        Pays Premium
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                  
+                  {/* Smart Contracts Card */}
+                  <motion.div 
+                    whileHover={{ y: -5 }}
+                    className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700 text-center"
+                  >
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gray-500 dark:bg-gray-400 rounded-t-xl"></div>
+                    <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4 shadow-inner">
+                      <div className="relative">
+                        <FileCode className="h-10 w-10 text-gray-600 dark:text-gray-300" />
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.4, 1, 0.4],
+                            scale: [1.2, 1.4, 1.2] 
+                          }}
+                          transition={{ 
+                            repeat: Infinity, 
+                            duration: 2,
+                            repeatType: "loop" 
+                          }}
+                          className="absolute inset-0 rounded-full border-2 border-gray-400 dark:border-gray-500"
+                        ></motion.div>
+                      </div>
+                    </div>
+                    <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">Smart Contracts</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Non-custodial & secure</p>
+                    
+                    <div className="flex gap-2 justify-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/50">
+                      <span className="inline-flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Verified & Audited</span>
+                    </div>
+                  </motion.div>
+                  
+                  {/* Income Provider Card */}
+                  <motion.div 
+                    whileHover={{ y: -5 }}
+                    className="relative bg-gradient-to-br from-white to-amber-50 dark:from-gray-800 dark:to-amber-900/30 rounded-xl p-6 shadow-md border border-amber-100 dark:border-amber-800 text-center"
+                  >
+                    <div className="absolute top-0 left-0 w-full h-1 bg-amber-500 rounded-t-xl"></div>
+                    <div className="w-20 h-20 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mx-auto mb-4 shadow-inner">
+                      <div className="relative">
+                        <DollarSignIcon className="h-10 w-10 text-amber-500" />
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.4, 1, 0.4],
+                            scale: [1.2, 1.4, 1.2] 
+                          }}
+                          transition={{ 
+                            repeat: Infinity, 
+                            duration: 2.2,
+                            repeatType: "loop" 
+                          }}
+                          className="absolute inset-0 rounded-full border-2 border-amber-500/50"
+                        ></motion.div>
+                      </div>
+                    </div>
+                    <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">Income Provider</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Earns premium income</p>
+                    
+                    <div className="mt-4 pt-4 border-t border-amber-100 dark:border-amber-800/50">
+                      <motion.div 
+                        initial={{ opacity: 0.8 }}
+                        whileHover={{ opacity: 1, scale: 1.05 }}
+                        className="bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 px-3 py-2 rounded-full text-sm font-medium"
+                      >
+                        Provides Collateral
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </div>
+                
+                {/* Policy outcomes - Enhanced visual with interactive cards */}
+                <div className="mt-12 relative">
+                  <div className="absolute -inset-4 bg-gray-50 dark:bg-gray-800 rounded-3xl opacity-50 z-0"></div>
+                  <div className="relative bg-white dark:bg-gray-900 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-800 z-10">
+                    <h4 className="flex items-center justify-center text-base font-bold text-gray-800 dark:text-gray-100 mb-6">
+                      <Scale className="mr-2 h-5 w-5 text-gray-600 dark:text-gray-300" />
+                      Policy Outcomes
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Price falls scenario */}
+                      <motion.div 
+                        whileHover={{ scale: 1.02 }}
+                        className="bg-gradient-to-br from-white to-red-50 dark:from-gray-800 dark:to-red-900/10 rounded-lg p-5 shadow-sm border border-red-100 dark:border-red-900/30"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0 mt-1">
+                            <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shadow-inner">
+                              <ArrowDown className="h-4 w-4 text-red-500" />
+                            </div>
+                          </div>
+                          <div>
+                            <h5 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">If price falls below protection level</h5>
+                            <div className="flex items-center text-gray-600 dark:text-gray-300 mb-2">
+                              <span className="text-sm">Provider transfers protected value to Buyer</span>
+                            </div>
+                            <div className="text-xs mt-3 text-gray-500 dark:text-gray-400 rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
+                              Protection activates, preserving the value guaranteed in the policy
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                      
+                      {/* Price stays above scenario */}
+                      <motion.div 
+                        whileHover={{ scale: 1.02 }}
+                        className="bg-gradient-to-br from-white to-green-50 dark:from-gray-800 dark:to-green-900/10 rounded-lg p-5 shadow-sm border border-green-100 dark:border-green-900/30"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0 mt-1">
+                            <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shadow-inner">
+                              <ArrowUp className="h-4 w-4 text-green-500" />
+                            </div>
+                          </div>
+                          <div>
+                            <h5 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">If price stays above protection level</h5>
+                            <div className="flex items-center text-gray-600 dark:text-gray-300 mb-2">
+                              <span className="text-sm">Provider keeps collateral + premium</span>
+                            </div>
+                            <div className="text-xs mt-3 text-gray-500 dark:text-gray-400 rounded-lg bg-gray-50 dark:bg-gray-800 p-2">
+                              Protection expires, provider earns income for the service
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            
+            {/* Value proposition - Enhanced with subtle animation */}
+            <motion.div 
+              initial={{ opacity: 0.7 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="relative max-w-2xl mx-auto text-center mt-8 pt-8 border-t border-gray-200 dark:border-gray-700"
+            >
+              <div className="absolute w-24 h-px left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+              <p className="text-gray-700 dark:text-gray-300">
+                Our platform connects those seeking Bitcoin insurance with those willing to provide it for premium income. 
+                This creates a balanced ecosystem where both parties benefit from each other&apos;s needs.
+              </p>
+              <motion.div 
+                className="mt-6 flex justify-center"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Link 
+                  href="/explanation" 
+                  className="inline-flex items-center text-primary hover:text-primary/80 text-sm font-medium"
+                >
+                  <Info className="mr-1.5 h-4 w-4" />
+                  Learn more about our protection mechanism
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
-          
-          <div className="md:col-span-2">
-          <Step 
-            number={1}
-              title="Offer Protection Capacity"
-              description="Decide how much protection you're willing to provide and at what rates."
-              persona="income"
-            />
-          </div>
-        </div>
-        
-        {/* Connectors */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-1">
-          <div className="md:col-span-2 flex justify-center">
-            <ConnectorLine type="protection" />
-          </div>
-          <div className="md:col-span-1"></div>
-          <div className="md:col-span-2 flex justify-center">
-            <ConnectorLine type="income" />
-          </div>
-        </div>
-        
-        {/* Step 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-2">
-          <div className="md:col-span-2">
-            <Step
-              number={2}
-              title="Customize Your Coverage"
-              description="Select your protection period and coverage level based on your risk tolerance."
-              persona="protection"
-            />
-          </div>
-          
-          <div className="hidden md:flex md:col-span-1 items-center justify-center">
-            <div className="relative w-full h-[90px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[90%] border-t-2 border-dashed border-gray-300 dark:border-gray-700"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-gray-50/80 dark:bg-gray-900/20 p-2 rounded-full border border-gray-200 dark:border-gray-800 z-10">
-                  <ArrowRight className="h-5 w-5 text-gray-500" />
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="md:col-span-2">
-          <Step 
-            number={2}
-              title="Set Your Terms"
-              description="Specify your premium requirements and protection periods to match your strategy."
-              persona="income"
-            />
-          </div>
-        </div>
-        
-        {/* Connectors */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-1">
-          <div className="md:col-span-2 flex justify-center">
-            <ConnectorLine type="protection" />
-          </div>
-          <div className="md:col-span-1"></div>
-          <div className="md:col-span-2 flex justify-center">
-            <ConnectorLine type="income" />
-          </div>
-        </div>
-        
-        {/* Step 3 */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-2">
-          <div className="md:col-span-2">
-            <Step
-              number={3}
-              title="Secure Instant Protection"
-              description="Pay a one-time premium and immediately activate your Bitcoin protection policy."
-              persona="protection"
-            />
-          </div>
-          
-          <div className="hidden md:flex md:col-span-1 items-center justify-center">
-            <div className="relative w-full h-[90px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[90%] border-t-2 border-dashed border-gray-300 dark:border-gray-700"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-gray-50/80 dark:bg-gray-900/20 p-2 rounded-full border border-gray-200 dark:border-gray-800 z-10">
-                  <ArrowRight className="h-5 w-5 text-gray-500" />
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="md:col-span-2">
-          <Step 
-            number={3}
-              title="Collect Premiums Instantly"
-              description="Receive premium payments immediately when protection buyers select your offerings."
-              persona="income"
-            />
-          </div>
-        </div>
-        
-        {/* Connectors */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-1">
-          <div className="md:col-span-2 flex justify-center">
-            <ConnectorLine type="protection" />
-          </div>
-          <div className="md:col-span-1"></div>
-          <div className="md:col-span-2 flex justify-center">
-            <ConnectorLine type="income" />
-          </div>
-        </div>
-        
-        {/* Step 4 */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-          <div className="md:col-span-2">
-            <Step
-              number={4}
-              title="Claim If Needed, Or Let Expire"
-              description="If prices fall below your protected value, exercise your protection. If not, simply let it expire."
-              persona="protection"
-            />
-          </div>
-          
-          <div className="hidden md:flex md:col-span-1 items-center justify-center">
-            <div className="relative w-full h-[90px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[90%] border-t-2 border-dashed border-gray-300 dark:border-gray-700"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-gray-50/80 dark:bg-gray-900/20 p-2 rounded-full border border-gray-200 dark:border-gray-800 z-10">
-                  <ArrowRight className="h-5 w-5 text-gray-500" />
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="md:col-span-2">
-            <Step
-              number={4}
-              title="Fulfill Or Release"
-              description="If protection is claimed, fulfill your obligation. Otherwise, release your collateral automatically."
-              persona="income"
-            />
-          </div>
-        </div>
-        
-        {/* Connection visualization */}
-        <div className="mt-10 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-xl p-6 text-center shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">How Protection and Income Connect</h3>
-          <div className="h-64 bg-gray-100/80 dark:bg-gray-700/40 rounded-lg flex items-center justify-center p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center w-full max-w-3xl">
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800 text-center">
-                <Shield className="h-10 w-10 mx-auto mb-2 text-primary" />
-                <p className="font-medium">Protection Buyer</p>
-                <p className="text-xs text-muted-foreground mt-1">Secures value against downside</p>
-              </div>
-              
-              <div className="flex flex-col items-center">
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 w-full mb-2"></div>
-                <div className="bg-gray-200 dark:bg-gray-800 px-3 py-1.5 rounded-full text-xs font-medium">
-                  Premium Payment
-                </div>
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 w-full mt-2"></div>
-              </div>
-              
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800 text-center">
-                <TrendingUp className="h-10 w-10 mx-auto mb-2 text-amber-500" />
-                <p className="font-medium">Protection Provider</p>
-                <p className="text-xs text-muted-foreground mt-1">Collects premiums for income</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        </motion.div>
         
         <div className="flex justify-center mt-10">
-          <Button
-            asChild
-            className="h-11 px-8 font-medium"
-          >
-            <Link href="/home">
-              Experience The Platform
-          </Link>
+          <Button variant="secondary" size="lg" asChild className="group rounded-full">
+            <Link href="/demo">
+              <Play className="mr-2 h-4 w-4" />
+              <span>Watch Demo Video</span>
+            </Link>
           </Button>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Shield, TrendingUp, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
 
 interface PersonaSelectorProps {
   onPersonaSelect: (persona: Persona) => void;
@@ -16,7 +16,7 @@ export function PersonaSelector({ onPersonaSelect, activePersona }: PersonaSelec
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">Choose Your Path</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            BitHedge serves two types of users. Select the option that best describes your goals.
+            The Bitcoin Insurance Company serves two types of users. Select the option that best describes your goals.
           </p>
         </div>
         

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { WalletConnect } from "@/components/wallet/WalletConnect";
+import { Logo } from "./Logo";
 
 const NavItems = [
   {
@@ -36,9 +37,7 @@ export const Navbar = ({ className }: NavbarProps) => {
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex h-16 items-center">
         <div className="mr-6 flex">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">BitHedge</span>
-          </Link>
+          <Logo variant="three-line" className="text-orange-600" showPrefix={true} />
         </div>
         
         {/* Navigation links - hidden on mobile */}

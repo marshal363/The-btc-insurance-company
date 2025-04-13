@@ -1,8 +1,8 @@
-# BitHedge: Bitcoin-Native Protection Variables Analysis
+# The Bitcoin Insurance Company: Bitcoin-Native Protection Variables Analysis
 
 ## Executive Summary
 
-As Senior Bitcoin Product Designer for BitHedge, I've conducted a thorough analysis of how to translate complex options contract variables into Bitcoin-native protection concepts. Building on our success in reimagining expiration dates as a tiered, Bitcoin-aware protection duration system, this document examines other key options variables that need similar transformation to create a truly accessible Bitcoin protection experience.
+As Senior Bitcoin Product Designer for The Bitcoin Insurance Company, I've conducted a thorough analysis of how to translate complex options contract variables into Bitcoin-native protection concepts. Building on our success in reimagining expiration dates as a tiered, Bitcoin-aware protection duration system, this document examines other key options variables that need similar transformation to create a truly accessible Bitcoin protection experience.
 
 For each variable, I analyze the challenges, propose Bitcoin-native alternatives, and provide implementation recommendations that emphasize clarity, familiarity, and alignment with Bitcoin principles. This approach extends our core design philosophy: transforming sophisticated financial instruments into intuitive protection tools for everyday Bitcoin holders without compromising on functionality.
 
@@ -473,4 +473,4 @@ This Bitcoin-first approach to protection variables delivers several key advanta
 
 The transformation of abstract options contract variables into Bitcoin-native protection concepts represents a fundamental reimagining of how financial protection tools should function in the Bitcoin ecosystem. By exploring multiple terminology systems and testing with different user segments, we can find the perfect balance between Bitcoin authenticity and broader accessibility.
 
-This approach reinforces BitHedge's core mission: democratizing sophisticated financial tools for everyday Bitcoin users by speaking their language and respecting their values, while maintaining sufficient approachability for those new to Bitcoin protection.
+This approach reinforces The Bitcoin Insurance Company's core mission: democratizing sophisticated financial tools for everyday Bitcoin users by speaking their language and respecting their values, while maintaining sufficient approachability for those new to Bitcoin protection.

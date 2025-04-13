@@ -1,11 +1,11 @@
 "use client";
 
 import React from 'react';
-import { Hero, Persona } from "@/components/landing/hero";
+import { Hero, Persona } from "@/components/landing/old/hero";
 import { ValueProposition } from "@/components/landing/value-proposition";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { Paths } from "@/components/landing/paths";
-import { SocialProof } from "@/components/landing/social-proof";
+import { SocialProof } from "@/components/landing/old/social-proof";
 import { FAQ } from "@/components/landing/faq";
 import { CTA } from "@/components/landing/cta";
 import { usePersonaState } from "@/components/landing/persona-switcher";

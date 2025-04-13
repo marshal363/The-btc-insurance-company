@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import { Shield, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Persona } from "@/components/landing/hero";
+import { Persona } from "@/components/landing/old/hero";
+import { Logo } from "./Logo";
 
 interface LandingHeaderProps {
   className?: string;
@@ -47,41 +48,55 @@ export const LandingHeader = ({ className, activePersona, setActivePersona }: La
       )}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-        <div className="flex items-center">
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold">BitHedge</span>
-          </Link>
+        <div className="flex items-center py-2">
+          <Logo 
+            variant="three-line" 
+            className="text-orange-600" 
+            showPrefix={true}
+          />
         </div>
         
-        <div className="flex items-center justify-center flex-grow">
-          <div className="hidden sm:flex bg-muted rounded-full p-1 border shadow-sm">
+        {/* Centered persona switcher - hidden on very small screens */}
+        <div className="hidden sm:flex items-center justify-center flex-grow max-w-md mx-auto">
+          <div className="flex bg-muted rounded-full p-1 shadow-sm border border-muted/50">
             <Button 
               variant={activePersona === "protection" ? "default" : "ghost"}
               size="sm"
-              className="rounded-full flex items-center gap-2"
+              className={cn(
+                "rounded-full flex items-center gap-2 px-4 transition-all", 
+                activePersona === "protection" ? 
+                  "shadow-sm bg-primary text-white" : 
+                  "text-muted-foreground hover:text-foreground"
+              )}
               onClick={handleProtectionClick}
             >
               <Shield className="h-4 w-4" />
-              <span>Protection</span>
+              <span className="font-medium">PROTECT</span>
             </Button>
             <Button 
               variant={activePersona === "income" ? "default" : "ghost"}
               size="sm"
-              className="rounded-full flex items-center gap-2"
+              className={cn(
+                "rounded-full flex items-center gap-2 px-4 transition-all",
+                activePersona === "income" ? 
+                  "shadow-sm bg-amber-500 text-white hover:bg-amber-500" : 
+                  "text-muted-foreground hover:text-foreground"
+              )}
               onClick={handleIncomeClick}
             >
               <TrendingUp className="h-4 w-4" />
-              <span>Income</span>
+              <span className="font-medium">EARN</span>
             </Button>
           </div>
         </div>
         
+        {/* Mobile-optimized right section with condensed price info and buttons */}
         <div className="flex items-center">
           <Link
             href="/home"
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 md:h-11 px-4 md:px-6 py-2"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 md:h-11 px-5 md:px-6 py-2 shadow-sm"
           >
-            Launch App
+            Launch
           </Link>
         </div>
       </div>

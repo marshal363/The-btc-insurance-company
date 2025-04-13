@@ -1,4 +1,4 @@
-# BitHedge: Bitcoin Protection Center User Journey Analysis
+# The Bitcoin Insurance Company: Bitcoin Protection Center User Journey Analysis
 
 ## Introduction: Democratizing Bitcoin Protection
 
@@ -10,7 +10,7 @@ The Protection Center flow transforms complex financial instruments (options con
 
 The application maintains consistent interface elements throughout the flow:
 
-- **Header Bar**: Contains the BitHedge logo (top-left), wallet connection status with a truncated Stacks wallet address (ST2CY...K9AG) and a green status indicator dot confirming successful connection.
+- **Header Bar**: Contains The Bitcoin Insurance Company logo (top-left), wallet connection status with a truncated Stacks wallet address (ST2CY...K9AG) and a green status indicator dot confirming successful connection.
 - **Network Badge**: A "Testnet" indicator in the top-right ensuring users understand they're in a test environment.
 - **Navigation Menu**: Horizontal navigation showing "Home", "Option Data", and "Easy Trade" sections.
 - **Progress Indicator**: A stepped process indicator (numbers 1-5) showing current position in the protection setup flow.
@@ -58,7 +58,7 @@ This screen transforms complex options parameters (strike price, contract size) 
 
 ## Step 3: Policy Duration - Bitcoin-Aware Timeframe Selection
 
-The third step addresses the time dimension of protection with the heading "Policy Duration." Unlike traditional insurance products that typically offer standard annual terms, BitHedge implements a Bitcoin-specific approach to protection durations that acknowledges the cryptocurrency's unique market cycles and volatility patterns.
+The third step addresses the time dimension of protection with the heading "Policy Duration." Unlike traditional insurance products that typically offer standard annual terms, The Bitcoin Insurance Company implements a Bitcoin-specific approach to protection durations that acknowledges the cryptocurrency's unique market cycles and volatility patterns.
 
 **Coverage Summary**:
 

@@ -256,7 +256,7 @@ export function PolicyPreview({
                 <h3 className="text-xl font-bold text-white">
                   {optionType === "put" ? "Price Drop Protection" : "Purchase Price Lock"}
                 </h3>
-                <p className="text-blue-100 text-sm">Secured by BitHedge</p>
+                <p className="text-blue-100 text-sm">Secured by The Bitcoin Insurance Company</p>
               </div>
             </div>
             <div className="flex flex-col items-end">
@@ -475,7 +475,7 @@ export function PolicyPreview({
                   <BadgeCheck className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-green-800">BitHedge Protection Guarantee</h4>
+                  <h4 className="text-sm font-medium text-green-800">The Bitcoin Insurance Company Protection Guarantee</h4>
                   <p className="text-xs text-green-700 mt-0.5">
                     Your protection is guaranteed by smart contracts on the Stacks blockchain
                   </p>

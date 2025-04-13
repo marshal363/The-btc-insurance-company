@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from "framer-motion";
 import { Shield, TrendingUp, ArrowDown } from "lucide-react";
-import { Persona } from './hero';
+import { Persona } from './old/hero';
 
 interface JourneyStepProps {
   number: number;

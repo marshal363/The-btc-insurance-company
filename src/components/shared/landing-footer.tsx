@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { Logo } from "./Logo";
 
 interface LandingFooterProps {
   className?: string;
@@ -13,14 +14,10 @@ export function LandingFooter({ className }: LandingFooterProps) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start mb-4">
-              <svg className="h-7 w-7 text-blue-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              <span className="font-bold text-slate-800 text-xl">BitHedge</span>
+            <div className="flex flex-col items-center md:items-start mb-4">
+              <Logo variant="three-line" className="text-orange-600" showPrefix={true} />
             </div>
-            <p className="text-sm text-slate-600 mb-3">Protecting your Bitcoin with options</p>
+            <p className="text-sm text-slate-600 mb-3 mt-2">Protecting your Bitcoin with options</p>
             <div className="flex space-x-3 justify-center md:justify-start">
               <a href="#" className="text-slate-400 hover:text-blue-500 transition-colors">
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -62,7 +59,7 @@ export function LandingFooter({ className }: LandingFooterProps) {
         </div>
         
         <div className="border-t border-slate-200 mt-8 pt-8 text-center">
-          <p className="text-sm text-slate-600 mb-2">© 2025 BitHedge - Bitcoin Vegas Hackathon Project</p>
+          <p className="text-sm text-slate-600 mb-2">© 2025 The Bitcoin Insurance Company - Bitcoin Vegas Hackathon Project</p>
           <p className="text-xs text-slate-500">Running on Stacks Testnet - No real funds required</p>
         </div>
       </div>

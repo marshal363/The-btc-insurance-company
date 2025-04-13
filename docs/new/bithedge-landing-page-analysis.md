@@ -1,4 +1,4 @@
-# BitHedge: Landing Page User Experience Analysis
+# The Bitcoin Insurance Company: Landing Page User Experience Analysis
 
 ## Introduction: A Dual-Purpose Platform Interface
 
@@ -10,7 +10,7 @@ This analysis examines how the landing page uses design psychology, educational 
 
 The landing page maintains consistent interface elements that establish brand identity and facilitate navigation:
 
-- **Header Bar**: Features the BitHedge logo (top-left) establishing brand presence and a navigation menu with a segmented button group showing "Protection" and "Income" tabs allowing users to self-identify their primary interest.
+- **Header Bar**: Features The Bitcoin Insurance Company logo (top-left) establishing brand presence and a navigation menu with a segmented button group showing "Protection" and "Income" tabs allowing users to self-identify their primary interest.
 - **Call-to-Action**: A prominent "Launch App" button in the top-right corner provides a consistent conversion path throughout the experience.
 - **Visual Language**: Clean typography with a financial technology aesthetic, using a carefully selected color system where blue tones represent protection and gold/amber tones represent income generation.
 - **Mobile Optimization**: Responsive design elements that maintain the dual-persona approach even on smaller screens.
@@ -55,7 +55,7 @@ This configuration immediately addresses the primary anxiety of Bitcoin holders�
 - Primary CTA: "Start Earning" button with forward arrow suggesting progression
 - Secondary CTA: "Learn more" link for education-focused users
 
-This approach directly addresses the yield-seeker's primary motivation—generating returns—while differentiating BitHedge's offering from traditional yield opportunities in the Bitcoin/Stacks ecosystem.
+This approach directly addresses the yield-seeker's primary motivation—generating returns—while differentiating The Bitcoin Insurance Company's offering from traditional yield opportunities in the Bitcoin/Stacks ecosystem.
 
 The segmented hero design allows each user type to immediately self-identify and see relevant messaging, without requiring complex user paths or diluting the value proposition for either audience.
 
@@ -71,14 +71,14 @@ The value proposition section expands on the core benefits for each persona with
 - Emotional appeal focusing on peace of mind
 - Social proof through user testimonial
 - Key metrics showing financial outcomes with and without protection
-- Concrete numbers: "-$12,400 Without Protection" vs. "+$320 With BitHedge"
+- Concrete numbers: "-$12,400 Without Protection" vs. "+$320 With The Bitcoin Insurance Company"
 
 **"Protection Without Complexity"**
 
 - Comparison with traditional options platforms
 - Emphasis on familiar insurance concepts
 - Feature list highlighting customizable coverage, flexible periods, and transparent costs
-- Side-by-side comparison between traditional options ("Greeks, IV, premium decay...") and BitHedge ("Pay once, stay protected")
+- Side-by-side comparison between traditional options ("Greeks, IV, premium decay...") and The Bitcoin Insurance Company ("Pay once, stay protected")
 
 The combination of emotional storytelling and concrete examples helps transform abstract financial concepts into relatable, understandable benefits for Bitcoin holders with varying levels of financial sophistication.
 
@@ -87,7 +87,7 @@ The combination of emotional storytelling and concrete examples helps transform 
 **"Unlock New Yield Streams From Your STX"**
 
 - Comparison with existing yield opportunities (stacking, DeFi lending)
-- Concrete yield numbers: "8-10% Stacking" vs. "15-25% BitHedge"
+- Concrete yield numbers: "8-10% Stacking" vs. "15-25% The Bitcoin Insurance Company"
 - Historical performance highlighting income during volatile markets
 - Social proof through provider testimonial
 
@@ -205,8 +205,8 @@ The FAQ section uses a tabbed interface allowing users to filter questions relev
 
 ### Common FAQs
 
-- "Is BitHedge fully non-custodial?"
-- "How is BitHedge different from centralized options platforms?"
+- "Is The Bitcoin Insurance Company fully non-custodial?"
+- "How is The Bitcoin Insurance Company different from centralized options platforms?"
 
 This segmented approach to FAQs serves several purposes:
 

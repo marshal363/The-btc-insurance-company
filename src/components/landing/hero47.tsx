@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
 import Link from "next/link";
 
-interface Hero47Props {
+export type Hero47Props = {
   heading?: string;
   subheading?: string;
   description?: string;
@@ -23,7 +23,7 @@ interface Hero47Props {
     };
   };
   activePersona?: Persona;
-}
+};
 
 const Hero47 = ({
   heading,
@@ -36,40 +36,40 @@ const Hero47 = ({
   // Define content based on activePersona
   const content = {
     protection: {
-      heading: "Protect Your",
-      subheading: " Bitcoin From Market Volatility",
-      description: "Secure the value of your Bitcoin portfolio against market crashes with non-custodial protection contracts.",
+      heading: "Protect Your Bitcoin Value",
+      subheading: "Without Selling a Single Sat",
+      description: "No more sleepless nights during market dips. Your policy activates automatically when Bitcoin prices fall below your protected value.",
       image: {
         src: "https://images.unsplash.com/photo-1640340434855-6084b1f4901c?q=80&w=1964&auto=format&fit=crop",
         alt: "Bitcoin Protection",
       },
       buttons: {
         primary: {
-          text: "Get Protected",
+          text: "Secure My Bitcoin Value",
           url: "/home",
         },
         secondary: {
-          text: "Learn more",
-          url: "#",
+          text: "See How It Works",
+          url: "#how-it-works",
         },
       },
     },
     income: {
-      heading: "Earn Premium",
-      subheading: " Income Providing Bitcoin Protection",
-      description: "Generate substantial yields by providing Bitcoin protection to others while maintaining full custody of your assets.",
+      heading: "Earn Premium Income",
+      subheading: "Providing Bitcoin Insurance",
+      description: "Receive premiums instantly while your collateral is securely locked in non-custodial contracts. No intermediaries, just yield.",
       image: {
         src: "https://images.unsplash.com/photo-1640340434855-6084b1f4901c?q=80&w=1964&auto=format&fit=crop", 
         alt: "Bitcoin Income",
       },
       buttons: {
         primary: {
-          text: "Start Earning",
+          text: "Start Earning Today",
           url: "/home",
         },
         secondary: {
-          text: "Learn more",
-          url: "#",
+          text: "Explore Strategies",
+          url: "#how-it-works",
         },
       },
     },
@@ -81,7 +81,7 @@ const Hero47 = ({
   const currentDescription = description || content[activePersona].description;
   const currentImage = image || content[activePersona].image;
   const currentButtons = buttons || content[activePersona].buttons;
-
+  
   return (
     <section className="bg-background py-12 md:py-20 lg:py-24 overflow-hidden">
       <div className="container max-w-6xl px-4 sm:px-6 lg:px-8 mx-auto">
@@ -95,7 +95,9 @@ const Hero47 = ({
           >
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-left leading-tight">
               <span className="text-foreground block">{currentHeading}</span>
-              <span className="text-muted-foreground block">{currentSubheading}</span>
+              <span className={`${activePersona === 'protection' ? 'text-primary' : 'text-amber-500'} block`}>
+                {currentSubheading}
+              </span>
             </h1>
             
             <p className="text-base md:text-lg text-muted-foreground max-w-xl">
@@ -103,7 +105,11 @@ const Hero47 = ({
             </p>
             
             <div className="flex flex-wrap items-center gap-5 mt-4">
-              <Button asChild size="lg" className="rounded-md">
+              <Button 
+                asChild 
+                size="lg" 
+                className={`rounded-full ${activePersona === 'income' ? 'bg-amber-500 hover:bg-amber-600' : ''}`}
+              >
                 <Link href={currentButtons.primary?.url || "#"}>
                   <div className="flex items-center gap-2">
                     <ArrowUpRight className="size-5" />
@@ -112,7 +118,7 @@ const Hero47 = ({
                 </Link>
               </Button>
               
-              <Button asChild variant="link" className="text-muted-foreground hover:text-foreground px-0">
+              <Button asChild variant="link" className="text-muted-foreground hover:text-foreground">
                 <Link href={currentButtons.secondary?.url || "#"}>{currentButtons.secondary?.text}</Link>
               </Button>
             </div>

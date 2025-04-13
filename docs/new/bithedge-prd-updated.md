@@ -1,8 +1,8 @@
-# BitHedge: Product Requirements Document (PRD) - Updated
+# The Bitcoin Insurance Company: Product Requirements Document (PRD) - Updated
 
 ## Introduction
 
-BitHedge is a decentralized application built on the Stacks blockchain that helps everyday Bitcoin users protect the value of their Bitcoin holdings against market volatility. While traditional hedging tools like options contracts exist, they remain inaccessible to regular users due to complex financial jargon and intimidating interfaces. BitHedge solves this problem by transforming options contracts into simple, understandable "Bitcoin protection policies" that function like familiar insurance products.
+The Bitcoin Insurance Company is a decentralized application built on the Stacks blockchain that helps everyday Bitcoin users protect the value of their Bitcoin holdings against market volatility. While traditional hedging tools like options contracts exist, they remain inaccessible to regular users due to complex financial jargon and intimidating interfaces. The Bitcoin Insurance Company solves this problem by transforming options contracts into simple, understandable "Bitcoin protection policies" that function like familiar insurance products.
 
 This PRD outlines a complete Bitcoin Protection Center focused on our primary persona "Protective Peter" - an everyday Bitcoin user who wants security against price drops without needing to understand complex trading terminology.
 
@@ -10,12 +10,12 @@ This PRD outlines a complete Bitcoin Protection Center focused on our primary pe
 
 - **Version**: 3.0
 - **Date**: November 15, 2024
-- **Project**: BitHedge – Bitcoin Protection Center
+- **Project**: The Bitcoin Insurance Company – Bitcoin Protection Center
 - **Focus**: Making Bitcoin value protection accessible to everyone
 
 ## 1. Executive Summary
 
-BitHedge is a decentralized application that allows everyday Bitcoin users to protect themselves against price volatility through easy-to-understand protection policies. Using familiar insurance concepts instead of complex financial jargon, our Bitcoin Protection Center guides users through selecting, customizing, and activating protection for their Bitcoin holdings or future purchases. Built on the Stacks blockchain, the platform ensures self-custody and trustlessness while providing peace of mind through guaranteed Bitcoin value protection.
+The Bitcoin Insurance Company is a decentralized application that allows everyday Bitcoin users to protect themselves against price volatility through easy-to-understand protection policies. Using familiar insurance concepts instead of complex financial jargon, our Bitcoin Protection Center guides users through selecting, customizing, and activating protection for their Bitcoin holdings or future purchases. Built on the Stacks blockchain, the platform ensures self-custody and trustlessness while providing peace of mind through guaranteed Bitcoin value protection.
 
 ## 2. Vision & Objectives
 
@@ -122,13 +122,13 @@ The Bitcoin Protection Center is powered by Clarity smart contracts on the Stack
 
 #### 1. Discovery & Education
 
-- User arrives at BitHedge landing page
+- User arrives at The Bitcoin Insurance Company landing page
 - Learns about Bitcoin protection through simple explanations
 - Clicks "Get Protected" to begin
 
 #### 2. Protection Setup
 
-- Connects wallet to BitHedge
+- Connects wallet to The Bitcoin Insurance Company
 - Selects "Protect my Bitcoin holdings"
 - Specifies amount to protect (e.g., 0.25 BTC)
 - Selects protection level (e.g., 10% below current price)
@@ -162,7 +162,7 @@ The Bitcoin Protection Center is powered by Clarity smart contracts on the Stack
 
 ### Global Elements
 
-- **Header**: BitHedge logo, wallet connection status, network indicator
+- **Header**: The Bitcoin Insurance Company logo, wallet connection status, network indicator
 - **Progress Indicator**: 5-step visual tracker showing current position in process
 - **Navigation**: Back/Continue buttons for moving between steps
 
@@ -351,4 +351,4 @@ For a PUT protection policy with:
 
 ## Conclusion
 
-The BitHedge Bitcoin Protection Center represents a fundamental reimagining of how Bitcoin users can protect themselves against market volatility. By transforming complex options mechanisms into familiar insurance concepts, we make sophisticated financial protection accessible to everyday users without requiring specialized knowledge. This approach democratizes risk management tools, enabling broader Bitcoin adoption by addressing the volatility concerns that prevent many potential users from holding Bitcoin long-term.
+The Bitcoin Insurance Company Protection Center represents a fundamental reimagining of how Bitcoin users can protect themselves against market volatility. By transforming complex options mechanisms into familiar insurance concepts, we make sophisticated financial protection accessible to everyday users without requiring specialized knowledge. This approach democratizes risk management tools, enabling broader Bitcoin adoption by addressing the volatility concerns that prevent many potential users from holding Bitcoin long-term.

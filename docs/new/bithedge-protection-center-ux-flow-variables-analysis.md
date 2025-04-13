@@ -1,8 +1,8 @@
-# BitHedge: Protection Center UX Flow Variables Analysis
+# The Bitcoin Insurance Company: Protection Center UX Flow Variables Analysis
 
 ## Executive Summary
 
-This technical analysis examines how the BitHedge Protection Center presents complex options contract variables across the policy lifecycle. By mapping each protection variable to specific stages in the user journey, we can identify optimization opportunities that enhance comprehension while maintaining Bitcoin-native principles.
+This technical analysis examines how The Bitcoin Insurance Company Protection Center presents complex options contract variables across the policy lifecycle. By mapping each protection variable to specific stages in the user journey, we can identify optimization opportunities that enhance comprehension while maintaining Bitcoin-native principles.
 
 The analysis reveals an effective progressive disclosure strategy that introduces variables at contextually relevant moments, progressively building user understanding of Bitcoin protection mechanisms. We also identify opportunities to enhance variable presentation in post-purchase phases of the policy lifecycle.
 

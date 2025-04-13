@@ -1,8 +1,8 @@
-# BitHedge Protection Center: Streamlined UX Specification
+# The Bitcoin Insurance Company Protection Center: Streamlined UX Specification
 
 ## Executive Summary
 
-This technical specification outlines a streamlined user interface design for the BitHedge Bitcoin Protection Center. Based on extensive UX research and analysis of Bitcoin users' mental models, this document proposes a refined approach that maintains clarity and educational value while significantly reducing text density. By breaking key variables into focused individual screens with precise, efficient copy, we aim to create a clean, intuitive experience that guides users through the protection configuration process with minimal cognitive load.
+This technical specification outlines a streamlined user interface design for The Bitcoin Insurance Company Protection Center. Based on extensive UX research and analysis of Bitcoin users' mental models, this document proposes a refined approach that maintains clarity and educational value while significantly reducing text density. By breaking key variables into focused individual screens with precise, efficient copy, we aim to create a clean, intuitive experience that guides users through the protection configuration process with minimal cognitive load.
 
 The specification assumes implementation of the **Assisted Counterparty Model** for the MVP, which enables a more directed user flow with guaranteed protection fulfillment. The design prioritizes Bitcoin-native terminology, visual communication over text explanation, and progressive disclosure of complexity through a carefully sequenced journey.
 
@@ -284,7 +284,7 @@ Structure:
 Chart Elements:
 - Current BTC price reference line
 - Protected value reference line
-- Protection activation zone (shaded area)
+- Protection zone (shaded area below protected value)
 - PnL curve showing value at different prices
 - Interactive price point selection
 
@@ -717,7 +717,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge      [1]─2─3─4─5 │
+│ ⬅ The Bitcoin Insurance Company      [1]─2─3─4─5 │
 ├─────────────────────────────┤
 │                             │
 │ What Are You Looking        │
@@ -749,7 +749,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge      1─[2]─3─4─5 │
+│ ⬅ The Bitcoin Insurance Company      1─[2]─3─4─5 │
 ├─────────────────────────────┤
 │                             │
 │ How Much Protection         │
@@ -782,7 +782,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge      1─[2]─3─4─5 │
+│ ⬅ The Bitcoin Insurance Company      1─[2]─3─4─5 │
 ├─────────────────────────────┤
 │                             │
 │ How Much Bitcoin Do You     │
@@ -811,7 +811,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge      1─2─[3]─4─5 │
+│ ⬅ The Bitcoin Insurance Company      1─2─[3]─4─5 │
 ├─────────────────────────────┤
 │                             │
 │ How Long Do You Need        │
@@ -842,7 +842,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge   Protection Sim │
+│ ⬅ The Bitcoin Insurance Company   Protection Sim │
 ├─────────────────────────────┤
 │                             │
 │ [Chart][Adjust Variables]   │
@@ -875,7 +875,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge      1─2─3─[4]─5 │
+│ ⬅ The Bitcoin Insurance Company      1─2─3─[4]─5 │
 ├─────────────────────────────┤
 │                             │
 │ Your Bitcoin                │
@@ -908,7 +908,7 @@ Planned enhancements after initial launch:
 
 ```
 ┌─────────────────────────────┐
-│ ⬅ BitHedge      1─2─3─4─[5] │
+│ ⬅ The Bitcoin Insurance Company      1─2─3─4─[5] │
 ├─────────────────────────────┤
 │                             │
 │ Activate Your Bitcoin       │

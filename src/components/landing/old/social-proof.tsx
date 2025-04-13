@@ -107,8 +107,8 @@ export function SocialProof({ activePersona }: SocialProofProps) {
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             {activePersona === "protection"
-              ? "Bitcoin investors protecting their holdings with BitHedge"
-              : "STX providers earning consistent returns on BitHedge" 
+              ? "Bitcoin investors protecting their holdings with The Bitcoin Insurance Company"
+              : "STX providers earning consistent returns on The Bitcoin Insurance Company" 
             }
           </p>
         </motion.div>
@@ -159,7 +159,7 @@ export function SocialProof({ activePersona }: SocialProofProps) {
           {activePersona === "protection" && (
             <>
               <Testimonial
-                quote="BitHedge completely changed how I manage downside risk. No more sleepless nights during market corrections."
+                quote="The Bitcoin Insurance Company completely changed how I manage downside risk. No more sleepless nights during market corrections."
                 author="Alex Johnson"
                 role="Bitcoin investor"
                 persona="protection"
@@ -212,7 +212,7 @@ export function SocialProof({ activePersona }: SocialProofProps) {
                   ))}
                 </div>
                 <p className="mb-4">
-                  I was looking for a way to protect my Bitcoin during market drops without selling. BitHedge let me set protection at exactly the price I wanted, giving me peace of mind.
+                  I was looking for a way to protect my Bitcoin during market drops without selling. The Bitcoin Insurance Company let me set protection at exactly the price I wanted, giving me peace of mind.
                 </p>
                 <p className="text-sm text-muted-foreground">Protected 0.65 BTC during the 2023 market correction</p>
               </Card>
@@ -234,9 +234,9 @@ export function SocialProof({ activePersona }: SocialProofProps) {
                   ))}
                 </div>
                 <p className="mb-4">
-                  BitHedge changed how I manage my portfolio. Now I can hold Bitcoin long-term with confidence knowing I have downside protection in place whenever I need it.
+                  The Bitcoin Insurance Company changed how I manage my portfolio. Now I can hold Bitcoin long-term with confidence knowing I have downside protection in place whenever I need it.
                 </p>
-                <p className="text-sm text-muted-foreground">Uses BitHedge during high volatility periods</p>
+                <p className="text-sm text-muted-foreground">Uses The Bitcoin Insurance Company during high volatility periods</p>
               </Card>
             </>
           )}
@@ -260,7 +260,7 @@ export function SocialProof({ activePersona }: SocialProofProps) {
                   ))}
                 </div>
                 <p className="mb-4">
-                  I&apos;ve provided protection on BitHedge for 3 months and generated 18.7% APY on my STX - significantly outperforming my previous DeFi strategies.
+                  I&apos;ve provided protection on The Bitcoin Insurance Company for 3 months and generated 18.7% APY on my STX - significantly outperforming my previous DeFi strategies.
                 </p>
                 <p className="text-sm text-muted-foreground">Active provider since January 2023</p>
               </Card>
@@ -282,7 +282,7 @@ export function SocialProof({ activePersona }: SocialProofProps) {
                   ))}
                 </div>
                 <p className="mb-4">
-                  The analytics on BitHedge are unmatched. I can see exactly what my risk profile is and adjust my protection parameters to maximize returns while keeping risk in check.
+                  The analytics on The Bitcoin Insurance Company are unmatched. I can see exactly what my risk profile is and adjust my protection parameters to maximize returns while keeping risk in check.
                 </p>
                 <p className="text-sm text-muted-foreground">Manages a multi-strategy yield portfolio</p>
               </Card>

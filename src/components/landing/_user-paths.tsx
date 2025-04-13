@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Shield, TrendingUp, LockKeyhole, Settings, ChevronRight } from "lucide-react";
-import { Persona } from "./hero";
+import { Persona } from "./old/hero";
 
 interface StrategyCardProps {
   title: string;
@@ -58,7 +58,7 @@ export function UserPaths({ activePersona = "protection" }: UserPathsProps) {
               
               <p className="text-muted-foreground mb-8">
                 Whether you&apos;re protecting your long-term holdings or managing short-term volatility, 
-                BitHedge adapts to your protection needs.
+                The Bitcoin Insurance Company adapts to your protection needs.
               </p>
               
               <div className="grid grid-cols-1 gap-4 mb-8">
@@ -105,7 +105,7 @@ export function UserPaths({ activePersona = "protection" }: UserPathsProps) {
               </div>
               
               <p className="text-muted-foreground mb-8">
-                BitHedge offers multiple strategies for generating income based on your risk 
+                The Bitcoin Insurance Company offers multiple strategies for generating income based on your risk 
                 preference and market outlook.
               </p>
               

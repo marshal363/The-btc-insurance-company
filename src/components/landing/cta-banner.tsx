@@ -85,7 +85,7 @@ export function CTABanner({
             asChild
             variant={persona === 'income' ? 'secondary' : 'default'}
             size="lg"
-            className={cn("w-full md:w-auto", persona === 'income' && scheme.buttonClass)}
+            className={cn("w-full md:w-auto rounded-full", persona === 'income' && scheme.buttonClass)}
           >
             <Link href={buttonHref}>
               <span>{buttonText}</span>

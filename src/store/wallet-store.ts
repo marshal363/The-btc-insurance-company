@@ -153,7 +153,7 @@ const debugStorage = () => {
 
 // App details for wallet connection
 const appDetails = {
-  name: "BitHedge",
+  name: "The Bitcoin Insurance Company",
   icon: "/logo.png",
 };
 
