@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Info, ArrowUp, ArrowDown } from "lucide-react";
+import { Info, ArrowUp, ArrowDown, BarChart4 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
@@ -119,7 +119,7 @@ export function PnlSimulation({
       newPoints.push({ 
         price,
         pnl, 
-        formattedPrice: formatCurrency(price)
+        formattedPrice: formatCurrency(price) as string
       });
     }
     
@@ -251,14 +251,19 @@ export function PnlSimulation({
   };
 
   return (
-    <div className="border rounded-lg bg-background shadow-sm">
-      <div className="border-b p-4">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          {optionType === "put" ? "Protection Value Simulator" : "Price Lock Value Simulator"}
-          <span className="text-xs font-normal text-muted-foreground">
-            (Current price: ${formatNumber(currentPrice)})
-          </span>
-        </h3>
+    <div className="border rounded-lg bg-white shadow-sm overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 p-4 text-white">
+        <div className="flex items-center gap-3">
+          <div className="bg-white p-2 rounded-full">
+            <BarChart4 className="h-5 w-5 text-indigo-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold">Coverage Calculator</h3>
+            <p className="text-purple-100 text-sm">
+              {optionType === "put" ? "See how your protection performs at different prices" : "Visualize your price lock value"}
+            </p>
+          </div>
+        </div>
       </div>
       
       <div className="overflow-auto">
@@ -290,14 +295,14 @@ export function PnlSimulation({
                   <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                   <XAxis 
                     dataKey="price" 
-                    tickFormatter={(value) => formatCurrency(value)}
+                    tickFormatter={(value) => formatCurrency(value) as string}
                     domain={['dataMin', 'dataMax']}
                     type="number"
                     tickCount={5}
                     fontSize={12}
                   />
                   <YAxis 
-                    tickFormatter={(value) => formatCurrency(value)}
+                    tickFormatter={(value) => formatCurrency(value) as string}
                     fontSize={12}
                   />
                   <Tooltip content={<CustomTooltip />} />
@@ -347,21 +352,21 @@ export function PnlSimulation({
                   <span className="w-2 h-2 rounded-full bg-red-500"></span>
                   Maximum Loss
                 </p>
-                <p className="font-semibold text-amber-600">{formatCurrency(maxLoss)}</p>
+                <p className="font-semibold text-amber-600">{formatCurrency(maxLoss) as string}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                   Break-even Price
                 </p>
-                <p className="font-semibold">{formatCurrency(breakEvenPrice)}</p>
+                <p className="font-semibold">{formatCurrency(breakEvenPrice) as string}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-purple-500"></span>
                   {optionType === "put" ? "Insurance Premium" : "Lock-in Fee"}
                 </p>
-                <p className="font-semibold">{formatCurrency(simulationValues.premium)}</p>
+                <p className="font-semibold">{formatCurrency(simulationValues.premium) as string}</p>
               </div>
             </div>
             
@@ -371,7 +376,7 @@ export function PnlSimulation({
                   <span className="text-sm">
                     {optionType === "put" ? "Protected Value" : "Purchase Price"}
                   </span>
-                  <span className="font-medium">{formatCurrency(simulationValues.strikePrice)}</span>
+                  <span className="font-medium">{formatCurrency(simulationValues.strikePrice) as string}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Protection Amount</span>
@@ -381,7 +386,7 @@ export function PnlSimulation({
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Current Price</span>
-                  <span className="font-medium">{formatCurrency(currentPrice)}</span>
+                  <span className="font-medium">{formatCurrency(currentPrice) as string}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Position</span>
@@ -455,7 +460,7 @@ export function PnlSimulation({
                   <span className="text-sm text-muted-foreground">BTC</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  ≈ {formatCurrency(simulationValues.amount * currentPrice)}
+                  ≈ {formatCurrency(simulationValues.amount * currentPrice) as string}
                 </p>
               </div>
               

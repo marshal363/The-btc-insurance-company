@@ -13,10 +13,12 @@ import { Check } from "lucide-react";
 import { StepIndicator, StepType } from "@/components/easy-option/step-indicator";
 import { NavigationButtons } from "@/components/easy-option/navigation-buttons";
 import { ProtectionTypeSelector, ProtectionType } from "@/components/easy-option/protection-type-selector";
-import { StrikePrice } from "@/components/easy-option/strike-price";
 import { QuantityAndDuration } from "@/components/easy-option/quantity-and-duration";
 import { PolicyPreview } from "@/components/easy-option/policy-preview";
 import { PnlSimulation } from "@/components/easy-option/pnl-simulation";
+import { ProtectionAmount } from "@/components/easy-option/protection-amount";
+import { ProtectedValue } from "@/components/easy-option/strike-price-protective";
+import { useWallet } from "@/hooks/wallet/useWallet";
 
 // Define array of step names
 const STEP_NAMES = [
@@ -34,6 +36,9 @@ const CUSTOM_STEPS = STEPS;
 export default function EasyOption() {
   const { toast } = useToast();
   const router = useRouter();
+
+  // Get wallet data from hook
+  const { isConnected, balance } = useWallet();
 
   // State from market store
   const { btcPrice = 48500 } = useMarketStore();
@@ -348,41 +353,34 @@ export default function EasyOption() {
         )}
   
         {currentStep === CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY && (
-          <StrikePrice 
+          <ProtectedValue 
             optionType={optionType}
             strikePrice={protectedValue} 
             setStrikePrice={setProtectedValue}
             protectionType={protectionType}
-            amount={amount}
-            setAmount={setAmount}
             protectionStrategy={protectionStrategy}
             setProtectionStrategy={setProtectionStrategyAndValue}
-            showAmountSelection={false}
           />
         )}
 
         {currentStep === CUSTOM_STEPS.PROTECTION_AMOUNT && (
-          <StrikePrice 
-            optionType={optionType}
-            strikePrice={protectedValue} 
-            setStrikePrice={setProtectedValue}
-            protectionType={protectionType}
+          <ProtectionAmount 
             amount={amount}
             setAmount={setAmount}
-            protectionStrategy={protectionStrategy}
-            setProtectionStrategy={setProtectionStrategyAndValue}
-            showAmountSelection={true}
-            showStrategySelection={false}
+            walletBalance={balance?.sbtc?.toString() || "0.1"}
+            walletConnected={isConnected}
           />
         )}
 
         {currentStep === CUSTOM_STEPS.PROTECTION_PERIOD && (
-          <QuantityAndDuration 
-            amount={amount}
-            duration={duration}
-            setDuration={setDuration}
-            hideSummary={true}
-          />
+          <div>
+            <QuantityAndDuration 
+              amount={amount}
+              duration={duration}
+              setDuration={setDuration}
+              hideSummary={true}
+            />
+          </div>
         )}
 
         {currentStep === CUSTOM_STEPS.PROTECTION_SIMULATION && (
@@ -401,27 +399,12 @@ export default function EasyOption() {
               premium={getCorrectPremium()}
               amount={parseFloat(amount)}
             />
-            
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mt-6">
-              <div className="flex items-start gap-3">
-                <div className="text-sm text-blue-800">
-                  <p className="font-medium mb-1">Understanding Your Protection Value</p>
-                  <p className="text-sm">
-                    This simulator helps you visualize how your protection policy would perform at different Bitcoin price levels. 
-                    You can adjust variables to see how changes would affect your protection outcomes.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         )}
         
         {currentStep === CUSTOM_STEPS.POLICY_PREVIEW && (
           <div>
-            <h2 className="text-2xl font-bold mb-2">Activate Bitcoin Price Drop Protection</h2>
-            <p className="text-muted-foreground mb-6">
-              You&apos;re about to activate price drop protection for your Bitcoin holdings. Review the details and confirm to proceed.
-            </p>
+            
             <PolicyPreview 
               policy={policy}
               optionType={optionType}
@@ -432,16 +415,7 @@ export default function EasyOption() {
             />
             
             {/* Add activation button directly in the policy preview step */}
-            <div className="flex justify-center mt-8">
-              <Button 
-                size="lg" 
-                onClick={handleActivate}
-                className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto min-w-[200px]"
-              >
-                <Check className="mr-2 h-5 w-5" />
-                Activate Protection
-              </Button>
-            </div>
+         
           </div>
         )}
       </div>

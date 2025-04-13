@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useMarketStore } from "@/store/market-store";
-import { ArrowUp, ArrowDown, Shield, ArrowLeftRight, Check, ShieldCheck, AlertOctagon, Rocket, CircleDollarSign } from "lucide-react";
+import { Shield, ArrowLeftRight, Check, ShieldCheck, AlertOctagon, Rocket, CircleDollarSign } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ProtectionType } from "./protection-type-selector";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface StrikePriceProps {
   optionType: "call" | "put";
@@ -38,10 +39,10 @@ const SATS_PER_BTC = 100000000;
 
 export function StrikePrice({ 
   optionType, 
-  // We need strikePrice and setStrikePrice for API compatibility
-  // even if we don't directly use strikePrice in this component
-  strikePrice: _strikePrice, 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  strikePrice, 
   setStrikePrice,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protectionType,
   amount,
   setAmount,
@@ -112,29 +113,6 @@ export function StrikePrice({
     }
   }, [isInSats, amount]);
   
-  // Get title and description based on protection type and option type
-  const getTitle = () => {
-    if (showAmountSelection && !showStrategySelection) {
-      return protectionType === "hodl" 
-        ? "How Much Bitcoin Do You Want to Protect?" 
-        : "How Much Bitcoin Do You Want to Purchase?";
-    } else {
-      return protectionType === "hodl" 
-        ? "Select Your Bitcoin Protection Strategy" 
-        : "Select Your Price Lock Strategy";
-    }
-  };
-  
-  const getDescription = () => {
-    if (showAmountSelection && !showStrategySelection) {
-      return "Enter the amount of Bitcoin you want to protect or use the quick selection options.";
-    } else {
-      return protectionType === "hodl" 
-        ? "Choose a protection strategy and the amount of Bitcoin you want to protect." 
-        : "Choose a price lock strategy and the amount of Bitcoin you want to purchase.";
-    }
-  };
-
   // Strategy options with descriptions, tailored to the protection type
   const getStrategyOptions = (): StrategyOption[] => {
     if (optionType === "put") {
@@ -266,112 +244,100 @@ export function StrikePrice({
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">{getTitle()}</h2>
-      <p className="text-muted-foreground mb-4">
-        {getDescription()}
-      </p>
+      <h2 className="text-2xl font-bold mb-4">Select Your Bitcoin Protection Strategy</h2>
       
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-full ${optionType === "put" ? "bg-red-100" : "bg-green-100"}`}>
-              {optionType === "put" 
-                ? <ArrowDown className="w-4 h-4 text-red-500" /> 
-                : <ArrowUp className="w-4 h-4 text-green-500" />}
-            </div>
-            <h3 className="font-medium">
-              {optionType === "put" ? "Price Drop Protection" : "Purchase Price Lock"}
-            </h3>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            Current Bitcoin Price: ${btcPrice.toLocaleString()}
-          </div>
-        </div>
+      {/* Prominently displayed current Bitcoin price */}
+      <div className="text-center mb-5 p-3 bg-gray-50 rounded-md border border-gray-200">
+        <p className="text-sm text-gray-600 mb-1">Current Bitcoin Price</p>
+        <p className="text-xl font-semibold">${btcPrice.toLocaleString()}</p>
       </div>
       
       {/* Strategy Selection */}
       {showStrategySelection && (
-        <div className="mb-8">
-          <h3 className="font-medium text-lg mb-3">Choose Your Protection Strategy</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {strategyOptions.map((strategy) => {
               const isSelected = protectionStrategy === strategy.id;
               return (
                 <Card 
                   key={strategy.id}
-                  className={`overflow-hidden transition-all hover:shadow-md cursor-pointer ${
-                    isSelected ? "ring-1 ring-black shadow-sm" : "border"
-                  }`}
+                  className={cn(
+                    "overflow-hidden transition-all cursor-pointer group border-2 p-0",
+                    isSelected 
+                      ? "ring-1 ring-black shadow-sm border-gray-300"
+                      : "hover:border-gray-300 border-transparent shadow-sm hover:shadow"
+                  )}
                   onClick={() => handleStrategySelect(strategy)}
                 >
-                  <div className="relative p-6">
-                    {isSelected && (
-                      <div className="absolute top-3 right-3">
-                        <Badge className="bg-black text-white px-2 py-1 text-xs font-medium flex items-center gap-1">
-                          <Check className="h-3 w-3" /> Selected
-                        </Badge>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`p-2 rounded-full ${strategy.color}`}>
-                        {strategy.icon}
-                      </div>
-                      <div>
-                        <h4 className="font-medium">
-                          {strategy.name}
-                        </h4>
-                        <p className="text-xs text-gray-500">
-                          {optionType === "put" ? 
-                            `${strategy.percentage}% of current BTC value` : 
-                            `${strategy.percentage}% of current BTC price`}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm text-gray-600 mb-3">
-                      {strategy.description}
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-gray-500">Protected Value</p>
-                        <p className="font-medium">
-                          ${strategy.value.toLocaleString()}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Premium</p>
-                        <div className="flex">
-                          {[...Array(strategy.premiumLevel)].map((_, i) => (
-                            <div key={i} className="h-2 w-2 bg-gray-800 rounded-full mr-1" />
-                          ))}
-                          {[...Array(4 - strategy.premiumLevel)].map((_, i) => (
-                            <div key={i} className="h-2 w-2 bg-gray-200 rounded-full mr-1" />
-                          ))}
+                  <div className="h-full w-full overflow-hidden relative">
+                    <div className="px-4 py-3">
+                      {/* Strategy Header with all essential info */}
+                      <div className="flex items-start gap-2.5 pt-0.5">
+                        <div className={cn(
+                          "p-1.5 rounded-full flex-shrink-0",
+                          isSelected 
+                            ? `${strategy.color} text-black` 
+                            : `${strategy.color} group-hover:bg-opacity-80`
+                        )}>
+                          <div className="w-4 h-4">{strategy.icon}</div>
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-base font-semibold truncate pr-2">
+                              {strategy.name}
+                            </h4>
+                          </div>
+                          
+                          <p className="text-xs text-gray-600 mt-1 mb-1">
+                            {optionType === "put" ? 
+                              `${strategy.percentage}% of current BTC value` : 
+                              `${strategy.percentage}% of current BTC price`}
+                          </p>
+
+                          <p className="text-xs text-gray-600 mb-2">
+                            {strategy.description}
+                          </p>
+                          
+                          {/* Protected Value */}
+                          <div className="grid grid-cols-2 gap-2 mb-2">
+                            <div>
+                              <p className="text-xs text-gray-500">Protected Value</p>
+                              <p className="font-medium text-sm">
+                                ${strategy.value.toLocaleString()}
+                              </p>
+                            </div>
+                            
+                            <div>
+                              <p className="text-xs text-gray-500">Premium</p>
+                              <div className="flex items-center">
+                                {Array.from({ length: 4 }).map((_, i) => (
+                                  <div 
+                                    key={i} 
+                                    className={`h-2 w-2 rounded-full mr-1 ${
+                                      i < strategy.premiumLevel 
+                                        ? 'bg-black' 
+                                        : 'bg-gray-200'
+                                    }`} 
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                      
+                      {/* Selected badge - positioned at bottom right */}
+                      {isSelected && (
+                        <Badge className="bg-black text-white px-1.5 py-0.5 text-xs font-medium flex items-center gap-1 absolute bottom-2 right-2">
+                          <Check className="h-2.5 w-2.5" /> Selected
+                        </Badge>
+                      )}
                     </div>
-                    
-                    <p className="text-xs text-gray-500 mt-3">
-                      {strategy.detail}
-                    </p>
                   </div>
                 </Card>
               );
             })}
-          </div>
-        </div>
-      )}
-      
-      {/* Chart visualization - simplified chart showing protection levels */}
-      {showStrategySelection && (
-        <div className="bg-gray-50 p-6 rounded-lg mb-8 flex flex-col items-center">
-          <p className="text-sm text-gray-500 mb-4 text-center">
-            Price chart visualization with protection levels will appear here
-          </p>
-          <div className="w-full h-32 bg-gray-100 rounded flex items-center justify-center">
-            <p className="text-xs text-gray-400">Price chart coming soon</p>
           </div>
         </div>
       )}
