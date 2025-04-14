@@ -322,7 +322,7 @@ export default function Home() {
                   {persona === "protection" ? (
                     <Shield className={`h-5 w-5 ${persona === "protection" ? "text-green-600" : "text-amber-600"}`} />
                   ) : (
-                    <TrendingUp className={`h-5 w-5 ${persona === "protection" ? "text-green-600" : "text-amber-600"}`} />
+                    <TrendingUp className={`h-5 w-5 ${persona === "income" ? "text-amber-600" : "text-green-600"}`} />
                   )}
                 </div>
                 <h2 className="text-xl font-bold">
