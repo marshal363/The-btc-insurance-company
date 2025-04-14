@@ -355,9 +355,7 @@ export default function EasyOption() {
         {currentStep === CUSTOM_STEPS.PROTECTED_VALUE_STRATEGY && (
           <ProtectedValue 
             optionType={optionType}
-            strikePrice={protectedValue} 
             setStrikePrice={setProtectedValue}
-            protectionType={protectionType}
             protectionStrategy={protectionStrategy}
             setProtectionStrategy={setProtectionStrategyAndValue}
           />
