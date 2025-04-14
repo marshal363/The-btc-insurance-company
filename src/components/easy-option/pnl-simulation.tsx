@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Info, ArrowUp, ArrowDown, BarChart4 } from "lucide-react";
+import { BarChart4, Shield, BadgeCheck, Settings, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import {
   ResponsiveContainer, 
   XAxis,
@@ -15,6 +16,11 @@ import {
   Area,
   ComposedChart
 } from "recharts";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface PnlSimulationProps {
   optionType: "call" | "put";
@@ -250,259 +256,264 @@ export function PnlSimulation({
     return null;
   };
 
+  // For clarity - determine outcome text based on option type
+  const outcomeTextWhenNoAction = optionType === "put" 
+    ? `If BTC stays above $${formatNumber(simulationValues.strikePrice)}, no need to activate protection.`
+    : `If BTC stays below $${formatNumber(simulationValues.strikePrice)}, no need to use your price lock.`;
+    
+  const outcomeTextWhenAction = optionType === "put"
+    ? `If BTC drops below $${formatNumber(simulationValues.strikePrice)}, activate protection to preserve value.`
+    : `If BTC rises above $${formatNumber(simulationValues.strikePrice)}, use your price lock to buy at the locked price.`;
+
   return (
-    <div className="border rounded-lg bg-white shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 p-4 text-white">
-        <div className="flex items-center gap-3">
-          <div className="bg-white p-2 rounded-full">
-            <BarChart4 className="h-5 w-5 text-indigo-600" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold">Coverage Calculator</h3>
-            <p className="text-purple-100 text-sm">
-              {optionType === "put" ? "See how your protection performs at different prices" : "Visualize your price lock value"}
-            </p>
-          </div>
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-baseline justify-between mb-4">
+        <h3 className="text-xl font-bold">Protection Value Simulator</h3>
+          <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full">
+            Step 5 of 6
+          </Badge>
       </div>
       
-      <div className="overflow-auto">
-        <Tabs defaultValue="chart" className="w-full">
-          <div className="px-4 pt-4">
-            <TabsList className="w-full">
-              <TabsTrigger value="chart" className="flex-1">Chart</TabsTrigger>
-              <TabsTrigger value="settings" className="flex-1">Adjust Variables</TabsTrigger>
-            </TabsList>
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+        {/* Header with key info */}
+        <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="bg-slate-800 p-2 rounded-full">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-slate-800">Protected Value:</h4>
+              <p className="text-xl font-bold">{formatCurrency(simulationValues.strikePrice)}</p>
+            </div>
           </div>
           
-          <TabsContent value="chart" className="p-4 mt-0 overflow-auto">
-            <div className="h-[300px] mb-6">
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={resetSimulation}
+              className="h-9"
+            >
+              Reset
+            </Button>
+            
+              <Button 
+                size="sm"
+              className="bg-slate-900 text-white hover:bg-slate-800 h-9"
+              >
+                <BarChart4 className="h-4 w-4 mr-2" />
+              Detailed Analysis
+              </Button>
+          </div>
+        </div>
+        
+        {/* Main chart */}
+        <div className="p-4 border-b border-slate-200">
+          <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                   data={chartData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
                 >
                   <defs>
                     <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#1e293b" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#1e293b" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="lossGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#9f1239" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#9f1239" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis 
-                    dataKey="price" 
-                    tickFormatter={(value) => formatCurrency(value) as string}
-                    domain={['dataMin', 'dataMax']}
-                    type="number"
-                    tickCount={5}
-                    fontSize={12}
+                  dataKey="formattedPrice" 
+                  scale="band" 
+                  tick={{ fontSize: 12, fill: '#64748b' }}
+                  tickFormatter={(value) => value}
                   />
                   <YAxis 
-                    tickFormatter={(value) => formatCurrency(value) as string}
-                    fontSize={12}
+                  tickFormatter={(value) => `$${Math.abs(value) >= 1000 ? (value / 1000).toFixed(1) + 'k' : value}`} 
+                  tick={{ fontSize: 12, fill: '#64748b' }}
                   />
                   <Tooltip content={<CustomTooltip />} />
+                <ReferenceLine y={0} stroke="#64748b" strokeWidth={2} />
                   <ReferenceLine 
-                    x={currentPrice} 
-                    stroke="#666" 
-                    strokeDasharray="3 3" 
-                    label={{ value: "Current", position: "insideBottomRight", fontSize: 12 }} 
+                  x={formatCurrency(currentPrice)} 
+                  stroke="#334155" 
+                  strokeWidth={1.5} 
+                  strokeDasharray="5 5"
+                  label={{
+                    value: 'Current Price',
+                    position: 'insideBottomRight',
+                    fill: '#334155',
+                    fontSize: 12
+                  }}
                   />
                   <ReferenceLine 
-                    x={simulationValues.strikePrice} 
-                    stroke={optionType === "put" ? "#3b82f6" : "#10b981"} 
-                    strokeDasharray="3 3" 
+                  x={formatCurrency(simulationValues.strikePrice)} 
+                  stroke="#1e40af" 
+                  strokeWidth={1.5} 
                     label={{ 
-                      value: optionType === "put" ? "Protected" : "Purchase", 
-                      position: "insideBottomLeft", 
-                      fontSize: 12,
-                      fill: optionType === "put" ? "#3b82f6" : "#10b981"
-                    }} 
-                  />
-                  <ReferenceLine y={0} stroke="#888" strokeWidth={1} />
+                    value: 'Protected Value',
+                    position: 'insideTopRight',
+                    fill: '#1e40af',
+                    fontSize: 12
+                  }}
+                />
                   <Area 
                     type="monotone" 
                     dataKey="pnl" 
-                    fill={optionType === "put" ? "#3b82f6" : "#10b981"} 
-                    fillOpacity={0.2}
-                    stroke={optionType === "put" ? "#3b82f6" : "#10b981"} 
+                  stroke={optionType === "put" ? "#1e293b" : "#9f1239"} 
                     strokeWidth={2} 
-                    activeDot={{ r: 6 }}
+                  fill={optionType === "put" ? "url(#profitGradient)" : "url(#lossGradient)"}
+                  activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
                   />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4 bg-background/80 p-4 rounded-lg backdrop-blur-sm border border-border/20">
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                  Maximum Profit
-                </p>
-                <p className="font-semibold">
-                  {maxProfit ? `${formatCurrency(maxProfit)}` : 'Unlimited'}
-                </p>
+        </div>
+        
+        {/* Key metrics and outcomes */}
+        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Key metrics */}
+          <div>
+            <h4 className="font-semibold text-slate-800 mb-3">Key Values & Analysis</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between py-2 border-b border-slate-100">
+                <span className="text-sm text-slate-600">Protected Value</span>
+                <span className="font-medium">{formatCurrency(simulationValues.strikePrice)}</span>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                  Maximum Loss
-                </p>
-                <p className="font-semibold text-amber-600">{formatCurrency(maxLoss) as string}</p>
+              <div className="flex justify-between py-2 border-b border-slate-100">
+                <span className="text-sm text-slate-600">Premium Cost</span>
+                <span className="font-medium">{formatCurrency(simulationValues.premium)}</span>
               </div>
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                  Break-even Price
-                </p>
-                <p className="font-semibold">{formatCurrency(breakEvenPrice) as string}</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                  {optionType === "put" ? "Insurance Premium" : "Lock-in Fee"}
-                </p>
-                <p className="font-semibold">{formatCurrency(simulationValues.premium) as string}</p>
-              </div>
+              <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Amount Protected</span>
+                  <span className="font-medium">{formatNumber(simulationValues.amount, 8)} BTC</span>
             </div>
-            
-            <div className="grid grid-cols-2 gap-x-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">
-                    {optionType === "put" ? "Protected Value" : "Purchase Price"}
-                  </span>
-                  <span className="font-medium">{formatCurrency(simulationValues.strikePrice) as string}</span>
+              <div className="flex justify-between py-2 border-b border-slate-100">
+                <span className="text-sm text-slate-600">Breakeven Price</span>
+                <span className="font-medium">{formatCurrency(breakEvenPrice)}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Protection Amount</span>
-                  <span className="font-medium">{formatNumber(simulationValues.amount, 4)} BTC</span>
-                </div>
+              <div className="flex justify-between py-2 border-b border-slate-100">
+                <span className="text-sm text-slate-600">Max Possible Loss</span>
+                <span className="font-medium">{formatCurrency(maxLoss)}</span>
               </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Current Price</span>
-                  <span className="font-medium">{formatCurrency(currentPrice) as string}</span>
+              {optionType === "put" && maxProfit && (
+                <div className="flex justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Max Possible Gain</span>
+                  <span className="font-medium">{formatCurrency(maxProfit)}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Position</span>
-                  <span className="flex items-center font-medium">
-                    {simulationValues.strikePrice === currentPrice ? (
-                      "At the Money"
-                    ) : optionType === "put" && simulationValues.strikePrice > currentPrice ? (
-                      <>
-                        <ArrowUp className="h-3 w-3 text-green-500 mr-1" />
-                        In the Money
-                      </>
-                    ) : optionType === "call" && simulationValues.strikePrice < currentPrice ? (
-                      <>
-                        <ArrowUp className="h-3 w-3 text-green-500 mr-1" />
-                        In the Money
-                      </>
-                    ) : (
-                      <>
-                        <ArrowDown className="h-3 w-3 text-amber-500 mr-1" />
-                        Out of the Money
-                      </>
-                    )}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
-          </TabsContent>
+          </div>
           
-          <TabsContent value="settings" className="p-4 mt-0">
-            <div className="space-y-6">
+          {/* Protection outcomes */}
+          <div>
+            <h4 className="font-semibold text-slate-800 mb-3">Protection Outcome</h4>
+            <Card className="p-4 border-slate-200 bg-slate-50">
+              <ul className="space-y-4">
+                  <li className="flex items-start gap-2">
+                  <div className="bg-white rounded-full p-1 mt-0.5 border border-slate-200">
+                    <BadgeCheck className="h-4 w-4 text-slate-700" />
+                    </div>
+                    <span className="text-sm">
+                    {outcomeTextWhenNoAction}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                  <div className="bg-white rounded-full p-1 mt-0.5 border border-slate-200">
+                    <BadgeCheck className="h-4 w-4 text-slate-700" />
+                    </div>
+                    <span className="text-sm">
+                    {outcomeTextWhenAction}
+                    </span>
+                  </li>
+              </ul>
+            </Card>
+            </div>
+        </div>
+        
+        {/* Customization section - collapsed by default */}
+        <Collapsible className="border-t border-slate-200">
+          <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+            <div className="flex items-center gap-2">
+              <div className="bg-slate-100 p-2 rounded-full">
+                <Settings className="w-4 h-4 text-slate-700" />
+              </div>
+              <h3 className="text-sm font-semibold text-slate-800">Customize Simulation</h3>
+          </div>
+            <ChevronDown className="w-4 h-4 text-slate-600" />
+          </CollapsibleTrigger>
+          
+          <CollapsibleContent>
+            <div className="p-4 pt-0 border-t border-slate-200">
+          <div className="space-y-4">
               <div>
-                <Label htmlFor="strikePrice" className="text-sm font-medium">
-                  {optionType === "put" ? "Protected Value" : "Purchase Price"}
-                </Label>
-                <div className="space-y-3 mt-2">
+              <Label className="text-xs text-slate-600 mb-1 block">Protected Value (Strike Price)</Label>
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
                   <Slider
-                    id="strikePrice"
-                    defaultValue={[getStrikePricePercentage()]}
+                    value={[getStrikePricePercentage()]} 
+                    min={0} 
                     max={100}
                     step={1}
                     onValueChange={handleStrikePriceSlider}
+                    className="my-3"
                   />
-                  <div className="flex items-center gap-2">
+                </div>
+                <div className="w-24">
                     <Input
                       type="number"
                       value={simulationValues.strikePrice}
                       onChange={(e) => handleInputChange(e, 'strikePrice')}
-                      className="h-9"
-                      step="100"
-                      min="1"
+                    className="text-right border-slate-300"
                     />
-                    <span className="text-sm text-muted-foreground">USD</span>
-                  </div>
+                </div>
                 </div>
               </div>
               
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="amount" className="text-sm font-medium">
-                  Bitcoin Amount
-                </Label>
-                <div className="flex items-center gap-2 mt-2">
+                <Label className="text-xs text-slate-600 mb-1 block">BTC Amount</Label>
                   <Input
-                    id="amount"
                     type="number"
                     value={simulationValues.amount}
                     onChange={(e) => handleInputChange(e, 'amount')}
-                    className="h-9"
                     step="0.01"
                     min="0.01"
+                  className="border-slate-300"
                   />
-                  <span className="text-sm text-muted-foreground">BTC</span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  ≈ {formatCurrency(simulationValues.amount * currentPrice) as string}
-                </p>
               </div>
-              
               <div>
-                <Label htmlFor="premium" className="text-sm font-medium">
-                  {optionType === "put" ? "Insurance Premium" : "Lock-in Fee"}
-                </Label>
-                <div className="flex items-center gap-2 mt-2">
+                <Label className="text-xs text-slate-600 mb-1 block">Premium (USD)</Label>
                   <Input
-                    id="premium"
                     type="number"
                     value={simulationValues.premium}
                     onChange={(e) => handleInputChange(e, 'premium')}
-                    className="h-9"
                     step="1"
                     min="1"
+                  className="border-slate-300"
                   />
-                  <span className="text-sm text-muted-foreground">USD</span>
+              </div>
+            </div>
+                
+                <div className="flex justify-end mt-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={resetSimulation}
+                    className="text-xs"
+                  >
+                    Reset to Defaults
+                  </Button>
                 </div>
               </div>
             </div>
-        
-            <div className="flex justify-between mt-6">
-              <Button 
-                variant="outline" 
-                onClick={resetSimulation}
-              >
-                Reset to Default
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-        
-        <div className="p-4">
-          <div className="p-3 bg-background/80 rounded-lg backdrop-blur-sm border border-border/20 flex items-start gap-2">
-            <Info className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-muted-foreground">
-              This simulation helps you visualize the value of your protection policy at different Bitcoin price levels. Adjust variables to see how they affect your potential outcomes.
-            </p>
-          </div>
-        </div>
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     </div>
   );
-} 
+}

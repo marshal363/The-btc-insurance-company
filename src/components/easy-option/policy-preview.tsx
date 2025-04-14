@@ -24,6 +24,7 @@ import { useMarketStore } from "@/store/market-store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface PolicyPreviewProps {
   optionType: "call" | "put";
@@ -193,23 +194,130 @@ export function PolicyPreview({
   
   return (
     <div>
-      <div className="flex justify-between items-center mb-5">
+      <div className="flex items-baseline justify-between mb-4">
+        <h2 className="text-2xl font-bold">Bitcoin Protection Policy</h2>
+        <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full">
+          Step 6 of 6
+        </Badge>
+      </div>
+      
+      <p className="text-muted-foreground mb-6">
+        Review your protection details and activate when you're ready.
+      </p>
+      
+      <Card className="border rounded-lg overflow-hidden mb-6 shadow-md bg-white">
+        {/* Header section with slate styling */}
+        <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-5 border-b relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <pattern id="graph-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0" x2="10" y2="10" style={{ stroke: 'white', strokeWidth: 0.5 }} />
+                <line x1="10" y1="0" x2="0" y2="10" style={{ stroke: 'white', strokeWidth: 0.5 }} />
+              </pattern>
+              <rect x="0" y="0" width="100%" height="100%" fill="url(#graph-pattern)" />
+            </svg>
+          </div>
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="bg-white p-2 rounded-full">
+                <ShieldCheck className="h-6 w-6 text-slate-700" />
+              </div>
         <div>
-          <h2 className="text-2xl font-bold mb-1">Your Bitcoin Protection Policy</h2>
-          <p className="text-muted-foreground">
-            Based on your selections, we&apos;ve prepared your Bitcoin protection policy.
-          </p>
+                <h3 className="text-xl font-bold text-white">Bitcoin Protection Policy</h3>
+                <p className="text-slate-300">
+                  {optionType === "put" ? policy.protectionLevel : "Price Lock Protection"}
+                </p>
+              </div>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="bg-white hover:bg-slate-100 text-slate-800 border-transparent"
+              onClick={togglePnlPanel}
+            >
+              <BarChart className="h-4 w-4 mr-2" />
+              Simulate Outcomes
+            </Button>
+          </div>
         </div>
         
-        {/* Enhanced Activation Button */}
+        <div className="p-6">
+          {/* Grid layout for policy details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
+                <Shield className="h-4 w-4 text-slate-600" />
+                Protection Parameters
+              </h4>
+              
+              <div className="space-y-4">
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-slate-600">Protected Value</span>
+                    <span className="font-medium">${parseFloat(protectedValue).toLocaleString()}</span>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    {calculateThresholdDifference()}
+                  </div>
+                </div>
+                
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-slate-600">Bitcoin Amount</span>
+                    <span className="font-medium">{amount} BTC</span>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    ≈ ${(parseFloat(amount) * parseFloat(protectedValue)).toLocaleString()} total value
+                  </div>
+                </div>
+                
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-slate-600">Protection Period</span>
+                    <span className="font-medium">{duration === "halving" ? "Until Halving" : `${duration} Days`}</span>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Active until {formatDatePretty(durationDays)}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
+                <DollarSign className="h-4 w-4 text-slate-600" />
+                Premium & Fees
+              </h4>
+              
+              <div className="bg-slate-50 rounded-lg border border-slate-200 p-5 mb-4">
+                <div className="space-y-3 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Protection Premium</span>
+                    <span className="font-medium">${policy.premium.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Platform Fee</span>
+                    <span className="font-medium">${policy.fees.toFixed(2)}</span>
+                  </div>
+                  <div className="border-t border-slate-200 pt-3 flex justify-between items-center">
+                    <span className="font-medium text-slate-700">Total Cost</span>
+                    <span className="text-lg font-semibold">${policy.total.toFixed(2)}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2 text-xs text-slate-500 mt-2">
+                  <InfoIcon className="h-3 w-3" />
+                  <span>One-time payment for the entire protection period</span>
+                </div>
+              </div>
+              
         <motion.div 
-          whileHover={{ scale: 1.05 }} 
-          whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
         >
           <Button 
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium"
             size="lg" 
-            className={`${activatingProtection ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} 
-            text-white shadow-md transition-all duration-300`}
             onClick={handleActivateProtection}
             disabled={activatingProtection}
           >
@@ -232,399 +340,152 @@ export function PolicyPreview({
             )}
           </Button>
         </motion.div>
-      </div>
-      
-      {/* Enhanced Policy Card with Premium Design */}
-      <Card className="border rounded-lg overflow-hidden mb-6 shadow-md bg-gradient-to-b from-white to-gray-50">
-        {/* Header section with improved visual styling */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-5 border-b relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <pattern id="graph-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                <line x1="0" y1="0" x2="10" y2="10" style={{ stroke: 'white', strokeWidth: 0.5 }} />
-                <line x1="10" y1="0" x2="0" y2="10" style={{ stroke: 'white', strokeWidth: 0.5 }} />
-              </pattern>
-              <rect x="0" y="0" width="100%" height="100%" fill="url(#graph-pattern)" />
-            </svg>
-          </div>
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="bg-white p-2 rounded-full">
-                <Shield className="h-6 w-6 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">
-                  {optionType === "put" ? "Price Drop Protection" : "Purchase Price Lock"}
-                </h3>
-                <p className="text-blue-100 text-sm">Secured by The Bitcoin Insurance Company</p>
-              </div>
-            </div>
-            <div className="flex flex-col items-end">
-              <Badge className="bg-white text-blue-700 px-3 py-1 text-sm font-medium shadow-sm">
-                {policy.protectionLevel.split(' ')[0]}
-              </Badge>
-              <div className="flex items-center mt-1">
-                <BadgeCheck className="h-4 w-4 text-blue-200 mr-1" />
-                <span className="text-blue-100 text-xs">Verified Non-Custodial</span>
-              </div>
-            </div>
           </div>
         </div>
         
-        <div className="p-6">
-          {/* Core Policy Details in Visually Improved Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Protected Value Card with Visual Enhancement */}
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24">
-                <div className="absolute transform rotate-45 bg-blue-600 text-white text-xs font-bold py-1 right-[-35px] top-[20px] w-[140px] text-center">
-                  {optionType === "put" ? "Protection" : "Lock Price"}
-                </div>
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <ShieldCheck className="h-5 w-5 text-blue-600" />
-                  <p className="text-sm font-medium text-gray-700">Protected Value</p>
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <p className="text-3xl font-bold text-gray-900">${parseInt(protectedValue).toLocaleString()}</p>
-                </div>
-                <div className="mt-2 flex items-center text-xs text-gray-500">
-                  <TrendingDown className="h-3 w-3 mr-1" />
-                  <span>{calculateThresholdDifference()}</span>
-                </div>
-                
-                {/* Protection visualization */}
-                <div className="mt-4 h-10 bg-gray-100 rounded-full overflow-hidden relative">
-                  <div 
-                    className="absolute h-full bg-gradient-to-r from-blue-500 to-blue-600"
-                    style={{ 
-                      width: `${optionType === "put" 
-                        ? 100 - (parseInt(protectedValue) / btcPrice * 100)
-                        : (parseInt(protectedValue) / btcPrice * 100)}%` 
-                    }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                    <span className="bg-white px-2 py-0.5 rounded-full shadow-sm">
-                      Protected at ${parseInt(protectedValue).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Activation scenarios */}
+          <div className="mb-6">
+            <h4 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-slate-600" />
+              Protection Outcomes
+            </h4>
             
-            {/* Protection Period with Visual Timeline */}
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="h-5 w-5 text-blue-600" />
-                  <p className="text-sm font-medium text-gray-700">Protection Period</p>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">
-                  {duration === "halving" ? "Until Halving" : 
-                   duration === "custom" ? "Custom" : 
-                   `${duration} Days`}
-                </p>
-                
-                {/* Visual timeline */}
-                <div className="mt-4 relative">
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-600 rounded-full" style={{ width: '100%' }} />
-                  </div>
-                  <div className="flex justify-between mt-2">
-                    <div className="text-xs text-gray-500">
-                      <div className="font-medium">Start</div>
-                      <div>{new Date().toLocaleDateString("en-US", { month: 'short', day: 'numeric' })}</div>
-                    </div>
-                    <div className="text-xs text-gray-500 text-right">
-                      <div className="font-medium">Expiry</div>
-                      <div>{formatDatePretty(durationDays)}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Policy Details in a 2-Column Grid with Enhanced Visuals */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="h-4 w-4 text-blue-600" />
-                <p className="text-sm font-medium text-gray-700">Protected Amount</p>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-gray-900">{amount} BTC</p>
-                <p className="text-sm text-gray-500">
-                  ≈ ${(parseFloat(amount) * btcPrice).toLocaleString()}
-                </p>
-              </div>
-              <div className="mt-3 flex items-center text-xs text-gray-500">
-                <LockIcon className="h-3 w-3 mr-1" />
-                <span>Remains in your wallet at all times</span>
-              </div>
-            </div>
-            
-            <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24">
-                <div className="absolute transform rotate-45 bg-green-600 text-white text-xs font-bold py-1 right-[-35px] top-[20px] w-[140px] text-center">
-                  One-time Fee
-                </div>
-              </div>
-              <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="h-4 w-4 text-blue-600" />
-                <p className="text-sm font-medium text-gray-700">Protection Cost</p>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-gray-900">${policy.total.toFixed(2)}</p>
-                <p className="text-sm text-gray-500">
-                  One-time payment
-                </p>
-              </div>
-              <div className="mt-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-xs flex items-center gap-1 text-blue-600 p-0"
-                  onClick={() => setShowDetails(!showDetails)}
+            <Tabs defaultValue="0" className="w-full">
+              <TabsList className="mb-6 grid grid-cols-3 max-w-xl mx-auto rounded-full p-1 bg-slate-100/80 border border-slate-200">
+                <TabsTrigger 
+                  value="0" 
+                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  onClick={() => setActiveScenario(0)}
                 >
-                  {showDetails ? "Hide details" : "View details"}
-                  {showDetails ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-                </Button>
-                
-                {/* Expandable Cost Details */}
-                {showDetails && (
-                  <motion.div 
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    className="mt-2 pt-2 border-t border-gray-100 text-sm"
-                  >
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-gray-500">Protection Premium</span>
-                      <span className="text-gray-700">${policy.premium.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-gray-500">Network Fee</span>
-                      <span className="text-gray-700">${policy.fees.toFixed(2)}</span>
-                    </div>
-                  </motion.div>
-                )}
+                  Scenario 1
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="1" 
+                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  onClick={() => setActiveScenario(1)}
+                >
+                  Scenario 2
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="2" 
+                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  onClick={() => setActiveScenario(2)}
+                >
+                  Scenario 3
+                </TabsTrigger>
+              </TabsList>
+              
+              {scenarios.map((scenario, index) => (
+                <TabsContent key={index} value={index.toString()} className="mt-0">
+                  <Card className={cn(
+                    "border rounded-lg overflow-hidden p-0",
+                    scenario.color === "green" ? "border-green-200" : 
+                    scenario.color === "blue" ? "border-slate-200" : 
+                    "border-slate-200"
+                  )}>
+                    <div className={cn(
+                      "p-4",
+                      scenario.color === "green" ? "bg-green-50" : 
+                      scenario.color === "blue" ? "bg-slate-50" : 
+                      "bg-slate-50"
+                    )}>
+                      <div className="flex items-start gap-3">
+                        <div className={cn(
+                          "p-2 rounded-full mt-1",
+                          scenario.color === "green" ? "bg-green-100" : 
+                          scenario.color === "blue" ? "bg-slate-200" : 
+                          "bg-slate-200"
+                        )}>
+                          {scenario.icon}
+                  </div>
+                        <div>
+                          <h5 className="font-semibold mb-1">{scenario.title}</h5>
+                          <p className="text-sm text-slate-600">{scenario.description}</p>
               </div>
             </div>
           </div>
           
-          {/* Enhanced Activation Details */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200 mb-6 shadow-sm">
-            <div className="flex items-start">
-              <div className="bg-blue-600 p-2 rounded-full mr-3">
-                <CheckCircle className="h-5 w-5 text-white" />
+                    <div className="p-4 bg-white">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">BTC Price</p>
+                          <p className="font-medium">${scenario.btcPrice.toLocaleString()}</p>
+              </div>
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Protected At</p>
+                          <p className="font-medium">${parseFloat(protectedValue).toLocaleString()}</p>
+              </div>
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Outcome</p>
+                          <Badge className={cn(
+                            "font-normal",
+                            scenario.color === "green" ? "bg-green-100 text-green-700 hover:bg-green-100" : 
+                            scenario.color === "blue" ? "bg-slate-100 text-slate-700 hover:bg-slate-100" : 
+                            "bg-slate-100 text-slate-700 hover:bg-slate-100"
+                          )}>
+                            {scenario.outcome}
+                          </Badge>
+              </div>
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Net Savings</p>
+                          <p className={cn(
+                            "font-medium",
+                            scenario.savings > 0 ? "text-green-600" : "text-slate-600"
+                          )}>
+                            {scenario.premium}
+                </p>
+              </div>
+                    </div>
+                    </div>
+                  </Card>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+          
+          {/* Verification and trust elements */}
+          <div className="bg-slate-100 rounded-lg border border-slate-200 p-4">
+            <div className="flex items-start gap-3">
+              <div className="bg-white p-2 rounded-full mt-1">
+                <LockIcon className="h-4 w-4 text-slate-700" />
               </div>
               <div>
-                <h4 className="font-semibold text-blue-800 mb-2">Protection Activation</h4>
-                <p className="text-sm text-blue-700 mb-3">
-                  {optionType === "put" 
-                    ? `Your protection becomes valuable when Bitcoin price falls below $${parseInt(protectedValue).toLocaleString()}.` 
-                    : `Your price lock becomes valuable when Bitcoin price rises above $${parseInt(protectedValue).toLocaleString()}.`}
-                </p>
-                <p className="text-sm text-blue-700">
-                  {optionType === "put"
-                    ? "When activated, you can sell your Bitcoin at the protected value, regardless of how low the market price falls."
-                    : "When activated, you can purchase Bitcoin at your locked price, regardless of how high the market price rises."
-                  }
+                <h4 className="font-medium text-slate-700 mb-1">Secure Blockchain Protection</h4>
+                <p className="text-sm text-slate-600 mb-3">
+                  Your protection is secured by smart contracts on the Stacks blockchain, with funds held in escrow until activation or expiration.
                 </p>
                 
-                {/* Added visual trust indicator */}
-                <div className="mt-4 flex items-center p-2 bg-white rounded-lg border border-blue-200">
-                  <Badge variant="outline" className="mr-2 border-blue-300 bg-blue-50">
-                    <BadgeCheck className="h-3 w-3 mr-1 text-blue-600" />
-                    <span className="text-blue-700">Guaranteed</span>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="bg-white text-xs py-1 px-2 rounded-full">
+                    <BadgeCheck className="h-3 w-3 mr-1 text-slate-600" />
+                    Verified
                   </Badge>
-                  <p className="text-xs text-blue-700">
-                    Your protection is backed by smart contracts on the Stacks blockchain
-                  </p>
+                  <Badge variant="outline" className="bg-white text-xs py-1 px-2 rounded-full">
+                    <ShieldCheck className="h-3 w-3 mr-1 text-slate-600" />
+                    Protected
+                  </Badge>
+                  <Badge variant="outline" className="bg-white text-xs py-1 px-2 rounded-full">
+                    <Calendar className="h-3 w-3 mr-1 text-slate-600" />
+                    {duration === "halving" ? "Until Halving" : `${duration} Days`}
+                  </Badge>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          {/* Risk Warning - Improved Visual Design */}
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3 mb-6 shadow-sm">
-            <div className="bg-amber-100 p-1.5 rounded-full">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-amber-800 mb-1">Important Risk Information</h4>
-              <p className="text-xs text-amber-700">
-                Bitcoin protection involves financial risk. The maximum cost is limited to your premium payment. 
-                Protection is non-custodial and does not require depositing your Bitcoin.
-              </p>
-              
-              {/* Added "Learn More" option */}
-              <Button variant="link" size="sm" className="p-0 h-auto mt-1 text-amber-700 text-xs">
-                <InfoIcon className="h-3 w-3 mr-1" />
-                Learn more about risks
-              </Button>
-            </div>
-          </div>
-          
-          {/* Added Policy Guarantee Section */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-8 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="bg-green-100 p-1.5 rounded-full mr-3">
-                  <BadgeCheck className="h-5 w-5 text-green-600" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-green-800">The Bitcoin Insurance Company Protection Guarantee</h4>
-                  <p className="text-xs text-green-700 mt-0.5">
-                    Your protection is guaranteed by smart contracts on the Stacks blockchain
-                  </p>
-                </div>
-              </div>
-              <Badge variant="outline" className="border-green-300 bg-green-100 text-green-800">
-                Verified Policy
-              </Badge>
             </div>
           </div>
         </div>
       </Card>
       
-      {/* Enhanced Protection Scenarios with Interactive Elements */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium flex items-center gap-2">
-            <Shield className="h-5 w-5 text-gray-700" />
-            <span>Protection Scenarios</span>
-          </h3>
-          
-          {/* Enhanced Simulation Button */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="flex items-center gap-2 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-              onClick={togglePnlPanel}
-            >
-              <BarChart className="h-4 w-4" />
-              <span>Detailed Simulation</span>
-            </Button>
-          </motion.div>
+      {/* Important disclaimer */}
+      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
+        <div className="bg-amber-100 p-1.5 rounded-full mt-0.5">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
         </div>
-        
-        <Tabs defaultValue="cards" className="w-full">
-          <TabsList className="mb-4 bg-gray-100">
-            <TabsTrigger value="cards" className="data-[state=active]:bg-white">Visual Cards</TabsTrigger>
-            <TabsTrigger value="table" className="data-[state=active]:bg-white">Table View</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="cards" className="space-y-4">
-            {scenarios.map((scenario, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ y: -2 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                onMouseEnter={() => setActiveScenario(index)}
-              >
-                <Card className={`p-5 border overflow-hidden ${
-                  scenario.color === 'green' ? 'border-l-4 border-l-green-500' : 
-                  scenario.color === 'blue' ? 'border-l-4 border-l-blue-500' : 'border'
-                } ${activeScenario === index ? 'ring-1 ring-blue-200 shadow-md' : 'shadow-sm'}`}>
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-full ${
-                      scenario.color === 'gray' ? 'bg-gray-100 text-gray-700' : 
-                      scenario.color === 'blue' ? 'bg-blue-100 text-blue-700' : 
-                      'bg-green-100 text-green-700'
-                    }`}>
-                      {scenario.icon}
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start mb-3">
-                        <h4 className="font-semibold text-gray-900">{scenario.title}</h4>
-                        <Badge 
-                          className={`${
-                            scenario.color === 'gray' ? "bg-gray-100 text-gray-800" : 
-                            scenario.color === 'blue' ? "bg-blue-100 text-blue-800" : 
-                            "bg-green-100 text-green-800"
-                          } shadow-sm`}
-                        >
-                          {scenario.outcome}
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4 mb-3">
-                        <div className="bg-gray-50 p-2 rounded-md">
-                          <p className="text-xs text-gray-500 mb-1">BTC Price</p>
-                          <p className="font-medium">${scenario.btcPrice.toLocaleString()}</p>
-                        </div>
-                        <div className="bg-gray-50 p-2 rounded-md">
-                          <p className="text-xs text-gray-500 mb-1">Net Result</p>
-                          <p className={`font-medium ${scenario.savings > 0 ? "text-green-600" : "text-red-600"}`}>
-                            {scenario.savings > 0 ? '+' : ''}${scenario.savings.toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <p className="text-sm text-gray-600">
-                        {scenario.description}
+        <div>
+          <h4 className="font-medium text-amber-800 mb-1">Important Information</h4>
+          <p className="text-sm text-amber-700">
+            By activating protection, you agree to the terms and conditions of the Bitcoin Protection Policy. Premium payments are non-refundable. You maintain full ownership of your Bitcoin throughout the protection period.
                       </p>
                     </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </TabsContent>
-          
-          <TabsContent value="table">
-            <Card className="overflow-hidden border shadow-sm">
-              <Table>
-                <TableHeader className="bg-gray-50">
-                  <TableRow>
-                    <TableHead className="font-medium">Scenario</TableHead>
-                    <TableHead className="font-medium">Bitcoin Price</TableHead>
-                    <TableHead className="font-medium">Outcome</TableHead>
-                    <TableHead className="text-right font-medium">Net Result</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {scenarios.map((scenario, index) => (
-                    <TableRow key={index} className="hover:bg-gray-50">
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <div className={`p-1 rounded-full ${
-                            scenario.color === 'gray' ? 'bg-gray-100' : 
-                            scenario.color === 'blue' ? 'bg-blue-100' : 
-                            'bg-green-100'
-                          }`}>
-                            {scenario.icon}
-                          </div>
-                          {scenario.title}
-                        </div>
-                      </TableCell>
-                      <TableCell>${scenario.btcPrice.toLocaleString()}</TableCell>
-                      <TableCell>
-                        <Badge 
-                          className={`${
-                            scenario.color === 'gray' ? "bg-gray-100 text-gray-800" : 
-                            scenario.color === 'blue' ? "bg-blue-100 text-blue-800" : 
-                            "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {scenario.outcome}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span className={`font-medium ${scenario.savings > 0 ? "text-green-600" : "text-red-600"}`}>
-                          {scenario.savings > 0 ? '+' : ''}${Math.abs(scenario.savings).toFixed(2)}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-          </TabsContent>
-        </Tabs>
       </div>
     </div>
   );

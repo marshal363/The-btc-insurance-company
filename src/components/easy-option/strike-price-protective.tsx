@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMarketStore } from "@/store/market-store";
-import { Shield, ShieldCheck, AlertOctagon, Rocket, CircleDollarSign, ChevronDown, ChevronUp, BadgeCheck, Check, ArrowDown } from "lucide-react";
+import { Shield, ShieldCheck, AlertOctagon, Rocket, CircleDollarSign, ChevronDown, ChevronUp, BadgeCheck, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,9 @@ type StrategyOption = {
   description: string;
   icon: React.ReactNode;
   premiumLevel: number;
-  color: string;
+  bgColor: string;
+  textColor: string;
+  headerBg: string;
   detail: string;
 };
 
@@ -48,7 +50,9 @@ export function ProtectedValue({
           description: "Lock in today's exact Bitcoin value",
           icon: <ShieldCheck className="w-5 h-5" />,
           premiumLevel: 4,
-          color: "bg-blue-100 text-blue-700",
+          bgColor: "bg-slate-200",
+          textColor: "text-slate-900",
+          headerBg: "bg-slate-900",
           detail: "Activates immediately with any price decrease"
         },
         {
@@ -59,7 +63,9 @@ export function ProtectedValue({
           description: "Allow for 10% natural movement before protection activates",
           icon: <Shield className="w-5 h-5" />,
           premiumLevel: 3,
-          color: "bg-green-100 text-green-700",
+          bgColor: "bg-slate-200/70",
+          textColor: "text-slate-900",
+          headerBg: "bg-slate-800",
           detail: "Recommended for most Bitcoin holders"
         },
         {
@@ -70,7 +76,9 @@ export function ProtectedValue({
           description: "Balance between protection and premium cost",
           icon: <CircleDollarSign className="w-5 h-5" />,
           premiumLevel: 2,
-          color: "bg-yellow-100 text-yellow-700",
+          bgColor: "bg-slate-100",
+          textColor: "text-slate-800",
+          headerBg: "bg-slate-700",
           detail: "Lower premium, activates after moderate drops"
         },
         {
@@ -81,7 +89,9 @@ export function ProtectedValue({
           description: "Protection against major market downturns only",
           icon: <AlertOctagon className="w-5 h-5" />,
           premiumLevel: 1,
-          color: "bg-orange-100 text-orange-700",
+          bgColor: "bg-slate-100/70",
+          textColor: "text-slate-700",
+          headerBg: "bg-slate-600",
           detail: "Lowest premium, ideal for long-term HODLers"
         }
       ];
@@ -96,7 +106,9 @@ export function ProtectedValue({
           description: "Lock in today's exact Bitcoin price",
           icon: <ShieldCheck className="w-5 h-5" />,
           premiumLevel: 4,
-          color: "bg-blue-100 text-blue-700",
+          bgColor: "bg-slate-200",
+          textColor: "text-slate-900",
+          headerBg: "bg-slate-900",
           detail: "Guarantees today's price regardless of increases"
         },
         {
@@ -107,7 +119,9 @@ export function ProtectedValue({
           description: "Allow for 10% price increase with lower fee",
           icon: <Shield className="w-5 h-5" />,
           premiumLevel: 3,
-          color: "bg-green-100 text-green-700",
+          bgColor: "bg-slate-200/70",
+          textColor: "text-slate-900",
+          headerBg: "bg-slate-800",
           detail: "Recommended for most future buyers"
         },
         {
@@ -118,7 +132,9 @@ export function ProtectedValue({
           description: "Balance between guarantee and fee cost",
           icon: <CircleDollarSign className="w-5 h-5" />,
           premiumLevel: 2,
-          color: "bg-yellow-100 text-yellow-700",
+          bgColor: "bg-slate-100",
+          textColor: "text-slate-800",
+          headerBg: "bg-slate-700",
           detail: "Lower fee, activates after moderate increases"
         },
         {
@@ -129,7 +145,9 @@ export function ProtectedValue({
           description: "Protection against major bull runs only",
           icon: <Rocket className="w-5 h-5" />,
           premiumLevel: 1,
-          color: "bg-orange-100 text-orange-700",
+          bgColor: "bg-slate-100/70",
+          textColor: "text-slate-700",
+          headerBg: "bg-slate-600",
           detail: "Lowest fee, ideal for long-horizon buyers"
         }
       ];
@@ -150,7 +168,7 @@ export function ProtectedValue({
     <div>
       <div className="flex items-baseline justify-between mb-4">
         <h2 className="text-2xl font-bold">How Much Protection Do You Need?</h2>
-        <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">
+        <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full">
           Step 2 of 6
         </Badge>
       </div>
@@ -160,11 +178,11 @@ export function ProtectedValue({
       </p>
       
       {/* Prominently displayed current Bitcoin price with enhanced design */}
-      <div className="text-center mb-8 p-5 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200 shadow-sm">
-        <div className="flex items-center justify-center gap-2 text-gray-600 mb-1">
-          <Badge variant="outline" className="bg-white">Live Market Price</Badge>
+      <div className="text-center mb-8 p-5 bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg border border-slate-200 shadow-sm">
+        <div className="flex items-center justify-center gap-2 text-slate-600 mb-1">
+          <Badge variant="outline" className="bg-white border-slate-200">Live Market Price</Badge>
         </div>
-        <p className="text-3xl font-bold text-gray-800">${btcPrice.toLocaleString()}</p>
+        <p className="text-3xl font-bold text-slate-800">${btcPrice.toLocaleString()}</p>
       </div>
       
       {/* Strategy Selection with Enhanced Visuals */}
@@ -172,9 +190,6 @@ export function ProtectedValue({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {strategyOptions.map((strategy) => {
             const isSelected = protectionStrategy === strategy.id;
-            const colorClass = strategy.id === "maximum" ? "blue" : 
-                              strategy.id === "standard" ? "green" : 
-                              strategy.id === "flexible" ? "yellow" : "orange";
             
             return (
               <motion.div
@@ -184,62 +199,63 @@ export function ProtectedValue({
               >
                 <Card 
                   className={cn(
-                    "overflow-hidden transition-all cursor-pointer group border-2 p-0 shadow-sm hover:shadow-md relative",
+                    "overflow-hidden transition-all cursor-pointer group border p-0 shadow-sm hover:shadow-md relative",
                     isSelected 
-                      ? `ring-1 ring-${colorClass}-600 shadow-md border-${colorClass}-300`
-                      : "hover:border-gray-300 border-transparent"
+                      ? "ring-1 ring-slate-700 shadow-md border-slate-700/20"
+                      : "hover:border-slate-300 border-transparent"
                   )}
                   onClick={() => handleStrategySelect(strategy)}
                 >
                   {/* Top ribbon */}
                   {isSelected && (
                     <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden">
-                      <div className={`absolute transform rotate-45 bg-${colorClass}-600 text-white text-xs font-bold py-1 right-[-35px] top-[20px] w-[140px] text-center shadow-sm`}>
+                      <div className="absolute transform rotate-45 bg-slate-900 text-white text-xs font-bold py-1 right-[-35px] top-[20px] w-[140px] text-center shadow-sm">
                         Selected
                       </div>
                     </div>
                   )}
                   
-                  <div className="h-full w-full overflow-hidden relative">
-                    {/* Enhanced header with gradient background */}
-                    <div className={`bg-gradient-to-r from-${colorClass}-600 to-${colorClass}-700 p-4 text-white`}>
-                      <div className="flex items-center gap-3">
-                        <div className="bg-white p-2 rounded-full">
+                  <div className="h-full w-full overflow-hidden relative rounded-lg">
+                    {/* Card header with consistent styling */}
+                    <div className={`${strategy.headerBg} text-white p-6 flex flex-col items-center justify-center`}>
+                      <div className="bg-white p-3 rounded-full mb-4 relative">
+                        <div className="text-slate-700">
                           {strategy.icon}
                         </div>
-                        <div>
-                          <h3 className="text-lg font-bold">{strategy.name}</h3>
-                          <p className={`text-${colorClass}-100 text-sm`}>
-                            {optionType === "put" ? 
-                              `${strategy.percentage}% of current value` : 
-                              `${strategy.percentage}% of current price`}
-                          </p>
-                        </div>
+                        {isSelected && (
+                          <span className="absolute inset-0 rounded-full bg-blue-400/30 animate-ping"></span>
+                        )}
                       </div>
+                      <h3 className="text-xl font-bold mb-1">{strategy.name}</h3>
+                      <p className="text-slate-300 text-sm">
+                        {optionType === "put" ? 
+                          `${strategy.percentage}% of current value` : 
+                          `${strategy.percentage}% of current price`}
+                      </p>
                     </div>
                     
-                    <div className="p-5">
+                    <div className="p-6">
                       <div className="mb-5">
                         <p className="text-gray-700 mb-3">{strategy.description}</p>
                         
                         {/* Protected Value Visualization */}
-                        <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-4">
+                        <div className="bg-slate-100 p-4 rounded-lg border border-slate-200 mb-4">
                           <div className="flex justify-between items-center mb-2">
-                            <p className="text-sm font-medium text-gray-700">Protected Value</p>
+                            <p className="text-sm font-medium text-slate-700">Protected Value</p>
                             <p className="text-lg font-bold">${strategy.value.toLocaleString()}</p>
                           </div>
                           
                           {/* Visual price bar */}
-                          <div className="h-5 bg-gray-200 rounded-full overflow-hidden relative">
+                          <div className="h-5 bg-slate-200 rounded-full overflow-hidden relative">
                             <div 
-                              className={`absolute h-full bg-gradient-to-r from-${colorClass}-500 to-${colorClass}-600`}
+                              className={`absolute h-full ${strategy.headerBg}`}
                               style={{ 
                                 width: `${optionType === "put" 
                                   ? 100 * (strategy.value / (btcPrice * 1.5))
                                   : 100 * (strategy.value / (btcPrice * 1.5))}%` 
                               }}
                             />
-                            <div className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                            <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
                               {optionType === "put" ? "Protected at this price" : "Locked at this price"}
                             </div>
                           </div>
@@ -247,34 +263,41 @@ export function ProtectedValue({
                         
                         {/* Premium Indicator */}
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium text-gray-700">Premium Cost</p>
-                          <div className="flex items-center gap-1">
-                            {Array.from({ length: 4 }).map((_, i) => (
+                          <p className="text-sm font-medium text-slate-700">Premium Cost</p>
+                          <div className="flex items-center">
+                            {Array(4).fill(0).map((_, i) => (
                               <div 
                                 key={i} 
-                                className={`h-3 w-3 rounded-full ${
+                                className={`w-2 h-2 rounded-full mx-0.5 ${
                                   i < strategy.premiumLevel 
-                                    ? `bg-${colorClass}-600` 
-                                    : 'bg-gray-200'
+                                    ? 'bg-slate-700' 
+                                    : 'bg-slate-200'
                                 }`} 
                               />
                             ))}
                           </div>
                         </div>
+                        
+                        {/* Strategy Details */}
+                        <div className={`${strategy.bgColor} p-3 rounded-lg border border-slate-200 mt-4`}>
+                          <div className="flex items-start gap-2">
+                            <BadgeCheck className={`h-4 w-4 ${strategy.textColor} mt-0.5`} />
+                            <p className={`text-xs ${strategy.textColor}`}>{strategy.detail}</p>
+                          </div>
+                        </div>
                       </div>
                       
-                      {/* Detail box at the bottom */}
-                      <div className={`bg-${colorClass}-50 p-3 rounded-lg border border-${colorClass}-100 flex items-start gap-2`}>
-                        <BadgeCheck className="h-4 w-4 mt-0.5" />
-                        <p className="text-sm">{strategy.detail}</p>
+                      <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-200">
+                        {isSelected ? (
+                          <Badge className="bg-slate-900 text-white px-2 py-1 text-xs shadow-sm rounded-full">
+                            <Check className="h-3 w-3 mr-1" /> Selected
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity rounded-full border-slate-300">
+                            Select
+                          </Badge>
+                        )}
                       </div>
-                      
-                      {/* Selected badge - positioned at bottom right */}
-                      {isSelected && (
-                        <Badge className="bg-blue-600 text-white px-2 py-1 text-xs font-medium flex items-center gap-1 absolute bottom-3 right-3 shadow-sm">
-                          <Check className="h-3 w-3" /> Selected
-                        </Badge>
-                      )}
                     </div>
                   </div>
                 </Card>
@@ -284,22 +307,22 @@ export function ProtectedValue({
         </div>
       </div>
       
-      {/* Enhanced education section with consistent styling */}
-      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200 shadow-sm">
+      {/* Education Section with consistent styling */}
+      <div className="bg-gradient-to-r from-slate-100 to-slate-200 rounded-lg border border-slate-300 shadow-sm">
         <button 
           className="w-full p-4 flex items-center justify-between text-left focus:outline-none"
           onClick={() => setIsEducationExpanded(!isEducationExpanded)}
         >
           <div className="flex items-center gap-2">
-            <div className="bg-blue-600 p-2 rounded-full">
+            <div className="bg-slate-800 p-2 rounded-full">
               <Shield className="w-4 h-4 text-white" />
             </div>
-            <h3 className="text-sm font-semibold text-blue-800">Understanding Protection Levels</h3>
+            <h3 className="text-sm font-semibold text-slate-800">How Protection Value Works</h3>
           </div>
           {isEducationExpanded ? (
-            <ChevronUp className="w-4 h-4 text-blue-600" />
+            <ChevronUp className="w-4 h-4 text-slate-600" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-blue-600" />
+            <ChevronDown className="w-4 h-4 text-slate-600" />
           )}
         </button>
         
@@ -308,41 +331,42 @@ export function ProtectedValue({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className="p-4 pt-0 border-t border-blue-200"
+            className="p-4 pt-0 border-t border-slate-300"
           >
-            <p className="text-sm text-blue-700 mb-3">
-              Your protection level determines at what price your Bitcoin protection activates.
+            <p className="text-sm text-slate-700 mb-3">
+              {optionType === "put" 
+                ? "Your protected value determines at what price your Bitcoin protection activates. When the market price falls below this value, you can claim the difference."
+                : "Your locked purchase price determines the maximum you'll pay for Bitcoin regardless of market increases. If the price rises above this value, you can purchase at your locked price."}
             </p>
-            
-            <ul className="space-y-2">
+            <ul className="text-sm text-slate-700 space-y-2">
               <li className="flex items-start gap-2">
                 <div className="bg-white p-1 rounded-full mt-0.5">
-                  <ArrowDown className="h-3 w-3 text-blue-600" />
+                  <Check className="h-3 w-3 text-slate-600" />
                 </div>
-                <span className="text-sm text-blue-700">Higher protection levels activate sooner but cost more</span>
+                <span>Higher protection levels provide more security but cost more in premium</span>
               </li>
               <li className="flex items-start gap-2">
                 <div className="bg-white p-1 rounded-full mt-0.5">
-                  <ArrowDown className="h-3 w-3 text-blue-600" />
+                  <Check className="h-3 w-3 text-slate-600" />
                 </div>
-                <span className="text-sm text-blue-700">Lower protection levels are more affordable but activate only after larger price drops</span>
+                <span>Lower protection levels cost less but activate only after larger price movements</span>
               </li>
               <li className="flex items-start gap-2">
                 <div className="bg-white p-1 rounded-full mt-0.5">
-                  <Check className="h-3 w-3 text-blue-600" />
+                  <Check className="h-3 w-3 text-slate-600" />
                 </div>
-                <span className="text-sm text-blue-700">Once activated, your protection guarantees the protected value regardless of how far prices fall</span>
+                <span>Standard Protection (90%) offers a balanced approach for most users</span>
               </li>
             </ul>
             
             {/* Added trust indicator */}
-            <div className="mt-4 flex items-center p-2 bg-white rounded-lg border border-blue-200">
-              <Badge variant="outline" className="mr-2 border-blue-300 bg-blue-50">
-                <BadgeCheck className="h-3 w-3 mr-1 text-blue-600" />
-                <span className="text-blue-700">Smart Contract Protected</span>
+            <div className="mt-4 flex items-center p-2 bg-white rounded-lg border border-slate-300">
+              <Badge variant="outline" className="mr-2 border-slate-300 bg-slate-100 rounded-full">
+                <BadgeCheck className="h-3 w-3 mr-1 text-slate-600" />
+                <span className="text-slate-700">Smart Contracts</span>
               </Badge>
-              <p className="text-xs text-blue-700">
-                Your protection is guaranteed through immutable blockchain contracts
+              <p className="text-xs text-slate-700">
+                Your protection level is precisely encoded in secure blockchain contracts
               </p>
             </div>
           </motion.div>

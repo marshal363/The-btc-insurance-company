@@ -51,7 +51,6 @@ const logWalletIssue = () => {
 };
 
 export function WalletConnect({
-  variant = "default",
   size = "default",
   className = "",
 }: WalletConnectProps) {
@@ -188,15 +187,15 @@ export function WalletConnect({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
-            variant={variant === "default" ? "outline" : variant}
+            variant="outline"
             size={size}
-            className={`${className} flex items-center gap-2 bg-green-50 border-green-200 text-green-700 hover:bg-green-100 hover:text-green-800 focus:ring-2 focus:ring-green-500 focus:ring-offset-1`}
+            className={`${className} flex items-center gap-2 rounded-full bg-green-50 border-green-200 text-green-700 hover:bg-green-100 hover:text-green-800 focus:ring-2 focus:ring-green-500 focus:ring-offset-1`}
             aria-label="Connected wallet options"
             data-testid="wallet-connected-button"
           >
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse mr-1" aria-hidden="true"></div>
             {formattedAddress || "Connected"}
-            <ChevronDown className="h-4 w-4 opacity-70" aria-hidden="true" />
+            <ChevronDown className="h-4 w-4 opacity-70 ml-1" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
@@ -243,9 +242,9 @@ export function WalletConnect({
   console.log('[WalletConnect] Rendering connect button');
   return (
     <Button
-      variant={variant}
+      variant="default"
       size={size}
-      className={`${className} flex items-center gap-2`}
+      className={`${className} flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-900`}
       onClick={handleConnect}
       disabled={connecting}
       data-testid="wallet-connect-button"
@@ -254,7 +253,7 @@ export function WalletConnect({
         "Connecting..."
       ) : (
         <>
-          <Wallet className="h-4 w-4 mr-1" />
+          <Wallet className="h-4 w-4 mr-1.5" />
           Connect Wallet
         </>
       )}
