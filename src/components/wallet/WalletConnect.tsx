@@ -244,7 +244,7 @@ export function WalletConnect({
     <Button
       variant="default"
       size={size}
-      className={`${className} flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-900`}
+      className={`${className} hidden sm:flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-900`}
       onClick={handleConnect}
       disabled={connecting}
       data-testid="wallet-connect-button"

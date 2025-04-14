@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { HomeIcon, BarChartIcon, ArrowRightLeftIcon } from "lucide-react";
+import { HomeIcon, BarChartIcon } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 
 const NavItems = [
   {
@@ -12,14 +13,14 @@ const NavItems = [
     icon: HomeIcon,
   },
   {
+    name: "Protection Center",
+    href: "/easy-option",
+    useLogoIcon: true,
+  },
+  {
     name: "Income Center",
     href: "/income-center",
     icon: BarChartIcon,
-  },
-  {
-    name: "Protection Center",
-    href: "/easy-option",
-    icon: ArrowRightLeftIcon,
   },
 ];
 
@@ -47,7 +48,21 @@ export function BottomNav() {
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <item.icon className={cn("h-5 w-5 transition-all", isActive && "text-primary")} />
+              {item.useLogoIcon ? (
+                <div className="flex items-center justify-center transition-all h-5">
+                  <Logo 
+                    variant={isActive ? "icon-only" : "icon2"} 
+                    className={cn(
+                      isActive ? "" : "text-muted-foreground",
+                      // Adjust sizing and positioning for the icon-only variant
+                      isActive && "scale-[0.85] -translate-y-[1px]"
+                    )} 
+                    disableLink={true}
+                  />
+                </div>
+              ) : (
+                item.icon && <item.icon className={cn("h-5 w-5 transition-all", isActive && "text-primary")} />
+              )}
               <span className="text-xs font-medium">{item.name}</span>
               
               {/* Active indicator */}

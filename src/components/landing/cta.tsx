@@ -124,7 +124,7 @@ export function CTA({ activePersona }: CTAProps) { // Add activePersona prop
                   size="lg" 
                   className={`rounded-full w-full ${isProtection ? '' : 'bg-amber-500 hover:bg-amber-600'}`}
                 >
-                  <Link href="/home">
+                  <Link href={isProtection ? "/easy-option" : "/income-center"}>
                     <span>Launch Testing Environment</span>
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BarChart4, Shield, BadgeCheck, Settings, ChevronDown } from "lucide-react";
+import { BarChart4, Shield, BadgeCheck, Settings, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
@@ -69,6 +69,9 @@ export function PnlSimulation({
   
   // Recalculate chart data when simulation values change
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  
+  // For customization collapsible
+  const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   
   // Calculate break-even price
   const breakEvenPrice = 
@@ -266,79 +269,164 @@ export function PnlSimulation({
     : `If BTC rises above $${formatNumber(simulationValues.strikePrice)}, use your price lock to buy at the locked price.`;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-baseline justify-between mb-4">
-        <h3 className="text-xl font-bold">Protection Value Simulator</h3>
-          <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full">
-            Step 5 of 6
-          </Badge>
+    <div className="space-y-5">
+      {/* Badge only without duplicate title */}
+      <div className="flex justify-end">
+        <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full">
+          Step 5 of 6
+        </Badge>
       </div>
       
       <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
         {/* Header with key info */}
-        <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="bg-slate-800 p-2 rounded-full">
+        <div className="p-4 border-b border-slate-200">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-slate-800 p-2 rounded-full flex-shrink-0">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
               <h4 className="font-semibold text-slate-800">Protected Value:</h4>
-              <p className="text-xl font-bold">{formatCurrency(simulationValues.strikePrice)}</p>
+              <p className="text-2xl font-bold">{formatCurrency(simulationValues.strikePrice)}</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
+          {/* Customization option moved here */}
+          <div className="mb-4">
+            <Collapsible 
+              open={isCustomizeOpen} 
+              onOpenChange={setIsCustomizeOpen}
+              className="border border-slate-200 rounded-md"
+            >
+              <CollapsibleTrigger className="w-full p-2 flex items-center justify-between text-left focus:outline-none bg-slate-50 rounded-md hover:bg-slate-100">
+                <div className="flex items-center gap-2">
+                  <div className="bg-white p-1.5 rounded-full flex-shrink-0 border border-slate-200">
+                    <Settings className="w-3.5 h-3.5 text-slate-700" />
+                  </div>
+                  <span className="text-sm font-medium text-slate-800">Customize Value</span>
+                </div>
+                {isCustomizeOpen ? 
+                  <ChevronUp className="w-4 h-4 text-slate-600 flex-shrink-0" /> : 
+                  <ChevronDown className="w-4 h-4 text-slate-600 flex-shrink-0" />
+                }
+              </CollapsibleTrigger>
+              
+              <CollapsibleContent>
+                <div className="p-3 pt-3 border-t border-slate-200">
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="text-xs text-slate-600 mb-1 block">Protected Value (Strike Price)</Label>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                        <div className="flex-1">
+                          <Slider
+                            value={[getStrikePricePercentage()]} 
+                            min={0} 
+                            max={100}
+                            step={1}
+                            onValueChange={handleStrikePriceSlider}
+                            className="my-2"
+                          />
+                        </div>
+                        <div className="w-full sm:w-24">
+                          <Input
+                            type="number"
+                            value={simulationValues.strikePrice}
+                            onChange={(e) => handleInputChange(e, 'strikePrice')}
+                            className="text-right border-slate-300"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs text-slate-600 mb-1 block">BTC Amount</Label>
+                        <Input
+                          type="number"
+                          value={simulationValues.amount}
+                          onChange={(e) => handleInputChange(e, 'amount')}
+                          step="0.01"
+                          min="0.01"
+                          className="border-slate-300"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-slate-600 mb-1 block">Premium (USD)</Label>
+                        <Input
+                          type="number"
+                          value={simulationValues.premium}
+                          onChange={(e) => handleInputChange(e, 'premium')}
+                          step="1"
+                          min="1"
+                          className="border-slate-300"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
             <Button 
               variant="outline" 
               size="sm" 
               onClick={resetSimulation}
-              className="h-9"
+              className="h-9 flex-1 sm:flex-none"
             >
               Reset
             </Button>
             
-              <Button 
-                size="sm"
-              className="bg-slate-900 text-white hover:bg-slate-800 h-9"
-              >
-                <BarChart4 className="h-4 w-4 mr-2" />
+            <Button 
+              size="sm"
+              className="bg-slate-900 text-white hover:bg-slate-800 h-9 flex-1 sm:flex-none"
+            >
+              <BarChart4 className="h-4 w-4 mr-2" />
               Detailed Analysis
-              </Button>
+            </Button>
           </div>
         </div>
         
         {/* Main chart */}
-        <div className="p-4 border-b border-slate-200">
-          <div className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                  data={chartData}
-                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                >
-                  <defs>
-                    <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
+        <div className="p-3 sm:p-4 border-b border-slate-200">
+          <div className="h-64 sm:h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={chartData}
+                margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
+              >
+                <defs>
+                  <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#1e293b" stopOpacity={0.2} />
                     <stop offset="95%" stopColor="#1e293b" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="lossGradient" x1="0" y1="0" x2="0" y2="1">
+                  </linearGradient>
+                  <linearGradient id="lossGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#9f1239" stopOpacity={0.2} />
                     <stop offset="95%" stopColor="#9f1239" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis 
+                <XAxis 
                   dataKey="formattedPrice" 
                   scale="band" 
-                  tick={{ fontSize: 12, fill: '#64748b' }}
-                  tickFormatter={(value) => value}
-                  />
-                  <YAxis 
+                  tick={{ fontSize: 10, fill: '#64748b' }}
+                  tickFormatter={(value) => {
+                    // Shorter labels on mobile by trimming dollar sign and showing fewer ticks
+                    const trimmed = value.replace('$', '');
+                    return window.innerWidth < 640 ? 
+                      trimmed.length > 6 ? trimmed.substring(0, 6) + '..' : trimmed
+                      : value;
+                  }}
+                  interval={window.innerWidth < 640 ? 1 : 0} // Show fewer X-axis labels on mobile
+                />
+                <YAxis 
                   tickFormatter={(value) => `$${Math.abs(value) >= 1000 ? (value / 1000).toFixed(1) + 'k' : value}`} 
-                  tick={{ fontSize: 12, fill: '#64748b' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
+                  tick={{ fontSize: 10, fill: '#64748b' }}
+                  width={40}
+                />
+                <Tooltip content={<CustomTooltip />} />
                 <ReferenceLine y={0} stroke="#64748b" strokeWidth={2} />
-                  <ReferenceLine 
+                <ReferenceLine 
                   x={formatCurrency(currentPrice)} 
                   stroke="#334155" 
                   strokeWidth={1.5} 
@@ -347,35 +435,35 @@ export function PnlSimulation({
                     value: 'Current Price',
                     position: 'insideBottomRight',
                     fill: '#334155',
-                    fontSize: 12
+                    fontSize: 10
                   }}
-                  />
-                  <ReferenceLine 
+                />
+                <ReferenceLine 
                   x={formatCurrency(simulationValues.strikePrice)} 
                   stroke="#1e40af" 
                   strokeWidth={1.5} 
-                    label={{ 
+                  label={{ 
                     value: 'Protected Value',
                     position: 'insideTopRight',
                     fill: '#1e40af',
-                    fontSize: 12
+                    fontSize: 10
                   }}
                 />
-                  <Area 
-                    type="monotone" 
-                    dataKey="pnl" 
+                <Area 
+                  type="monotone" 
+                  dataKey="pnl" 
                   stroke={optionType === "put" ? "#1e293b" : "#9f1239"} 
-                    strokeWidth={2} 
+                  strokeWidth={2} 
                   fill={optionType === "put" ? "url(#profitGradient)" : "url(#lossGradient)"}
                   activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
         </div>
         
         {/* Key metrics and outcomes */}
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-4 grid grid-cols-1 gap-6">
           {/* Key metrics */}
           <div>
             <h4 className="font-semibold text-slate-800 mb-3">Key Values & Analysis</h4>
@@ -389,13 +477,13 @@ export function PnlSimulation({
                 <span className="font-medium">{formatCurrency(simulationValues.premium)}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-slate-100">
-                  <span className="text-sm text-slate-600">Amount Protected</span>
-                  <span className="font-medium">{formatNumber(simulationValues.amount, 8)} BTC</span>
-            </div>
+                <span className="text-sm text-slate-600">Amount Protected</span>
+                <span className="font-medium">{formatNumber(simulationValues.amount, 8)} BTC</span>
+              </div>
               <div className="flex justify-between py-2 border-b border-slate-100">
                 <span className="text-sm text-slate-600">Breakeven Price</span>
                 <span className="font-medium">{formatCurrency(breakEvenPrice)}</span>
-                </div>
+              </div>
               <div className="flex justify-between py-2 border-b border-slate-100">
                 <span className="text-sm text-slate-600">Max Possible Loss</span>
                 <span className="font-medium">{formatCurrency(maxLoss)}</span>
@@ -412,107 +500,28 @@ export function PnlSimulation({
           {/* Protection outcomes */}
           <div>
             <h4 className="font-semibold text-slate-800 mb-3">Protection Outcome</h4>
-            <Card className="p-4 border-slate-200 bg-slate-50">
+            <Card className="p-3 sm:p-4 border-slate-200 bg-slate-50">
               <ul className="space-y-4">
-                  <li className="flex items-start gap-2">
-                  <div className="bg-white rounded-full p-1 mt-0.5 border border-slate-200">
+                <li className="flex items-start gap-2">
+                  <div className="bg-white rounded-full p-1 mt-0.5 border border-slate-200 flex-shrink-0">
                     <BadgeCheck className="h-4 w-4 text-slate-700" />
-                    </div>
-                    <span className="text-sm">
+                  </div>
+                  <span className="text-xs sm:text-sm">
                     {outcomeTextWhenNoAction}
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                  <div className="bg-white rounded-full p-1 mt-0.5 border border-slate-200">
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="bg-white rounded-full p-1 mt-0.5 border border-slate-200 flex-shrink-0">
                     <BadgeCheck className="h-4 w-4 text-slate-700" />
-                    </div>
-                    <span className="text-sm">
+                  </div>
+                  <span className="text-xs sm:text-sm">
                     {outcomeTextWhenAction}
-                    </span>
-                  </li>
+                  </span>
+                </li>
               </ul>
             </Card>
-            </div>
-        </div>
-        
-        {/* Customization section - collapsed by default */}
-        <Collapsible className="border-t border-slate-200">
-          <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left focus:outline-none">
-            <div className="flex items-center gap-2">
-              <div className="bg-slate-100 p-2 rounded-full">
-                <Settings className="w-4 h-4 text-slate-700" />
-              </div>
-              <h3 className="text-sm font-semibold text-slate-800">Customize Simulation</h3>
           </div>
-            <ChevronDown className="w-4 h-4 text-slate-600" />
-          </CollapsibleTrigger>
-          
-          <CollapsibleContent>
-            <div className="p-4 pt-0 border-t border-slate-200">
-          <div className="space-y-4">
-              <div>
-              <Label className="text-xs text-slate-600 mb-1 block">Protected Value (Strike Price)</Label>
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <Slider
-                    value={[getStrikePricePercentage()]} 
-                    min={0} 
-                    max={100}
-                    step={1}
-                    onValueChange={handleStrikePriceSlider}
-                    className="my-3"
-                  />
-                </div>
-                <div className="w-24">
-                    <Input
-                      type="number"
-                      value={simulationValues.strikePrice}
-                      onChange={(e) => handleInputChange(e, 'strikePrice')}
-                    className="text-right border-slate-300"
-                    />
-                </div>
-                </div>
-              </div>
-              
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label className="text-xs text-slate-600 mb-1 block">BTC Amount</Label>
-                  <Input
-                    type="number"
-                    value={simulationValues.amount}
-                    onChange={(e) => handleInputChange(e, 'amount')}
-                    step="0.01"
-                    min="0.01"
-                  className="border-slate-300"
-                  />
-              </div>
-              <div>
-                <Label className="text-xs text-slate-600 mb-1 block">Premium (USD)</Label>
-                  <Input
-                    type="number"
-                    value={simulationValues.premium}
-                    onChange={(e) => handleInputChange(e, 'premium')}
-                    step="1"
-                    min="1"
-                  className="border-slate-300"
-                  />
-              </div>
-            </div>
-                
-                <div className="flex justify-end mt-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={resetSimulation}
-                    className="text-xs"
-                  >
-                    Reset to Defaults
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
+        </div>
       </div>
     </div>
   );

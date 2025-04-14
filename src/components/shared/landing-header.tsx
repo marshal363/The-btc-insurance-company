@@ -93,10 +93,10 @@ export const LandingHeader = ({ className, activePersona, setActivePersona }: La
         {/* Mobile-optimized right section with condensed price info and buttons */}
         <div className="flex items-center">
           <Link
-            href="/home"
+            href="/easy-option"
             className="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 md:h-11 px-5 md:px-6 py-2 shadow-sm"
           >
-            Launch
+            Get a Quote
           </Link>
         </div>
       </div>

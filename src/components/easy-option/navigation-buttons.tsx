@@ -26,7 +26,9 @@ export function NavigationButtons({
       {showBackButton ? (
         <Button 
           variant="outline" 
-          onClick={onBack}
+          onClick={() => {
+            onBack();
+          }}
           className="rounded-full"
         >
           Back
@@ -36,12 +38,19 @@ export function NavigationButtons({
       )}
       
       {showNextButton ? (
-        <Button onClick={onNext} className="rounded-full">
+        <Button 
+          onClick={() => {
+            onNext();
+          }} 
+          className="rounded-full"
+        >
           Continue
         </Button>
       ) : (
         <Button 
-          onClick={onActivate}
+          onClick={() => {
+            onActivate();
+          }}
           className="bg-primary rounded-full"
         >
           Activate Protection

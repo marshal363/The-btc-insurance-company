@@ -1,3 +1,4 @@
+import { SplashScreen } from "@/components/shared/SplashScreen";
 "use client";
 
 import { useMarketStore } from "@/store/market-store";
@@ -14,6 +15,7 @@ import { LearningResources } from "@/components/home/learning-resources";
 import { NetworkStatus } from "@/components/home/network-status";
 import { WalletConnect } from "@/components/wallet/WalletConnect";
 import { Logo } from "@/components/shared/Logo";
+import { SplashScreen } from "@/components/shared/SplashScreen";
 import { 
   Shield, 
   TrendingUp, 
@@ -695,10 +697,22 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Maximized Logo for screenshot/favicon creation */}
+      <div className="flex flex-col justify-center items-center py-16 bg-white mb-8 rounded-xl border">
+        <h2 className="text-xl font-semibold text-slate-600 mb-8">Logo for Favicon (Screenshot This)</h2>
+        <div className="bg-white p-10 rounded-xl border-4 border-amber-500 shadow-lg">
+          <Logo variant="icon-only" className="w-64 h-64" />
+        </div>
+        <p className="text-sm text-slate-500 mt-8">Take a screenshot of the icon above to convert to favicon</p>
+      </div>
+      
       {/* Regular logo at the bottom */}
       <div className="flex justify-center items-center mt-10 mb-4">
         <Logo variant="icon-only" />
       </div>
+      
+      {/* Render SplashScreen component */}
+      <SplashScreen />
     </div>
   );
 }

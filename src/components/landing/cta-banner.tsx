@@ -26,6 +26,13 @@ export function CTABanner({
   persona = 'neutral',
   className,
 }: CTABannerProps) {
+  // Determine the actual button href based on persona
+  const getActualButtonHref = () => {
+    if (persona === 'protection') return "/easy-option";
+    if (persona === 'income') return "/income-center";
+    return buttonHref; // Use the provided href for neutral persona
+  };
+
   const colorScheme = {
     protection: {
       gradientBg: "from-blue-50/70 to-blue-100/70 dark:from-blue-950/20 dark:to-blue-900/20",
@@ -54,6 +61,7 @@ export function CTABanner({
   };
 
   const scheme = colorScheme[persona];
+  const actualHref = getActualButtonHref();
   
   return (
     <motion.div 
@@ -87,7 +95,7 @@ export function CTABanner({
             size="lg"
             className={cn("w-full md:w-auto rounded-full", persona === 'income' && scheme.buttonClass)}
           >
-            <Link href={buttonHref}>
+            <Link href={actualHref}>
               <span>{buttonText}</span>
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

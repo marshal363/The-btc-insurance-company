@@ -46,7 +46,7 @@ const Hero47 = ({
       buttons: {
         primary: {
           text: "Secure My Bitcoin Value",
-          url: "/home",
+          url: "/easy-option",
         },
         secondary: {
           text: "See How It Works",
@@ -65,7 +65,7 @@ const Hero47 = ({
       buttons: {
         primary: {
           text: "Start Earning Today",
-          url: "/home",
+          url: "/income-center",
         },
         secondary: {
           text: "Explore Strategies",

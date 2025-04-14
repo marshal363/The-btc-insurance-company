@@ -194,9 +194,9 @@ export function PolicyPreview({
   
   return (
     <div>
-      <div className="flex items-baseline justify-between mb-4">
-        <h2 className="text-2xl font-bold">Bitcoin Protection Policy</h2>
-        <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full">
+      <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-4">
+        <h2 className="text-2xl font-bold mb-2 sm:mb-0">Bitcoin Protection Policy</h2>
+        <Badge variant="outline" className="bg-slate-100 border-slate-300 text-slate-700 rounded-full self-start sm:self-auto">
           Step 6 of 6
         </Badge>
       </div>
@@ -207,7 +207,7 @@ export function PolicyPreview({
       
       <Card className="border rounded-lg overflow-hidden mb-6 shadow-md bg-white">
         {/* Header section with slate styling */}
-        <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-5 border-b relative overflow-hidden">
+        <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 sm:p-5 border-b relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
               <pattern id="graph-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
@@ -217,14 +217,14 @@ export function PolicyPreview({
               <rect x="0" y="0" width="100%" height="100%" fill="url(#graph-pattern)" />
             </svg>
           </div>
-          <div className="flex items-center justify-between relative z-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between relative z-10 gap-3">
             <div className="flex items-center gap-3">
               <div className="bg-white p-2 rounded-full">
                 <ShieldCheck className="h-6 w-6 text-slate-700" />
               </div>
         <div>
                 <h3 className="text-xl font-bold text-white">Bitcoin Protection Policy</h3>
-                <p className="text-slate-300">
+                <p className="text-slate-300 text-sm sm:text-base">
                   {optionType === "put" ? policy.protectionLevel : "Price Lock Protection"}
                 </p>
               </div>
@@ -232,7 +232,7 @@ export function PolicyPreview({
             <Button 
               variant="outline" 
               size="sm" 
-              className="bg-white hover:bg-slate-100 text-slate-800 border-transparent"
+              className="bg-white hover:bg-slate-100 text-slate-800 border-transparent self-start sm:self-auto mt-2 sm:mt-0"
               onClick={togglePnlPanel}
             >
               <BarChart className="h-4 w-4 mr-2" />
@@ -241,18 +241,18 @@ export function PolicyPreview({
           </div>
         </div>
         
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {/* Grid layout for policy details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
             <div>
-              <h4 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
+              <h4 className="font-semibold text-slate-700 mb-3 sm:mb-4 flex items-center gap-2">
                 <Shield className="h-4 w-4 text-slate-600" />
                 Protection Parameters
               </h4>
               
-              <div className="space-y-4">
-                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
-                  <div className="flex justify-between items-center mb-2">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-3 sm:p-4">
+                  <div className="flex justify-between items-center mb-1 sm:mb-2">
                     <span className="text-sm text-slate-600">Protected Value</span>
                     <span className="font-medium">${parseFloat(protectedValue).toLocaleString()}</span>
                   </div>
@@ -261,8 +261,8 @@ export function PolicyPreview({
                   </div>
                 </div>
                 
-                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
-                  <div className="flex justify-between items-center mb-2">
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-3 sm:p-4">
+                  <div className="flex justify-between items-center mb-1 sm:mb-2">
                     <span className="text-sm text-slate-600">Bitcoin Amount</span>
                     <span className="font-medium">{amount} BTC</span>
                   </div>
@@ -271,8 +271,8 @@ export function PolicyPreview({
                   </div>
                 </div>
                 
-                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
-                  <div className="flex justify-between items-center mb-2">
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-3 sm:p-4">
+                  <div className="flex justify-between items-center mb-1 sm:mb-2">
                     <span className="text-sm text-slate-600">Protection Period</span>
                     <span className="font-medium">{duration === "halving" ? "Until Halving" : `${duration} Days`}</span>
                   </div>
@@ -284,12 +284,12 @@ export function PolicyPreview({
             </div>
             
             <div>
-              <h4 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
+              <h4 className="font-semibold text-slate-700 mb-3 sm:mb-4 flex items-center gap-2 mt-4 md:mt-0">
                 <DollarSign className="h-4 w-4 text-slate-600" />
                 Premium & Fees
               </h4>
               
-              <div className="bg-slate-50 rounded-lg border border-slate-200 p-5 mb-4">
+              <div className="bg-slate-50 rounded-lg border border-slate-200 p-4 sm:p-5 mb-4">
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Protection Premium</span>
@@ -306,7 +306,7 @@ export function PolicyPreview({
                 </div>
                 
                 <div className="flex items-center gap-2 text-xs text-slate-500 mt-2">
-                  <InfoIcon className="h-3 w-3" />
+                  <InfoIcon className="h-3 w-3 flex-shrink-0" />
                   <span>One-time payment for the entire protection period</span>
                 </div>
               </div>
@@ -351,24 +351,24 @@ export function PolicyPreview({
             </h4>
             
             <Tabs defaultValue="0" className="w-full">
-              <TabsList className="mb-6 grid grid-cols-3 max-w-xl mx-auto rounded-full p-1 bg-slate-100/80 border border-slate-200">
+              <TabsList className="mb-4 sm:mb-6 grid grid-cols-3 w-full sm:max-w-xl sm:mx-auto rounded-full p-1 bg-slate-100/80 border border-slate-200">
                 <TabsTrigger 
                   value="0" 
-                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white text-xs sm:text-sm py-1.5"
                   onClick={() => setActiveScenario(0)}
                 >
                   Scenario 1
                 </TabsTrigger>
                 <TabsTrigger 
                   value="1" 
-                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white text-xs sm:text-sm py-1.5"
                   onClick={() => setActiveScenario(1)}
                 >
                   Scenario 2
                 </TabsTrigger>
                 <TabsTrigger 
                   value="2" 
-                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white"
+                  className="rounded-full data-[state=active]:bg-slate-900 data-[state=active]:text-white text-xs sm:text-sm py-1.5"
                   onClick={() => setActiveScenario(2)}
                 >
                   Scenario 3
@@ -384,14 +384,14 @@ export function PolicyPreview({
                     "border-slate-200"
                   )}>
                     <div className={cn(
-                      "p-4",
+                      "p-3 sm:p-4",
                       scenario.color === "green" ? "bg-green-50" : 
                       scenario.color === "blue" ? "bg-slate-50" : 
                       "bg-slate-50"
                     )}>
                       <div className="flex items-start gap-3">
                         <div className={cn(
-                          "p-2 rounded-full mt-1",
+                          "p-2 rounded-full mt-1 flex-shrink-0",
                           scenario.color === "green" ? "bg-green-100" : 
                           scenario.color === "blue" ? "bg-slate-200" : 
                           "bg-slate-200"
@@ -400,13 +400,13 @@ export function PolicyPreview({
                   </div>
                         <div>
                           <h5 className="font-semibold mb-1">{scenario.title}</h5>
-                          <p className="text-sm text-slate-600">{scenario.description}</p>
+                          <p className="text-xs sm:text-sm text-slate-600">{scenario.description}</p>
               </div>
             </div>
           </div>
           
-                    <div className="p-4 bg-white">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="p-3 sm:p-4 bg-white">
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
                         <div>
                           <p className="text-xs text-slate-500 mb-1">BTC Price</p>
                           <p className="font-medium">${scenario.btcPrice.toLocaleString()}</p>
@@ -444,14 +444,14 @@ export function PolicyPreview({
           </div>
           
           {/* Verification and trust elements */}
-          <div className="bg-slate-100 rounded-lg border border-slate-200 p-4">
+          <div className="bg-slate-100 rounded-lg border border-slate-200 p-3 sm:p-4">
             <div className="flex items-start gap-3">
-              <div className="bg-white p-2 rounded-full mt-1">
+              <div className="bg-white p-2 rounded-full mt-1 flex-shrink-0">
                 <LockIcon className="h-4 w-4 text-slate-700" />
               </div>
               <div>
                 <h4 className="font-medium text-slate-700 mb-1">Secure Blockchain Protection</h4>
-                <p className="text-sm text-slate-600 mb-3">
+                <p className="text-xs sm:text-sm text-slate-600 mb-3">
                   Your protection is secured by smart contracts on the Stacks blockchain, with funds held in escrow until activation or expiration.
                 </p>
                 
@@ -477,12 +477,12 @@ export function PolicyPreview({
       
       {/* Important disclaimer */}
       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
-        <div className="bg-amber-100 p-1.5 rounded-full mt-0.5">
+        <div className="bg-amber-100 p-1.5 rounded-full mt-0.5 flex-shrink-0">
           <AlertTriangle className="h-4 w-4 text-amber-600" />
         </div>
         <div>
           <h4 className="font-medium text-amber-800 mb-1">Important Information</h4>
-          <p className="text-sm text-amber-700">
+          <p className="text-xs sm:text-sm text-amber-700">
             By activating protection, you agree to the terms and conditions of the Bitcoin Protection Policy. Premium payments are non-refundable. You maintain full ownership of your Bitcoin throughout the protection period.
                       </p>
                     </div>

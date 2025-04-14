@@ -46,6 +46,11 @@ export default function EasyOption() {
   // Step state - updated to use the steps from constants
   const [currentStep, setCurrentStep] = useState<STEPS_TYPE>(STEPS.PROTECTION_GOAL);
 
+  // Effect to scroll to top whenever step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [currentStep]);
+
   // Protection type state
   const [protectionType, setProtectionType] = useState<ProtectionType>("hodl");
   

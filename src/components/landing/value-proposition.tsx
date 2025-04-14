@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Persona } from "./old/hero";
+import Link from "next/link";
 
 interface ValuePropositionProps {
   activePersona: Persona;
@@ -271,17 +272,21 @@ export function ValueProposition({ activePersona }: ValuePropositionProps) {
           transition={{ duration: 0.5, delay: 0.6 }}
           viewport={{ once: true }}
         >
-          <motion.button
+          <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            className={`px-8 py-3 rounded-full font-medium ${
-              activePersona === "protection" 
-                ? "bg-primary text-white hover:bg-primary/90" 
-                : "bg-amber-500 text-white hover:bg-amber-500/90"
-            } transition-colors shadow-md hover:shadow-lg`}
           >
-            {activePersona === "protection" ? "Secure Your Bitcoin Now" : "Start Earning Premium Income"}
-          </motion.button>
+            <Link 
+              href={activePersona === "protection" ? "/easy-option" : "/income-center"}
+              className={`inline-block px-8 py-3 rounded-full font-medium ${
+                activePersona === "protection" 
+                  ? "bg-primary text-white hover:bg-primary/90" 
+                  : "bg-amber-500 text-white hover:bg-amber-500/90"
+              } transition-colors shadow-md hover:shadow-lg`}
+            >
+              {activePersona === "protection" ? "Secure Your Bitcoin Now" : "Start Earning Premium Income"}
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </section>
