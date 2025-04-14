@@ -12,13 +12,13 @@ const NavItems = [
     icon: HomeIcon,
   },
   {
-    name: "Option Data",
-    href: "/option-data",
+    name: "Income Center",
+    href: "/income-center",
     icon: BarChartIcon,
   },
   {
-    name: "Easy Trade",
-    href: "/easy-option",
+    name: "Protection Center",
+    href: "/protection-center",
     icon: ArrowRightLeftIcon,
   },
 ];

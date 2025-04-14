@@ -12,12 +12,12 @@ const NavItems = [
     href: "/home",
   },
   {
-    name: "Option Data",
-    href: "/option-data",
+    name: "Income Center",
+    href: "/income-center",
   },
   {
-    name: "Easy Trade",
-    href: "/easy-option",
+    name: "Protection Center",
+    href: "/protection-center",
   },
 ];
 
