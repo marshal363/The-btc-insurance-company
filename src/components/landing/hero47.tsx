@@ -3,15 +3,13 @@ import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Persona } from "./old/hero";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import useEmblaCarousel from 'embla-carousel-react';
 
 export type Hero47Props = {
   heading?: string;
   subheading?: string;
   description?: string;
-  image?: {
-    src: string;
-    alt: string;
-  };
   buttons?: {
     primary?: {
       text: string;
@@ -30,7 +28,6 @@ const Hero47 = ({
   subheading,
   description,
   buttons,
-  image,
   activePersona = "protection",
 }: Hero47Props) => {
   // Define content based on activePersona
@@ -39,10 +36,6 @@ const Hero47 = ({
       heading: "Protect Your Bitcoin Value",
       subheading: "Without Selling a Single Sat",
       description: "No more sleepless nights during market dips. Your policy activates automatically when Bitcoin prices fall below your protected value.",
-      image: {
-        src: "https://images.unsplash.com/photo-1640340434855-6084b1f4901c?q=80&w=1964&auto=format&fit=crop",
-        alt: "Bitcoin Protection",
-      },
       buttons: {
         primary: {
           text: "Secure My Bitcoin Value",
@@ -58,10 +51,6 @@ const Hero47 = ({
       heading: "Earn Premium Income",
       subheading: "Providing Bitcoin Insurance",
       description: "Receive premiums instantly while your collateral is securely locked in non-custodial contracts. No intermediaries, just yield.",
-      image: {
-        src: "https://images.unsplash.com/photo-1640340434855-6084b1f4901c?q=80&w=1964&auto=format&fit=crop", 
-        alt: "Bitcoin Income",
-      },
       buttons: {
         primary: {
           text: "Start Earning Today",
@@ -79,8 +68,39 @@ const Hero47 = ({
   const currentHeading = heading || content[activePersona].heading;
   const currentSubheading = subheading || content[activePersona].subheading;
   const currentDescription = description || content[activePersona].description;
-  const currentImage = image || content[activePersona].image;
   const currentButtons = buttons || content[activePersona].buttons;
+  
+  // Carousel setup
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // Images for carousel
+  const mockupImages = [
+    "/mockups/mock-up.webp",
+    "/mockups/mock-up-2.webp",
+    "/mockups/mock-up-3.webp"
+  ];
+  
+  // Auto-play the carousel
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    const interval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 3000);
+    
+    // Update the current slide when it changes
+    const onSelect = () => {
+      setCurrentSlide(emblaApi.selectedScrollSnap());
+    };
+    
+    emblaApi.on('select', onSelect);
+    
+    return () => {
+      clearInterval(interval);
+      if (emblaApi) emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi]);
   
   return (
     <section className="bg-background py-12 md:py-20 lg:py-24 overflow-hidden">
@@ -133,11 +153,36 @@ const Hero47 = ({
           >
             <div className="relative w-[280px] sm:w-[320px] md:w-[380px]">
               <div className="absolute top-2.5 left-1/2 h-[92%] w-[69%] -translate-x-[52%] overflow-hidden rounded-[35px]">
-                <img
-                  src={currentImage.src}
-                  alt={currentImage.alt}
-                  className="h-full w-full object-cover"
-                />
+                {/* Carousel container */}
+                <div className="embla h-full w-full" ref={emblaRef}>
+                  <div className="embla__container h-full flex">
+                    {mockupImages.map((src, index) => (
+                      <div className="embla__slide h-full w-full flex-[0_0_100%]" key={index}>
+                        <img
+                          src={src}
+                          alt={`BitHedge Mockup ${index + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Carousel dots */}
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+                  {mockupImages.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`w-2 h-2 rounded-full ${
+                        currentSlide === index 
+                          ? `bg-white` 
+                          : `bg-white/50`
+                      }`}
+                      onClick={() => emblaApi?.scrollTo(index)}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
               <img
                 className="relative z-10 w-full h-auto"
