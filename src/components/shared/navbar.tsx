@@ -17,7 +17,7 @@ const NavItems = [
   },
   {
     name: "Protection Center",
-    href: "/protection-center",
+    href: "/easy-option",
   },
 ];
 
