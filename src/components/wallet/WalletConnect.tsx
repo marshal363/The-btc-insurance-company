@@ -3,6 +3,17 @@ import { useWallet } from "@/hooks/wallet/useWallet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { LogOut, ChevronDown, Wallet, Bug } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useWalletStore } from "@/store/wallet-store";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 // Define interface for browser window with wallet providers
 interface ExtendedWindow extends Window {
@@ -70,7 +81,9 @@ export function WalletConnect({
   
   // Local state to force re-render after connection
   const [forceUpdate, setForceUpdate] = useState(0);
-
+  // Add state for network switch dialog
+  const [showNetworkDialog, setShowNetworkDialog] = useState(false);
+  
   // Debug logging for wallet state
   useEffect(() => {
     console.log('[WalletConnect DEBUG] Wallet state changed:', { 
@@ -112,6 +125,15 @@ export function WalletConnect({
     clearError();
   };
 
+  // Add handler for network switch
+  const handleSwitchNetwork = (newNetwork: "mainnet" | "testnet") => {
+    console.log(`[WalletConnect] Switching network to ${newNetwork}`);
+    useWalletStore.getState().switchNetwork(newNetwork);
+    setShowNetworkDialog(false);
+    // Force an update
+    setForceUpdate(prev => prev + 1);
+  };
+
   // Debug logging for connected state condition
   console.log('[WalletConnect DEBUG] Is wallet connected?', { 
     isConnected, 
@@ -119,6 +141,17 @@ export function WalletConnect({
     condition: !!isConnected,
     forceUpdate
   });
+
+  // If there's an error with the wallet connection, we might need to switch networks
+  useEffect(() => {
+    if (error && error.includes("Failed to get wallet address")) {
+      console.log('[WalletConnect] Detected wallet address error, showing network switch option');
+      setShowNetworkDialog(true);
+    }
+  }, [error]);
+  
+  // Render connect button
+  console.log('[WalletConnect] Rendering connect button');
 
   // If there was an error
   if (error) {
@@ -239,24 +272,45 @@ export function WalletConnect({
   }
 
   // Default connect button - directly triggers Stacks Connect modal
-  console.log('[WalletConnect] Rendering connect button');
   return (
-    <Button
-      variant="default"
-      size={size}
-      className={`${className} hidden sm:flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-900`}
-      onClick={handleConnect}
-      disabled={connecting}
-      data-testid="wallet-connect-button"
-    >
-      {connecting ? (
-        "Connecting..."
-      ) : (
-        <>
-          <Wallet className="h-4 w-4 mr-1.5" />
-          Connect Wallet
-        </>
-      )}
-    </Button>
+    <>
+      <Button
+        variant="default"
+        size={size}
+        className={`${className} hidden sm:flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-900`}
+        onClick={handleConnect}
+        disabled={connecting}
+        data-testid="wallet-connect-button"
+      >
+        {connecting ? (
+          "Connecting..."
+        ) : (
+          <>
+            <Wallet className="h-4 w-4 mr-1.5" />
+            Connect Wallet
+          </>
+        )}
+      </Button>
+      
+      {/* Network Switch Dialog */}
+      <AlertDialog open={showNetworkDialog} onOpenChange={setShowNetworkDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Network Mismatch Detected</AlertDialogTitle>
+            <AlertDialogDescription>
+              We couldn&apos;t find a wallet address for the current network ({network}). 
+              This might happen if your wallet only has addresses on a different network.
+              Would you like to switch networks?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowNetworkDialog(false)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => handleSwitchNetwork(network === "testnet" ? "mainnet" : "testnet")}>
+              Switch to {network === "testnet" ? "Mainnet" : "Testnet"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 } 

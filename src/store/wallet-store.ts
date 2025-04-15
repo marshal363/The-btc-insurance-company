@@ -267,11 +267,58 @@ export const useWalletStore = create<WalletStore>()(
                   try {
                     const userData = rawUserData as StacksWalletData;
                     
+                    // ENHANCED LOGGING: Log the entire profile structure
+                    console.log(`[Wallet DEBUG] Full profile structure:`, JSON.stringify(userData.profile || {}));
+                    
+                    // Log network being used for address selection
+                    console.log(`[Wallet DEBUG] Current network for address selection: ${network}`);
+                    
                     // Method 1: Standard stxAddress object path
                     if (userData?.profile?.stxAddress) {
+                      // Log available address keys
+                      console.log(`[Wallet DEBUG] Available stxAddress keys:`, Object.keys(userData.profile.stxAddress));
+                      console.log(`[Wallet DEBUG] Mainnet address:`, userData.profile.stxAddress.mainnet);
+                      console.log(`[Wallet DEBUG] Testnet address:`, userData.profile.stxAddress.testnet);
+                      
+                      // ENHANCEMENT: Auto-detect which networks have valid addresses
+                      const availableNetworks: { network: "mainnet" | "testnet", address: string }[] = [];
+                      
+                      if (userData.profile.stxAddress.mainnet) {
+                        availableNetworks.push({ 
+                          network: "mainnet", 
+                          address: userData.profile.stxAddress.mainnet 
+                        });
+                      }
+                      
+                      if (userData.profile.stxAddress.testnet) {
+                        availableNetworks.push({ 
+                          network: "testnet", 
+                          address: userData.profile.stxAddress.testnet 
+                        });
+                      }
+                      
+                      console.log(`[Wallet DEBUG] Available networks with addresses:`, availableNetworks);
+                      
+                      // First try the selected network
                       const addressKey = network === "mainnet" ? "mainnet" : "testnet";
                       address = userData.profile.stxAddress[addressKey];
                       console.log(`[Wallet DEBUG] Found address via profile.stxAddress.${addressKey}: ${address}`);
+                      
+                      // If testnet address is empty but we need testnet, try fallback to mainnet for development
+                      if (!address && network === "testnet" && userData.profile.stxAddress.mainnet) {
+                        console.log(`[Wallet DEBUG] Testnet address is empty, but mainnet address exists. Consider switching to mainnet.`);
+                        // FALLBACK: Use mainnet address if testnet is empty
+                        address = userData.profile.stxAddress.mainnet;
+                        console.log(`[Wallet DEBUG] Using mainnet address as fallback: ${address}`);
+                        
+                        // Auto-switch network to match the available address
+                        if (availableNetworks.length === 1) {
+                          console.log(`[Wallet DEBUG] Auto-switching network to ${availableNetworks[0].network} because it's the only available network`);
+                          setTimeout(() => {
+                            set({ network: availableNetworks[0].network });
+                          }, 100);
+                        }
+                      }
                     } 
                     // Method 2: Try to extract from username if it exists
                     else if (userData?.username) {
